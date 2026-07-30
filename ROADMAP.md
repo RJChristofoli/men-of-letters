@@ -1,0 +1,524 @@
+# Men of Letters Roadmap
+
+## Purpose
+
+Build a versioned GitHub repository of reusable agent skills that improves engineering quality, reduces token usage, and avoids duplicated or conflicting instructions.
+
+This document is the source of truth for priorities, validated decisions, progress, and next actions.
+
+## New Thread Continuation Contract
+
+When a new thread is asked to read this roadmap and continue development:
+
+1. Read `README.md`, this entire roadmap, and the documents linked by the README.
+2. Inspect the repository state and all applicable repository instructions before changing files.
+3. Treat checked design decisions as approved, but do not treat unimplemented or unevaluated capabilities as validated.
+4. Execute the current `Next Action`, starting with the earliest unchecked Phase -1 item. Do not jump to skill implementation before its governance contracts exist.
+5. Keep artifacts in English and keep conversation language aligned with the user's language.
+6. Do not modify `AGENTS.md` unless the user explicitly requests it.
+7. Validate each artifact in proportion to risk and apply the documentation maintenance rule in the same work session.
+
+The repository must be sufficient for continuation without access to the chat that created it. If repository evidence conflicts with this roadmap, record the conflict before changing direction.
+
+## Maintenance Rule
+
+Whenever an item is validated, update this document in the same work session:
+
+1. Update its status.
+2. Record the evidence or evaluation result.
+3. Add any resulting decision to the decision log.
+4. Define the next action.
+
+Do not mark recommendations as validated without evidence.
+
+## Documentation Maintenance Rule
+
+Documentation is part of the definition of done for every phase. Update only the artifacts affected by a validated decision, implementation, or release; do not create documentation churn for unchanged behavior.
+
+At each phase checkpoint:
+
+1. Update `ROADMAP.md` with status, evidence, decisions, and the next action.
+2. Update `catalog.yaml` when capability status, dependencies, compatibility, ownership, or installation packs change.
+3. Update `README.md` when repository purpose, public behavior, available capabilities, or installation changes.
+4. Update affected usage, implementation, installer, architecture, and evaluation documents.
+5. Verify documented commands and examples against the current repository state.
+6. Record released user-visible changes in release notes or a changelog when those artifacts exist.
+
+A phase is not complete while its affected documentation is stale.
+
+## Goals
+
+- Reduce total tokens per completed task, not only tokens per response.
+- Improve correctness, security, maintainability, and production readiness.
+- Improve algorithms, code, runtime behavior, delivery pipelines, engineering flow, architecture, and technology choices through measurable optimization.
+- Minimize always-loaded context.
+- Use progressive disclosure: small skill metadata, concise `SKILL.md`, conditional references, and deterministic scripts where useful.
+- Version skills and test them against repeatable evaluations.
+- Keep specialized capabilities installable without forcing every skill into every session.
+
+## Architecture Decision
+
+Build a governed engineering capability platform rather than a flat catalog of skills.
+
+### Capability layers
+
+| Layer | Responsibility | Initial components |
+| --- | --- | --- |
+| Policies | Apply compact cross-cutting constraints | `engineering-principles`, `evidence`, `backend-defaults`, `documentation`, `token-efficiency`, `versioning-and-lifecycle`, `safe-change` |
+| Routers | Select the relevant path and load only required context | `engineering-discovery`, `backend-review`, `optimize-engineering` |
+| Workflows | Execute operations with defined inputs, outputs, side effects, and validation | `security-review`, `test-change`, `refactor-safely`, `generate-adr`, `generate-docs` |
+| References | Supply conditional specialist knowledge | Architecture, API, database, performance, observability, Kafka, runtime, pipeline, and technology evaluation |
+| Resources | Provide deterministic or reusable implementation material | Scripts, templates, assets, schemas, benchmarks, checklists, and fixtures |
+
+Policies are not skills. They require a selective installation or activation mechanism because files stored under `policies/` are not automatically enforced by Codex.
+
+Keep the initial router set limited to three. A router selects paths; it must not absorb independent workflows.
+
+Start specialist capabilities as references. Promote a reference to an independent skill only when it has a distinct trigger, workflow, tooling, output, evaluation suite, and demonstrated recurring demand.
+
+### Operating flow
+
+```text
+Policies + Evidence
+        ↓
+Engineering Discovery
+        ↓
+Decision / Optional ADR
+        ↓
+Implementation
+        ↓
+Testing / Safe Refactoring
+        ↓
+Backend or Security Review
+        ↓
+Engineering Optimization
+        ↓
+Evaluation and Regression
+```
+
+Use only the stages required by the task.
+
+## Roadmap
+
+### Phase -1 — Governance and Engineering Principles
+
+- [x] Approve separation between policies, routers, workflows, references, and resources.
+- [x] Approve evidence as a repository-wide principle.
+- [x] Approve lifecycle states: `proposed`, `experimental`, `validated`, `stable`, `deprecated`, and `retired`.
+- [x] Approve plugins as the primary distribution mechanism and a separate bootstrap installer for policies and local development.
+- [x] Approve documentation maintenance as part of every phase's definition of done.
+- [ ] Define naming and repository conventions.
+- [ ] Define the Skill Design Guide and specification template.
+- [ ] Define policy precedence and conflict handling.
+- [ ] Define installation scopes, pack dependencies, collision handling, and policy-managed block conventions.
+- [ ] Define ownership and decision process.
+- [ ] Define versioning, release, compatibility, and deprecation rules.
+- [ ] Define safe-change and execution-contract requirements.
+
+### Phase 0 — Platform Foundation
+
+- [x] Choose `men-of-letters` as the repository, product, plugin, and future CLI name.
+- [ ] Confirm repository visibility, license, and publishing model.
+- [ ] Verify licensing and provenance before copying or adapting third-party skills.
+- [ ] Define plugin, bootstrap installer, and installation-pack boundaries.
+- [ ] Create repository structure, `catalog.yaml`, and validation workflow.
+- [ ] Define selective policy installation and activation.
+- [ ] Create the evaluation harness and baseline without custom skills.
+- [ ] Capture token usage, completion rate, correction turns, latency, false triggers, and context overhead.
+- [ ] Add automated validation for metadata, structure, dependencies, and policy budgets.
+- [ ] Implement a minimal bootstrap CLI with `list`, `install`, `uninstall`, and `doctor` commands.
+- [ ] Add dry-run, idempotency, conflict detection, dependency checks, backups, and explicit confirmation before modifying persistent instruction files.
+- [ ] Package the first versioned installation packs as plugins while keeping policy activation and local development in the bootstrap installer.
+- [ ] Validate installation, update, removal, rollback, skill discovery, and policy activation in a clean environment.
+
+### Phase 1 — Core Policies and Discovery
+
+- [ ] Create the compact core policy set.
+- [ ] Version the existing token-efficiency setup instead of duplicating Caveman and RTK.
+- [ ] Create `engineering-discovery` for feature design, technology research, architecture proposals, and trade-off analysis.
+- [ ] Create a discovery-brief template and optional ADR handoff.
+- [ ] Forward-test discovery against the no-skill baseline.
+
+### Phase 2 — Review and Optimization
+
+- [ ] Create `backend-review` as the central review router.
+- [ ] Create risk-triggered `security-review` as an independent workflow.
+- [x] Define and approve the scope and validation contract for `optimize-engineering`.
+- [ ] Create `optimize-engineering` as an on-demand optimization router.
+- [ ] Add architecture, API, database, performance, observability, runtime, pipeline, and technology-evaluation references.
+- [ ] Forward-test review and optimization on representative backend tasks.
+
+### Phase 3 — Engineering Workflows
+
+- [ ] Create `test-change` for focused test selection, implementation, and verification.
+- [ ] Create `refactor-safely`.
+- [ ] Create `generate-adr` with a reusable template.
+- [ ] Create `generate-docs` with scoped templates and freshness checks.
+- [ ] Create Kafka-specific capability only after recurring demand is demonstrated.
+- [ ] Reassess prompt compression only if Caveman and `caveman-compress` leave a measurable gap.
+
+### Phase 4 — Evaluation, Regression, and Lifecycle
+
+- [ ] Run benchmark and regression suites across all packs.
+- [ ] Compare task success, token usage, latency, correction turns, false triggers, and context overhead.
+- [ ] Run blinded human-preference comparisons for subjective outputs.
+- [ ] Detect skill conflicts and policy-precedence failures.
+- [ ] Promote, revise, deprecate, or retire capabilities using recorded evidence.
+- [ ] Create cost-optimization capability only when real cost data and evaluation cases exist.
+
+Evaluation starts in Phase 0 and gates every phase. Phase 4 evaluates the complete ecosystem and manages lifecycle decisions.
+
+## Engineering Discovery Track
+
+Use `engineering-discovery` before implementation when no accepted solution exists.
+
+### Modes
+
+- Feature design.
+- Technology research.
+- Architecture proposal.
+- Alternative comparison.
+- Trade-off analysis.
+- Feasibility discovery.
+- Proof-of-concept planning.
+
+### Required output
+
+- Goal and need.
+- Current state.
+- Constraints and assumptions.
+- Alternatives, including doing nothing when relevant.
+- Evidence and confidence.
+- Trade-offs and contraindications.
+- Recommendation.
+- Expected gain without fabricated precision.
+- Validation experiment.
+- Risks, reversibility, and optional ADR handoff.
+
+Discovery produces a decision proposal, not implementation, unless the user explicitly expands the task.
+
+## Engineering Optimization Track
+
+### Core principle
+
+Do not claim an optimization without a target, metric, baseline, observed bottleneck, measured result, and rollback criterion. Treat unmeasured changes as hypotheses, cleanup, or refactoring.
+
+Full optimization must remain on-demand. The future `backend-defaults` policy may include only a lightweight rule to avoid obvious waste and reject evidence-free optimization.
+
+### Modes
+
+- **Optimize:** improve a measurable property such as latency, throughput, CPU, memory, cost, pipeline duration, or delivery time.
+- **Simplify:** reduce duplication, dead code, accidental complexity, coupling, or maintenance burden while preserving behavior.
+
+Do not assume cleaner code is faster or faster code is easier to maintain. Record trade-offs explicitly.
+
+### Scope and metrics
+
+| Area | Typical work | Evidence |
+| --- | --- | --- |
+| Algorithms | Complexity, data structures, loops, concurrency | Big O, execution time, allocations |
+| Code | Duplication, dead code, complexity, readability | Complexity, size, duplication, tests |
+| Runtime | CPU, memory, I/O, latency, throughput | p95/p99, CPU, RAM, requests per second |
+| Data | Queries, indexes, locks, transactions | Query time, scans, lock time, contention |
+| Pipeline | Build, tests, caching, parallelism, deployment | Duration, cache hit rate, failures, retries |
+| Engineering flow | Handoffs, rework, slow feedback | Lead time, cycle time, correction count |
+| Architecture | Dependencies, coupling, communication paths | Reliability, latency, failure rate, cost |
+| Technology | Libraries, frameworks, infrastructure | Total cost, risk, support, migration effort |
+| Agent operations | Context, commands, skill loading, responses | Tokens per task, turns, latency, false triggers |
+
+### Required workflow
+
+1. Preserve expected behavior and define constraints.
+2. Select the optimization target and metric.
+3. Capture a reproducible baseline.
+4. Locate the observed bottleneck.
+5. Compare options by impact, effort, and risk.
+6. Apply the smallest sufficient change.
+7. Run tests and relevant benchmarks.
+8. Compare before and after results.
+9. Keep only a proven improvement or clearly justified simplification.
+10. Record limitations, trade-offs, evidence, and rollback path.
+
+### Planned progressive-disclosure structure
+
+```text
+optimize-engineering/
+├── SKILL.md
+└── references/
+    ├── measurement.md
+    ├── algorithms-and-code.md
+    ├── runtime-and-data.md
+    ├── pipelines.md
+    ├── delivery-flow.md
+    └── architecture-and-technology.md
+```
+
+Reuse planned review modules instead of duplicating them: `performance-review` identifies bottlenecks, database review detects data risks, `refactor-safely` preserves behavior, and `backend-review` evaluates the resulting change.
+
+### Implementation order
+
+1. Algorithms and code simplification.
+2. CI and delivery pipeline optimization.
+3. Runtime and database optimization.
+4. Architecture and technology optimization.
+5. Engineering-flow optimization.
+6. Cost optimization after real cost data exists.
+
+## Repository Contracts
+
+### Skill Design Guide
+
+Every proposed skill must define:
+
+- Problem, goal, scope, and non-goals.
+- Positive and negative triggers.
+- Inputs, outputs, and constraints.
+- References, scripts, templates, and assets.
+- Side effects and required approvals.
+- Validation, metrics, and evaluation suite.
+- Known limitations and dependencies.
+- Lifecycle status and owner.
+- Token, time, and tool-call budgets.
+- Stop conditions and rollback behavior.
+
+Keep official `SKILL.md` frontmatter limited to `name` and `description`. Store version, ownership, lifecycle, compatibility, dependencies, and evaluation metadata in the repository catalog, plugin manifests, and Git releases.
+
+### Execution contract
+
+Every workflow must declare whether it is read-only or mutating, affected files or systems, approvals, side effects, idempotency, rollback, and stop conditions. Destructive or irreversible actions require explicit confirmation.
+
+### Documentation contract
+
+Keep the repository `README.md` simple and brief. It must explain:
+
+- What the repository does.
+- How it works at a high level.
+- What problems and workflows it helps with.
+- How to install and start using it.
+
+Keep detailed architecture, governance, evaluation, workflow, and troubleshooting material in focused documents linked from the README. Do not turn the README into an internal design history.
+
+For every phase, identify the affected documentation before implementation and verify it at the phase checkpoint. Documentation-only completion is insufficient: examples and commands must match validated behavior.
+
+### Evidence contract
+
+Classify important claims as:
+
+- **Measured:** benchmark or telemetry.
+- **Observed:** code, logs, or reproduced behavior.
+- **Documented:** official documentation or another reliable source.
+- **Inferred:** technical conclusion not yet measured.
+- **Assumed:** explicit hypothesis.
+
+Recommendations must explain why, alternatives, trade-offs, when not to use the choice, expected gain, validation plan, migration cost, rollback, and confidence. Never fabricate expected gains.
+
+### Context budgets
+
+Initial targets:
+
+- Keep selected always-on policies within approximately 800 tokens total.
+- Keep descriptions short and trigger-specific.
+- Target fewer than 200 lines per `SKILL.md`; never exceed 500 lines.
+- Keep references one level deep and load them conditionally.
+- Avoid duplicating content between `SKILL.md` and references.
+- Scale evidence detail to decision risk.
+- Measure tokens per completed task rather than per response.
+
+### Catalog, lifecycle, and versioning
+
+Create `catalog.yaml` with capability ID, type, status, owner, dependencies, compatibility, evaluation suite, installation pack, and introduced or deprecated release.
+
+Use lifecycle states:
+
+```text
+proposed → experimental → validated → stable → deprecated → retired
+```
+
+Use SemVer by installation pack or plugin initially. Do not add per-skill versions until independently released skill lifecycles justify the overhead.
+
+### Packaging
+
+Prefer modular installation packs:
+
+- `core-policies`
+- `backend-quality`
+- `engineering-discovery`
+- `engineering-optimization`
+- `documentation-workflows`
+- `specialist-reviews`
+
+Install only relevant packs to reduce metadata, context overhead, and conflicts.
+
+## Distribution and Installation Track
+
+Treat authoring, local activation, policy installation, and reusable distribution as separate concerns.
+
+| Concern | Mechanism |
+| --- | --- |
+| Repository authoring | Versioned source, catalog, validation, and local links where useful |
+| Repository-scoped skills | `.agents/skills` under the target repository |
+| User-scoped skills | `$HOME/.agents/skills` |
+| Reusable distribution | Versioned plugins and modular installation packs |
+| Always-on policies | Bootstrap installer with selective, managed persistent-instruction changes |
+| Maintenance | Installer manifest, diagnostics, updates, rollback, and clean removal |
+
+The bootstrap installer is infrastructure, not a skill. It complements official plugin distribution by handling policy activation and local development workflows that standalone skill or plugin installation does not enforce automatically.
+
+### Initial bootstrap CLI
+
+```text
+men-of-letters list
+men-of-letters install <pack> --scope user|repo
+men-of-letters uninstall <pack> --scope user|repo
+men-of-letters doctor
+```
+
+The first version must:
+
+- Support `--dry-run` for mutating operations.
+- Be idempotent and detect collisions before writing.
+- Resolve pack dependencies and verify compatible versions.
+- Record installed files and managed policy blocks in a manifest.
+- Back up persistent instruction files before changing them.
+- Require explicit confirmation before modifying `AGENTS.md` or equivalent persistent instructions.
+- Remove only installer-owned content and preserve manual user content.
+- Provide a rollback path for failed installs and updates.
+- Verify that installed skills are discoverable in the selected scope.
+
+Use links for local authoring when appropriate and immutable copied or packaged artifacts for released versions. Do not implement the installer before repository conventions, the catalog contract, policy precedence, and installation-pack boundaries are defined.
+
+## Capability Classification Decisions
+
+| Original idea | Final treatment |
+| --- | --- |
+| Documentation Language | Compact policy |
+| Production Ready Mindset | Merge into `backend-defaults` policy |
+| Token Optimization | Version current RTK and Caveman setup |
+| Naming Consistency | Merge into `backend-defaults` policy |
+| Clean Architecture Guard | Merge non-dogmatic boundary rules into `backend-defaults` |
+| Code Reviewer | Route through `backend-review` |
+| Senior Backend Review | Merge into `backend-review` |
+| Architecture Reviewer | Conditional reference under `backend-review` |
+| Performance Review | Conditional reference initially |
+| Security Review | Independent risk-triggered workflow |
+| Database Review | Conditional reference initially |
+| API Review | Conditional reference initially |
+| Observability | Conditional reference initially |
+| Testing | Independent `test-change` workflow |
+| Refactor | Independent `refactor-safely` workflow |
+| ADR Generator | Independent template-driven workflow |
+| Documentation Generator | Independent scoped workflow |
+| Engineering Discovery | Router for pre-implementation decisions |
+| Engineering Optimization | On-demand router with conditional references |
+| Algorithm Improvement | `optimize-engineering` mode with benchmarks and complexity evidence |
+| Code Cleanup | `simplify` mode integrated with `refactor-safely` |
+| Pipeline and Flow Optimization | Conditional `optimize-engineering` references |
+| Kafka Review | Defer until recurring demand |
+| Cost Optimization | Defer until measurable cost data exists |
+| Prompt Compression | Defer due to overlap with Caveman tooling |
+
+## Evaluation Criteria
+
+Compare every capability with a baseline that does not use it.
+
+Measure:
+
+- Task success and technical correctness.
+- Tests, lint, benchmarks, or other objective verification.
+- Input, output, and total tokens per completed task.
+- Total turns and correction cycles.
+- Trigger precision and false-positive rate.
+- Context loaded for unrelated tasks.
+- Latency and tool-call overhead.
+- Clarity, actionability, and safety.
+- Policy conflicts and unintended side effects.
+- Blinded human preference when outputs are subjective.
+
+Protect evaluation integrity:
+
+- Keep evaluation cases separate from skill examples.
+- Use hidden or fresh cases when practical.
+- Pass raw artifacts rather than expected answers during forward-tests.
+- Test both positive and negative triggers.
+- Avoid exposing secrets or personal data through telemetry.
+
+Adopt or promote a capability only when it provides measurable quality or efficiency improvement without unacceptable regressions. Revise, deprecate, or retire capabilities that fail this gate.
+
+For optimization work, require reproducible before-and-after measurements. If measurement is impractical, document the change as a hypothesis or simplification instead of a validated optimization.
+
+## Decision Log
+
+### 2026-07-30 — Initial direction confirmed
+
+- Use a small always-on layer rather than eight independent always-on skills.
+- Prefer one backend review router with conditionally loaded specialist references.
+- Avoid recreating functionality already supplied by Caveman, `caveman-compress`, and RTK.
+- Build evaluation and versioning foundations before expanding the catalog.
+- Keep this roadmap updated whenever validation changes status or direction.
+
+### 2026-07-30 — Engineering optimization track approved
+
+- Add `optimize-engineering` to Phase 1 as an on-demand router.
+- Cover algorithms, code cleanup, runtime, data, pipelines, engineering flow, architecture, technology, and agent operations.
+- Separate measurable optimization from maintainability-focused simplification.
+- Require baseline, evidence, before-and-after comparison, and rollback criteria.
+- Reuse existing review and refactoring plans instead of duplicating their guidance.
+- Design approved; skill implementation and effectiveness are not yet validated.
+
+### 2026-07-30 — Governed capability platform approved
+
+- Separate policies, routers, workflows, references, and resources.
+- Keep policies compact and selectively installed rather than treating them as skills.
+- Limit the initial router set to `engineering-discovery`, `backend-review`, and `optimize-engineering`.
+- Keep security review, testing, refactoring, ADR generation, and documentation generation as independent workflows.
+- Add discovery before implementation and evidence as a cross-cutting contract.
+- Add Phase -1 governance and Phase 4 ecosystem evaluation while keeping evaluation continuous from Phase 0.
+- Add the Skill Design Guide, capability catalog, execution contracts, context budgets, lifecycle, modular packaging, and evaluation-integrity requirements.
+- Use SemVer by pack or plugin initially; keep version fields outside official skill frontmatter.
+- Architecture approved; implementation and effectiveness are not yet validated.
+
+### 2026-07-30 — Distribution and installation model approved
+
+- Use plugins as the primary mechanism for distributing versioned skills and installation packs.
+- Build a separate bootstrap installer for selective policy activation and local development workflows.
+- Treat the installer as platform infrastructure rather than an agent skill.
+- Support user and repository scopes without installing every capability globally.
+- Start with `list`, `install`, `uninstall`, and `doctor`, with dry-run, idempotency, collision checks, backups, explicit approval for persistent-instruction changes, and clean removal.
+- Implement the installer incrementally in Phase 0 after its catalog, policy, scope, and packaging contracts are defined.
+- Design approved; installer implementation and clean-environment validation are not yet complete.
+
+### 2026-07-30 — Documentation definition of done approved
+
+- Treat affected documentation as part of every phase's completion criteria.
+- Keep `ROADMAP.md`, `catalog.yaml`, affected guides, and release documentation synchronized with validated changes.
+- Update the README when repository purpose, public behavior, available capabilities, or installation changes.
+- Keep the README brief and limited to what the repository does, how it works, what it helps with, and how to install and start using it.
+- Verify documented commands and examples before completing a phase.
+- Policy approved; current repository documentation still requires phase-by-phase verification.
+
+### 2026-07-30 — Repository-local handoff established
+
+- Move `ROADMAP.md` into the `men-of-letters` repository as the single source of truth.
+- Make the README the brief entry point for purpose, operation, benefits, installation status, and development continuation.
+- Require a new thread to read repository-local documentation and execute the roadmap's `Next Action` without relying on prior chat history.
+- Keep Phase -1 as the next implementation boundary; do not scaffold all skills before its contracts are complete.
+- Handoff documentation organized; Phase -1 artifacts remain unimplemented.
+
+### 2026-07-30 — Men of Letters identity approved
+
+- Use `men-of-letters` for the repository, product, plugin, and future CLI.
+- Keep individual skill IDs functional and trigger-oriented instead of thematic.
+- Rename the local repository folder and GitHub remote to match the approved identity.
+- Brand approved and applied; plugin and CLI implementation remain planned work.
+
+## Known Issues and Open Questions
+
+- RTK instructions are present, but the `rtk` executable was unavailable in the current execution environment. Investigate before treating RTK integration as validated.
+- Repository visibility, license, and publishing model remain undecided.
+- Exact installation-pack boundaries, installer manifest schema, update strategy, and selective policy-activation mechanism remain to be designed.
+- Catalog schema, policy precedence, compatibility rules, and deprecation details remain to be formalized.
+- Third-party skill licensing and provenance must be checked before publication.
+
+## Next Action
+
+Execute Phase -1: define naming and repository conventions, the Skill Design Guide and specification template, policy precedence, installation scopes and managed-block conventions, versioning and deprecation rules, the safe-change execution contract, and the documentation checklist. Then scaffold Phase 0, establish the baseline, and implement one small vertical capability slice before building the bootstrap installer.
