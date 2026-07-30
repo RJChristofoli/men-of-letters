@@ -1,0 +1,24 @@
+{
+  "name": "men-of-letters",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Validation and development tooling for Men of Letters",
+  "type": "module",
+  "bin": {
+    "men-of-letters": "bootstrap/bin/men-of-letters.mjs"
+  },
+  "scripts": {
+    "cli": "node bootstrap/bin/men-of-letters.mjs",
+    "evaluate": "node scripts/evaluate.mjs",
+    "package-plugin": "node scripts/package-plugin.mjs",
+    "validate": "node scripts/validate-repository.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18.19.0"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "yaml": "^2.8.0"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RJChristofoli/men-of-letters/schemas/evaluation-case.schema.json",
+  "title": "Men of Letters evaluation case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "capability",
+    "kind",
+    "prompt_file",
+    "output_schema",
+    "sandbox",
+    "checks"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*-[0-9]{3}$"
+    },
+    "capability": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+    },
+    "kind": { "enum": ["positive", "negative"] },
+    "prompt_file": { "type": "string", "minLength": 1 },
+    "output_schema": { "type": "string", "minLength": 1 },
+    "sandbox": { "enum": ["read-only", "workspace-write"] },
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required_nonempty", "minimum_items", "required_terms"],
+      "properties": {
+        "required_nonempty": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "minimum_items": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 1 }
+        },
+        "required_terms": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "terms"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "terms": {
+                "type": "array",
+                "items": { "type": "string", "minLength": 1 },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

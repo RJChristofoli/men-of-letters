@@ -1,0 +1,15 @@
+schema_version: 1
+id: backend-quality
+version: 0.1.0-dev.0
+status: proposed
+owner: RJChristofoli
+distribution: plugin
+plugin_path: plugins/backend-quality
+capabilities:
+  - implement-task
+  - backend-review
+  - test-change
+  - refactor-safely
+dependencies: []
+suggested_policies:
+  - core-policies

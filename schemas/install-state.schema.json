@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RJChristofoli/men-of-letters/schemas/install-state.schema.json",
+  "title": "Men of Letters installation state",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "installer_version",
+    "scope",
+    "target_root",
+    "operation_id",
+    "packs",
+    "artifacts",
+    "managed_blocks",
+    "backups"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "installer_version": { "type": "string", "minLength": 1 },
+    "scope": { "enum": ["repo", "user"] },
+    "target_root": { "type": "string", "minLength": 1 },
+    "operation_id": { "type": ["string", "null"] },
+    "packs": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/installed_pack" }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/artifact" }
+    },
+    "managed_blocks": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/managed_block" }
+    },
+    "backups": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/backup" }
+    }
+  },
+  "$defs": {
+    "installed_pack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "dependencies", "installed_at"],
+      "properties": {
+        "version": { "type": "string", "minLength": 1 },
+        "dependencies": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "installed_at": { "type": "string", "minLength": 20 }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "pack_id", "capability_id", "checksum", "source"],
+      "properties": {
+        "kind": { "enum": ["directory", "link"] },
+        "pack_id": { "type": "string", "minLength": 1 },
+        "capability_id": { "type": "string", "minLength": 1 },
+        "checksum": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "source": { "type": "string", "minLength": 1 }
+      }
+    },
+    "managed_block": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_id",
+        "pack_id",
+        "version",
+        "checksum",
+        "instruction_path",
+        "prefix_added"
+      ],
+      "properties": {
+        "policy_id": { "type": "string", "minLength": 1 },
+        "pack_id": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "checksum": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "instruction_path": { "type": "string", "minLength": 1 },
+        "prefix_added": { "type": "boolean" }
+      }
+    },
+    "backup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operation_id", "target", "backup"],
+      "properties": {
+        "operation_id": { "type": "string", "minLength": 1 },
+        "target": { "type": "string", "minLength": 1 },
+        "backup": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

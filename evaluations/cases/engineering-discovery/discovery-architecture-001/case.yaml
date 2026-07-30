@@ -1,0 +1,27 @@
+schema_version: 1
+id: discovery-architecture-001
+capability: engineering-discovery
+kind: positive
+prompt_file: prompt.md
+output_schema: output.schema.json
+sandbox: read-only
+checks:
+  required_nonempty:
+    - goal
+    - current_state
+    - recommendation
+    - expected_gain
+    - validation_experiment
+    - reversibility
+  minimum_items:
+    constraints: 2
+    assumptions: 1
+    alternatives: 3
+    evidence: 2
+    risks: 2
+  required_terms:
+    - path: alternatives
+      terms:
+        - synchronous
+        - postgres
+        - redis

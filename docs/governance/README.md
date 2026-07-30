@@ -12,4 +12,5 @@ or any capability has been implemented or evaluated.
 - [Versioning, compatibility, and lifecycle](versioning-and-lifecycle.md)
 - [Safe change and execution contract](safe-change.md)
 - [Documentation maintenance checklist](documentation-checklist.md)
+- [Publishing, licensing, and provenance](publishing-and-provenance.md)
 - [Capability specification template](../../templates/capability-spec.md)

@@ -127,26 +127,43 @@ checks, and the tracked diff passed Git's whitespace validation.
 ### Phase 0 — Platform Foundation
 
 - [x] Choose `men-of-letters` as the repository, product, plugin, and future CLI name.
-- [ ] Confirm repository visibility, license, and publishing model.
-- [ ] Verify licensing and provenance before copying or adapting third-party skills.
-- [ ] Define plugin, bootstrap installer, and installation-pack boundaries.
-- [ ] Create repository structure, `catalog.yaml`, and validation workflow.
-- [ ] Define selective policy installation and activation.
-- [ ] Create the evaluation harness and baseline without custom skills.
-- [ ] Capture token usage, completion rate, correction turns, latency, false triggers, and context overhead.
-- [ ] Add automated validation for metadata, structure, dependencies, and policy budgets.
-- [ ] Implement a minimal bootstrap CLI with `list`, `install`, `uninstall`, and `doctor` commands.
-- [ ] Add dry-run, idempotency, conflict detection, dependency checks, backups, and explicit confirmation before modifying persistent instruction files.
-- [ ] Package the first versioned installation packs as plugins while keeping policy activation and local development in the bootstrap installer.
-- [ ] Validate installation, update, removal, rollback, skill discovery, and policy activation in a clean environment.
+- [x] Confirm repository visibility, license, and publishing model.
+- [x] Verify licensing and provenance before copying or adapting third-party skills.
+- [x] Define plugin, bootstrap installer, and installation-pack boundaries.
+- [x] Create repository structure, `catalog.yaml`, and validation workflow.
+- [x] Define selective policy installation and activation.
+- [x] Create the evaluation harness and baseline without custom skills.
+- [x] Capture token usage, completion rate, correction turns, latency, false triggers, and context overhead.
+- [x] Add automated validation for metadata, structure, dependencies, and policy budgets.
+- [x] Implement a minimal bootstrap CLI with `list`, `install`, `uninstall`, and `doctor` commands.
+- [x] Add dry-run, idempotency, conflict detection, dependency checks, backups, and explicit confirmation before modifying persistent instruction files.
+- [x] Package the first versioned installation packs as plugins while keeping policy activation and local development in the bootstrap installer.
+- [x] Validate installation, update, removal, rollback, skill discovery, and policy activation in a clean environment.
+
+Phase 0 evidence (2026-07-30): GitHub reported a public repository with `main`
+as the default branch. Apache-2.0, GitHub Releases, and provenance gates are
+documented; `catalog.yaml`, six pack manifests, seven schemas, CI validation, an
+evaluation harness, an experimental bootstrap CLI, and the proposed
+`engineering-discovery` plugin slice are implemented. Repository validation
+passes for 16 capabilities, six packs, two cases, two accepted baselines, two
+capability results, and zero third-party records. The bootstrap clean-environment
+suite passes 14/14 cases across repository/user scopes, dry-run, copy/link,
+idempotency, update, doctor, collision protection, policy activation, removal,
+and forced rollback. The plugin validator, skill validator, and generated
+development archive contents also pass inspection.
+
+The discovery comparison passed objective task checks but regressed from 18,473
+to 55,489 total tokens and from 46,596 ms to 60,841 ms without a material quality
+gain. It remains `proposed`; Phase 0 platform completion does not validate that
+capability or authorize a public release.
 
 ### Phase 1 — Core Policies and Discovery
 
 - [ ] Create the compact core policy set.
 - [ ] Version the existing token-efficiency setup instead of duplicating Caveman and RTK.
-- [ ] Create `engineering-discovery` for feature design, technology research, architecture proposals, and trade-off analysis.
+- [x] Create `engineering-discovery` for feature design, technology research, architecture proposals, and trade-off analysis.
 - [ ] Create a discovery-brief template and optional ADR handoff.
-- [ ] Forward-test discovery against the no-skill baseline.
+- [x] Forward-test discovery against the no-skill baseline.
 
 ### Phase 2 — Review and Optimization
 
@@ -565,25 +582,59 @@ For optimization work, require reproducible before-and-after measurements. If me
 - Contracts accepted and structurally documented; automated enforcement and
   effectiveness remain Phase 0 and later work.
 
+### 2026-07-30 — Phase 0 experimental foundation completed
+
+- Confirm the canonical repository is public with `main` as its default branch;
+  license original work under Apache-2.0 and use gated GitHub Releases as the
+  initial publishing model.
+- Require structured provenance review before bundling or adapting third-party
+  material. The initial inventory contains no third-party content.
+- Define six modular packs and keep plugin distribution, policy activation,
+  bootstrap state, local development, and evaluation as separate boundaries.
+- Establish a catalog, pack/provenance/plugin/evaluation/state schemas, semantic
+  validation, Node 18/20/22 CI, and accountable ownership through `CODEOWNERS`.
+- Capture two no-capability baselines and two capability comparisons. The
+  accepted-design negative case produced no response-level false trigger and 92
+  additional total tokens with the skill installed.
+- Keep `engineering-discovery` proposed: its positive case increased total tokens
+  from 18,473 to 55,489 and latency from 46,596 ms to 60,841 ms without a
+  material reviewed quality gain; its conditional reference also hit the host
+  read-only sandbox failure.
+- Implement the experimental bootstrap `list`, `install`, `uninstall`, and
+  `doctor` commands with explicit scopes, dry-run, dependency and collision
+  checks, checksummed ownership, policy confirmation/backups, idempotency,
+  copied/local-link installs, update, removal, and rollback.
+- Validate 14/14 clean-environment bootstrap cases and package the proposed
+  discovery plugin into a development archive containing its license,
+  provenance, and release-file checksums.
+- Phase 0 foundation validated at experimental scope; no stable capability,
+  marketplace package, registry package, or public release is implied.
+
 ## Known Issues and Open Questions
 
 - RTK exists at `$HOME/.headroom/bin/rtk` but is absent from the current shell's
   `PATH`; commands work through the absolute path. Installation/discovery is not
   yet validated for a clean environment.
-- Repository visibility, license, and publishing model remain undecided.
-- Exact installation-pack boundaries, catalog and installer schemas, publishing
-  provenance, update strategy, initial compatibility matrix, and host-specific
-  policy-activation targets remain Phase 0 work.
-- Initial capability, pack, platform, and governance owners must be assigned in
-  `catalog.yaml`, pack manifests, and `CODEOWNERS` during Phase 0 scaffolding.
-- Third-party skill licensing and provenance must be checked before publication.
+- No stable or public artifact has been published. Marketplace/registry flows,
+  signatures, attestations, Windows behavior, and a broader clean-host matrix
+  remain unvalidated.
+- `engineering-discovery` remains proposed because its positive comparison
+  regressed token usage and latency; the host read-only sandbox also prevented
+  its conditional reference from loading in that run.
+- One negative case records zero observed response-level false triggers, but it
+  does not establish a false-positive rate or broad implicit-trigger precision.
+- Core policy sources are not implemented. Policy activation is validated only
+  through clean fixture policies and cannot yet install `core-policies`.
+- The provenance inventory is empty; every future third-party addition still
+  requires license, immutable source, attribution, and reviewer evidence.
 
 ## Next Action
 
-Begin Phase 0 by confirming repository visibility, license, and publishing model;
-record provenance constraints for third-party material; then define the initial
-pack/plugin/bootstrap boundaries and scaffold `catalog.yaml`, schemas, and their
-validation workflow. Establish the no-capability evaluation baseline before
-implementing one small vertical capability slice, and do not build the bootstrap
-installer until those foundation artifacts and policy-activation targets are
-validated.
+Begin Phase 1 with the compact `evidence` and `safe-change` policy sources and
+their positive, negative, precedence, context-budget, activation, update, and
+removal evaluations. Then integrate the existing RTK and Caveman setup by
+reference and provenance rather than duplication. In parallel with that policy
+work, add the discovery-brief/ADR handoff template and revise
+`engineering-discovery` to reduce positive-case context cost and avoid the
+read-only reference-loading failure; do not promote it until fresh comparisons
+show a material benefit without trigger regressions.

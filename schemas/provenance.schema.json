@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/RJChristofoli/men-of-letters/schemas/provenance.schema.json",
+  "title": "Men of Letters provenance inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project", "third_party"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "license", "canonical_repository"],
+      "properties": {
+        "id": { "const": "men-of-letters" },
+        "license": { "const": "Apache-2.0" },
+        "canonical_repository": {
+          "const": "https://github.com/RJChristofoli/men-of-letters"
+        }
+      }
+    },
+    "third_party": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/record" }
+    }
+  },
+  "$defs": {
+    "record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "upstream_url",
+        "revision",
+        "owner",
+        "license",
+        "retrieved_on",
+        "paths",
+        "use",
+        "modifications",
+        "reviewer",
+        "status"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$"
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "upstream_url": { "type": "string", "pattern": "^https://" },
+        "revision": { "type": "string", "minLength": 7 },
+        "owner": { "type": "string", "minLength": 1 },
+        "license": { "type": "string", "minLength": 1 },
+        "retrieved_on": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "use": { "enum": ["copied", "adapted", "generated", "redistributed"] },
+        "modifications": { "type": "string", "minLength": 1 },
+        "reviewer": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["pending", "approved", "blocked"] }
+      }
+    }
+  }
+}

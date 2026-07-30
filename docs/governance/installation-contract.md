@@ -1,7 +1,7 @@
 # Installation and Managed-Content Contract
 
-Status: accepted Phase -1 contract; the bootstrap CLI, schemas, and pack
-manifests remain Phase 0 work.
+Status: accepted contract with an experimental Phase 0 bootstrap, schemas, and
+initial pack manifests. Stable distribution remains unvalidated.
 
 This contract separates released plugin installation from policy activation and
 repository-local development. It governs the future bootstrap installer.
@@ -32,8 +32,9 @@ dependencies and incompatible version constraints. A dependency already present
 at a compatible version is reused; an incompatible installed version requires
 an explicit update plan.
 
-Phase 0 will finalize pack boundaries and the manifest schema. It may not weaken
-the preflight, ownership, or rollback requirements in this contract.
+Phase 0 established the initial pack boundaries and manifest schema. Future
+changes may not weaken the preflight, ownership, or rollback requirements in
+this contract.
 
 ## Collision Rules
 

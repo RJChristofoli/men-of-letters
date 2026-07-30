@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "case_id": "discovery-architecture-001",
+  "capability": "engineering-discovery",
+  "variant": "baseline",
+  "timestamp": "2026-07-30T17:56:25.297Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 16561,
+    "cached_input_tokens": 0,
+    "output_tokens": 1912,
+    "total_tokens": 18473,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 46596,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:goal",
+      "passed": true,
+      "detail": "goal is populated"
+    },
+    {
+      "name": "nonempty:current_state",
+      "passed": true,
+      "detail": "current_state is populated"
+    },
+    {
+      "name": "nonempty:recommendation",
+      "passed": true,
+      "detail": "recommendation is populated"
+    },
+    {
+      "name": "nonempty:expected_gain",
+      "passed": true,
+      "detail": "expected_gain is populated"
+    },
+    {
+      "name": "nonempty:validation_experiment",
+      "passed": true,
+      "detail": "validation_experiment is populated"
+    },
+    {
+      "name": "nonempty:reversibility",
+      "passed": true,
+      "detail": "reversibility is populated"
+    },
+    {
+      "name": "minimum-items:constraints",
+      "passed": true,
+      "detail": "constraints has 8 items"
+    },
+    {
+      "name": "minimum-items:assumptions",
+      "passed": true,
+      "detail": "assumptions has 6 items"
+    },
+    {
+      "name": "minimum-items:alternatives",
+      "passed": true,
+      "detail": "alternatives has 4 items"
+    },
+    {
+      "name": "minimum-items:evidence",
+      "passed": true,
+      "detail": "evidence has 10 items"
+    },
+    {
+      "name": "minimum-items:risks",
+      "passed": true,
+      "detail": "risks has 7 items"
+    },
+    {
+      "name": "required-term:alternatives:synchronous",
+      "passed": true,
+      "detail": "alternatives includes synchronous"
+    },
+    {
+      "name": "required-term:alternatives:postgres",
+      "passed": true,
+      "detail": "alternatives includes postgres"
+    },
+    {
+      "name": "required-term:alternatives:redis",
+      "passed": true,
+      "detail": "alternatives includes redis"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "goal": "Choose the next architecture step that prevents audit-report work from being tied to HTTP request lifetimes, preserves accepted report requests, limits repeated computation, and gives operators actionable failure information.",
+    "current_state": "Audit reports are generated synchronously in the Node.js monolith. Generation takes 20 seconds to 4 minutes, so requests can time out and client retries can repeat the work. PostgreSQL is the source of truth, Redis is used for ephemeral caching, and no new managed service can be adopted this quarter.",
+    "constraints": [
+      "The team has two engineers.",
+      "Accepted report requests must not be lost.",
+      "Duplicate delivery is acceptable only if it is recorded.",
+      "Operators must be able to determine why a report failed.",
+      "PostgreSQL remains the source of truth.",
+      "Redis is currently treated as ephemeral infrastructure.",
+      "No new managed service may be adopted this quarter.",
+      "The proposal is architectural only; implementation is out of scope."
+    ],
+    "assumptions": [
+      "A report request can return an identifier immediately and let clients poll or retrieve the result later.",
+      "The monolith can run a separate worker process or worker execution mode using the same codebase.",
+      "Report generation can be retried safely, or can be made idempotent using a stable report-request identifier.",
+      "Generated report artifacts can be stored durably in PostgreSQL or in an already-approved durable store; Redis alone is not assumed durable.",
+      "PostgreSQL has enough operational headroom for an initially bounded worker workload; this must be validated.",
+      "Exact delivery to an external destination cannot be guaranteed atomically without cooperation from that destination, so delivery attempts and outcomes will be recorded."
+    ],
+    "alternatives": [
+      {
+        "name": "Keep synchronous generation, with mitigations",
+        "tradeoffs": "Raise HTTP timeouts, add client idempotency keys, cache completed reports, and suppress concurrent work for the same request. This is the smallest change and may reduce repeated computation, but long-running work remains coupled to connections, deployments, process crashes, and proxy timeout settings. Durable acceptance and reliable recovery remain awkward.",
+        "contraindications": "Contraindicated when accepted work must survive HTTP disconnects or process restarts, when generation regularly exceeds infrastructure timeouts, or when operators need a durable failure and retry history."
+      },
+      {
+        "name": "PostgreSQL-backed jobs with a database transaction boundary",
+        "tradeoffs": "Persist a report request/job in PostgreSQL, return its identifier promptly, and let a bounded worker claim jobs using transactional row locking such as FOR UPDATE SKIP LOCKED. Store status, attempt count, lease or heartbeat, timestamps, normalized error details, artifact reference, and delivery-attempt records. Creating domain state and its job can occur in one transaction, avoiding a database-to-queue dual-write gap. This adds worker lifecycle, retry, backoff, stale-lease recovery, retention, and database-load concerns, but keeps the design within existing durable infrastructure and is straightforward for a small team to inspect.",
+        "contraindications": "Contraindicated if measured polling, locking, write volume, or report queries place unacceptable load on PostgreSQL; if jobs require very high throughput or sophisticated queue semantics; or if workers cannot make generation and delivery idempotent enough to tolerate retries."
+      },
+      {
+        "name": "Redis-backed queue",
+        "tradeoffs": "A Redis queue can provide convenient worker primitives, delayed retries, and lower-latency job pickup. However, because PostgreSQL is the source of truth and Redis is considered ephemeral, reliably coordinating a committed report request with queue publication requires an outbox or reconciliation mechanism. Redis persistence, failover, eviction, and queue-library behavior would also become part of the durability argument. Once a PostgreSQL outbox is required, much of the durable job state already exists in PostgreSQL.",
+        "contraindications": "Contraindicated when Redis loss, eviction, restore, or failover could lose the only runnable copy of accepted work; when Redis durability is not explicitly operated and tested; or when the team cannot support dual-write reconciliation and preserve inspectable failure history."
+      },
+      {
+        "name": "PostgreSQL outbox feeding Redis workers",
+        "tradeoffs": "Persist the request and outbox event atomically in PostgreSQL, relay events to Redis, and reconcile unpublished events. This removes the primary dual-write loss window while retaining Redis queue ergonomics, but introduces two job-moving components and two operational stores. It changes the decision only if validation shows PostgreSQL job claiming is unsuitable while Redis worker features are materially valuable.",
+        "contraindications": "Contraindicated as the first step for a two-engineer team unless measured PostgreSQL contention or queue-feature requirements justify the additional relay, reconciliation, and failure modes."
+      }
+    ],
+    "evidence": [
+      {
+        "claim": "Report generation currently runs inside the HTTP request.",
+        "class": "documented",
+        "confidence": "high"
+      },
+      {
+        "claim": "Report generation takes between 20 seconds and 4 minutes.",
+        "class": "documented",
+        "confidence": "high"
+      },
+      {
+        "claim": "The current behavior causes request timeouts and repeated work when clients retry.",
+        "class": "documented",
+        "confidence": "high"
+      },
+      {
+        "claim": "PostgreSQL is the source of truth.",
+        "class": "documented",
+        "confidence": "high"
+      },
+      {
+        "claim": "Redis is already used for ephemeral caching.",
+        "class": "documented",
+        "confidence": "high"
+      },
+      {
+        "claim": "The team cannot adopt a new managed service this quarter.",
+        "class": "documented",
+        "confidence": "high"
+      },
+      {
+        "claim": "Report requests must not be lost, duplicate delivery is tolerable if recorded, and failures must be diagnosable by operators.",
+        "class": "documented",
+        "confidence": "high"
+      },
+      {
+        "claim": "A PostgreSQL job row created in the same transaction as related source-of-truth state avoids a PostgreSQL-to-queue dual-write loss window.",
+        "class": "inferred",
+        "confidence": "high"
+      },
+      {
+        "claim": "A Redis-only queue does not satisfy the stated durability requirement unless its persistence and recovery guarantees are strengthened and verified, or PostgreSQL retains a durable recoverable record.",
+        "class": "inferred",
+        "confidence": "high"
+      },
+      {
+        "claim": "The current PostgreSQL capacity and contention impact of job polling are unknown.",
+        "class": "observed",
+        "confidence": "high"
+      }
+    ],
+    "recommendation": "Adopt a PostgreSQL-backed job design as the next step. The HTTP endpoint should durably create or reuse a report request keyed by an idempotency key, then return a report identifier without waiting for generation. A separately runnable worker should claim jobs transactionally, use bounded concurrency, record every attempt and terminal error, recover expired leases, and retry only according to an explicit policy. Keep report state and delivery-attempt history in PostgreSQL; use Redis only for optional acceleration such as notifications or cache entries, never as the sole record of accepted work. Define states such as pending, running, succeeded, failed, and delivered, while treating state transitions—not a permanently held database transaction—as the durable workflow. Make generation idempotent by report-request identifier and record duplicate delivery attempts and outcomes.",
+    "expected_gain": "This should decouple report acceptance from HTTP timeouts, make accepted work recoverable after worker or process failure, suppress duplicate generation for requests sharing an idempotency key, and provide operators with durable attempt and error history. The magnitude of latency, throughput, and database-load changes is not yet measured and should not be claimed in advance.",
+    "validation_experiment": "Run a reversible, bounded pilot behind a feature flag for an internal tenant or small report subset. Add the PostgreSQL job table and worker without removing the synchronous path. Exercise normal completion, client retry with the same idempotency key, worker termination during generation, stale-lease recovery, PostgreSQL restart behavior, permanent generation failure, and duplicate delivery recording. Measure queue wait, generation duration, retry counts, stale recoveries, database query and lock impact, and operator ability to trace a failure from request to attempts. Stop the worker and route new requests back to the existing path if database impact or correctness is unacceptable; preserve pilot rows for diagnosis, then drop the additive schema later if the design is rejected.",
+    "risks": [
+      "Polling and job-state writes may add load or contention to PostgreSQL.",
+      "Long report queries may still harm transactional workloads unless concurrency, query cost, and resource usage are bounded.",
+      "Incorrect lease duration or heartbeat behavior can cause jobs to stall or be processed concurrently.",
+      "Retries can repeat external side effects unless artifact creation and delivery are idempotent or deduplicated.",
+      "Storing unbounded attempt, error, and delivery history requires a retention policy.",
+      "Sensitive report inputs or error details could leak through job metadata or logs unless access and redaction are designed explicitly.",
+      "Deployments containing both HTTP and worker modes require compatible schema and rolling-deployment behavior."
+    ],
+    "reversibility": "High for the proposed pilot: the schema and worker are additive, routing is feature-flagged, and the current synchronous path remains available during validation. Reversibility decreases after clients depend on asynchronous status APIs, so the API contract should initially be versioned or scoped to the pilot.",
+    "adr_handoff": {
+      "recommended": true,
+      "reason": "The choice establishes a durable work boundary, retry and idempotency semantics, operational ownership, and a deliberate decision to use PostgreSQL rather than Redis as the authoritative queue. These consequences span future report workflows and deserve a short ADR containing the alternatives, assumptions, pilot evidence, and conditions that would trigger reconsideration."
+    }
+  }
+}

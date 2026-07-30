@@ -19,18 +19,31 @@ The planned capabilities support engineering discovery, backend and security rev
 
 ## Status
 
-The repository is in its governance and foundation stage. The skills, installation packs, and bootstrap installer are not yet implemented or validated.
+Phase 0 foundation is implemented and validated at an experimental level. The
+catalog, schemas, evaluation harness, bootstrap CLI, and first proposed plugin
+slice exist. No stable capability or public release is available yet.
 
 ## Installation
 
-There is no supported capability installation yet. To contribute to the foundation:
+There is no supported stable installation yet. For local development:
 
 ```bash
 git clone https://github.com/RJChristofoli/men-of-letters.git
 cd men-of-letters
+npm ci
+npm run validate
+npm test
+npm run cli -- list
 ```
 
-Phase 0 will add versioned plugin packages and a bootstrap installer for local development and selective policy activation.
+Preview the proposed discovery pack without changing the repository:
+
+```bash
+npm run cli -- install engineering-discovery --scope repo --allow-proposed --dry-run
+```
+
+See the bootstrap guide before installing or activating policies. Proposed-pack
+installation is for evaluation only.
 
 ## Continue development
 
@@ -46,4 +59,7 @@ The next thread must treat [ROADMAP.md](ROADMAP.md) as the source of truth and r
 
 - [Roadmap and current next action](ROADMAP.md)
 - [Governance contracts and capability specification](docs/governance/README.md)
+- [Distribution architecture](docs/architecture/distribution-boundaries.md)
+- [Bootstrap CLI](docs/bootstrap-cli.md)
+- [Evaluation harness and current evidence](docs/evaluation.md)
 - [Implementation workflow and skill usage](docs/implementation-workflow.md)

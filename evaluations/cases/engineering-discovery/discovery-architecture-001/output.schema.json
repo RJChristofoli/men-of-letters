@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "goal",
+    "current_state",
+    "constraints",
+    "assumptions",
+    "alternatives",
+    "evidence",
+    "recommendation",
+    "expected_gain",
+    "validation_experiment",
+    "risks",
+    "reversibility",
+    "adr_handoff"
+  ],
+  "properties": {
+    "goal": { "type": "string", "minLength": 1 },
+    "current_state": { "type": "string", "minLength": 1 },
+    "constraints": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 2
+    },
+    "assumptions": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 1
+    },
+    "alternatives": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "tradeoffs", "contraindications"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "tradeoffs": { "type": "string", "minLength": 1 },
+          "contraindications": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim", "class", "confidence"],
+        "properties": {
+          "claim": { "type": "string", "minLength": 1 },
+          "class": {
+            "enum": ["measured", "observed", "documented", "inferred", "assumed"]
+          },
+          "confidence": { "enum": ["low", "medium", "high"] }
+        }
+      }
+    },
+    "recommendation": { "type": "string", "minLength": 1 },
+    "expected_gain": { "type": "string", "minLength": 1 },
+    "validation_experiment": { "type": "string", "minLength": 1 },
+    "risks": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 2
+    },
+    "reversibility": { "type": "string", "minLength": 1 },
+    "adr_handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recommended", "reason"],
+      "properties": {
+        "recommended": { "type": "boolean" },
+        "reason": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

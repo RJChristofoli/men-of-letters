@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["discovery_needed", "reason", "next_action"],
+  "properties": {
+    "discovery_needed": { "type": "boolean", "const": false },
+    "reason": { "type": "string", "minLength": 1 },
+    "next_action": { "type": "string", "minLength": 1 }
+  }
+}

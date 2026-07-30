@@ -1,0 +1,194 @@
+schema_version: 1
+capabilities:
+  - id: engineering-principles
+    type: policy
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: []
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: core-policies
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 140
+  - id: evidence
+    type: policy
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: []
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: core-policies
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 120
+  - id: backend-defaults
+    type: policy
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: [engineering-principles, evidence, safe-change]
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: core-policies
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 150
+  - id: documentation
+    type: policy
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: [evidence]
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: core-policies
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 100
+  - id: token-efficiency
+    type: policy
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: [safe-change]
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: core-policies
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 100
+  - id: versioning-and-lifecycle
+    type: policy
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: [evidence]
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: core-policies
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 90
+  - id: safe-change
+    type: policy
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: [evidence]
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: core-policies
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 100
+  - id: implement-task
+    type: workflow
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: [engineering-discovery, backend-review, test-change]
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: backend-quality
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 1200
+  - id: engineering-discovery
+    type: router
+    status: proposed
+    owner: RJChristofoli
+    source: plugins/engineering-discovery/skills/engineering-discovery/SKILL.md
+    dependencies: []
+    compatibility: {}
+    evaluation_suite: engineering-discovery
+    installation_pack: engineering-discovery
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 1800
+  - id: backend-review
+    type: router
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: []
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: backend-quality
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 1800
+  - id: optimize-engineering
+    type: router
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: [backend-review, refactor-safely]
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: engineering-optimization
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 1800
+  - id: security-review
+    type: workflow
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: []
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: specialist-reviews
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 1800
+  - id: test-change
+    type: workflow
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: []
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: backend-quality
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 1600
+  - id: refactor-safely
+    type: workflow
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: [test-change]
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: backend-quality
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 1600
+  - id: generate-adr
+    type: workflow
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: [engineering-discovery]
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: documentation-workflows
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 1200
+  - id: generate-docs
+    type: workflow
+    status: proposed
+    owner: RJChristofoli
+    source: null
+    dependencies: [evidence]
+    compatibility: {}
+    evaluation_suite: null
+    installation_pack: documentation-workflows
+    introduced_release: null
+    deprecated_release: null
+    context_budget_tokens: 1400

@@ -1,0 +1,4 @@
+node_modules/
+dist/
+evaluations/runs/
+.men-of-letters/

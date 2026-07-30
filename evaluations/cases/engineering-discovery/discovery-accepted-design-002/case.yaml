@@ -1,0 +1,16 @@
+schema_version: 1
+id: discovery-accepted-design-002
+capability: engineering-discovery
+kind: negative
+prompt_file: prompt.md
+output_schema: output.schema.json
+sandbox: read-only
+checks:
+  required_nonempty:
+    - reason
+    - next_action
+  minimum_items: {}
+  required_terms:
+    - path: next_action
+      terms:
+        - implement

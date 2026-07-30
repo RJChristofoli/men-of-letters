@@ -1,0 +1,6 @@
+interface:
+  display_name: "Engineering Discovery"
+  short_description: "Compare engineering options before implementation"
+  default_prompt: "Use $engineering-discovery to compare options and recommend a reversible validation experiment."
+policy:
+  allow_implicit_invocation: true
