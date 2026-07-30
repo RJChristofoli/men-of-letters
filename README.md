@@ -45,4 +45,5 @@ The next thread must treat [ROADMAP.md](ROADMAP.md) as the source of truth and r
 ## Documentation
 
 - [Roadmap and current next action](ROADMAP.md)
+- [Governance contracts and capability specification](docs/governance/README.md)
 - [Implementation workflow and skill usage](docs/implementation-workflow.md)

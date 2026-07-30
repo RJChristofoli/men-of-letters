@@ -107,13 +107,22 @@ Use only the stages required by the task.
 - [x] Approve lifecycle states: `proposed`, `experimental`, `validated`, `stable`, `deprecated`, and `retired`.
 - [x] Approve plugins as the primary distribution mechanism and a separate bootstrap installer for policies and local development.
 - [x] Approve documentation maintenance as part of every phase's definition of done.
-- [ ] Define naming and repository conventions.
-- [ ] Define the Skill Design Guide and specification template.
-- [ ] Define policy precedence and conflict handling.
-- [ ] Define installation scopes, pack dependencies, collision handling, and policy-managed block conventions.
-- [ ] Define ownership and decision process.
-- [ ] Define versioning, release, compatibility, and deprecation rules.
-- [ ] Define safe-change and execution-contract requirements.
+- [x] Define naming and repository conventions.
+- [x] Define the Skill Design Guide and specification template.
+- [x] Define policy precedence and conflict handling.
+- [x] Define installation scopes, pack dependencies, collision handling, and policy-managed block conventions.
+- [x] Define ownership and decision process.
+- [x] Define versioning, release, compatibility, and deprecation rules.
+- [x] Define safe-change and execution-contract requirements.
+
+Phase -1 evidence (2026-07-30): the accepted contracts are indexed in
+[`docs/governance/README.md`](docs/governance/README.md), with the authoring
+template at [`templates/capability-spec.md`](templates/capability-spec.md).
+Repository inspection confirmed that no implementation or release artifacts yet
+exist, so this checkpoint validates governance completeness and internal
+consistency only—not installer, capability, or evaluation effectiveness. All 13
+current Markdown files passed local-link, trailing-whitespace, and final-newline
+checks, and the tracked diff passed Git's whitespace validation.
 
 ### Phase 0 — Platform Foundation
 
@@ -268,6 +277,9 @@ Reuse planned review modules instead of duplicating them: `performance-review` i
 
 ### Skill Design Guide
 
+Detailed contract: [`docs/governance/skill-design-guide.md`](docs/governance/skill-design-guide.md).
+Authoring template: [`templates/capability-spec.md`](templates/capability-spec.md).
+
 Every proposed skill must define:
 
 - Problem, goal, scope, and non-goals.
@@ -285,9 +297,13 @@ Keep official `SKILL.md` frontmatter limited to `name` and `description`. Store 
 
 ### Execution contract
 
+Detailed contract: [`docs/governance/safe-change.md`](docs/governance/safe-change.md).
+
 Every workflow must declare whether it is read-only or mutating, affected files or systems, approvals, side effects, idempotency, rollback, and stop conditions. Destructive or irreversible actions require explicit confirmation.
 
 ### Documentation contract
+
+Checkpoint checklist: [`docs/governance/documentation-checklist.md`](docs/governance/documentation-checklist.md).
 
 Keep the repository `README.md` simple and brief. It must explain:
 
@@ -326,6 +342,8 @@ Initial targets:
 
 ### Catalog, lifecycle, and versioning
 
+Detailed contract: [`docs/governance/versioning-and-lifecycle.md`](docs/governance/versioning-and-lifecycle.md).
+
 Create `catalog.yaml` with capability ID, type, status, owner, dependencies, compatibility, evaluation suite, installation pack, and introduced or deprecated release.
 
 Use lifecycle states:
@@ -337,6 +355,11 @@ proposed → experimental → validated → stable → deprecated → retired
 Use SemVer by installation pack or plugin initially. Do not add per-skill versions until independently released skill lifecycles justify the overhead.
 
 ### Packaging
+
+Repository conventions are defined in
+[`docs/governance/repository-conventions.md`](docs/governance/repository-conventions.md),
+and installation ownership and collision behavior are defined in
+[`docs/governance/installation-contract.md`](docs/governance/installation-contract.md).
 
 Prefer modular installation packs:
 
@@ -363,6 +386,11 @@ Treat authoring, local activation, policy installation, and reusable distributio
 | Maintenance | Installer manifest, diagnostics, updates, rollback, and clean removal |
 
 The bootstrap installer is infrastructure, not a skill. It complements official plugin distribution by handling policy activation and local development workflows that standalone skill or plugin installation does not enforce automatically.
+
+Policy resolution follows
+[`docs/governance/policy-precedence.md`](docs/governance/policy-precedence.md).
+Ownership and changes to these contracts follow
+[`docs/governance/ownership-and-decisions.md`](docs/governance/ownership-and-decisions.md).
 
 ### Initial bootstrap CLI
 
@@ -458,7 +486,9 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ### 2026-07-30 — Engineering optimization track approved
 
-- Add `optimize-engineering` to Phase 1 as an on-demand router.
+- Initially place `optimize-engineering` in Phase 1 as an on-demand router. This
+  phase placement was superseded by the later governed-capability-platform
+  decision and the current roadmap places implementation in Phase 2.
 - Cover algorithms, code cleanup, runtime, data, pipelines, engineering flow, architecture, technology, and agent operations.
 - Separate measurable optimization from maintainability-focused simplification.
 - Require baseline, evidence, before-and-after comparison, and rollback criteria.
@@ -511,14 +541,49 @@ For optimization work, require reproducible before-and-after measurements. If me
 - Rename the local repository folder and GitHub remote to match the approved identity.
 - Brand approved and applied; plugin and CLI implementation remain planned work.
 
+### 2026-07-30 — Phase -1 governance contracts accepted
+
+- Use stable functional `kebab-case` IDs and keep each skill's canonical source
+  under its owning skill-bearing plugin; keep policies as separate canonical
+  sources for selective activation.
+- Limit official `SKILL.md` frontmatter to `name` and `description`; require a
+  capability specification, progressive disclosure, execution contract,
+  baseline, positive and negative evaluation cases, budgets, owner, and pack.
+- Resolve host authority first, narrower same-authority scope second, and Men of
+  Letters policy priority last; fail closed on unresolved required conflicts.
+- Separate repository, user, released-plugin, and local-development scopes. Use
+  checksummed installer-owned blocks and refuse unmanaged or modified
+  collisions.
+- Use accountable capability, pack, platform, and governance ownership with
+  recorded review for contract, cross-pack, breaking, and emergency decisions.
+- Apply SemVer per independently installable pack/plugin and independently to
+  the bootstrap CLI; keep lifecycle status separate from version and require
+  evidence gates for promotion.
+- Require exact scope, authority, side effects, validation, rollback, and stop
+  conditions for workflows and mutations. Treat documentation synchronization
+  as a checked phase artifact without equating documentation with validation.
+- Contracts accepted and structurally documented; automated enforcement and
+  effectiveness remain Phase 0 and later work.
+
 ## Known Issues and Open Questions
 
-- RTK instructions are present, but the `rtk` executable was unavailable in the current execution environment. Investigate before treating RTK integration as validated.
+- RTK exists at `$HOME/.headroom/bin/rtk` but is absent from the current shell's
+  `PATH`; commands work through the absolute path. Installation/discovery is not
+  yet validated for a clean environment.
 - Repository visibility, license, and publishing model remain undecided.
-- Exact installation-pack boundaries, installer manifest schema, update strategy, and selective policy-activation mechanism remain to be designed.
-- Catalog schema, policy precedence, compatibility rules, and deprecation details remain to be formalized.
+- Exact installation-pack boundaries, catalog and installer schemas, publishing
+  provenance, update strategy, initial compatibility matrix, and host-specific
+  policy-activation targets remain Phase 0 work.
+- Initial capability, pack, platform, and governance owners must be assigned in
+  `catalog.yaml`, pack manifests, and `CODEOWNERS` during Phase 0 scaffolding.
 - Third-party skill licensing and provenance must be checked before publication.
 
 ## Next Action
 
-Execute Phase -1: define naming and repository conventions, the Skill Design Guide and specification template, policy precedence, installation scopes and managed-block conventions, versioning and deprecation rules, the safe-change execution contract, and the documentation checklist. Then scaffold Phase 0, establish the baseline, and implement one small vertical capability slice before building the bootstrap installer.
+Begin Phase 0 by confirming repository visibility, license, and publishing model;
+record provenance constraints for third-party material; then define the initial
+pack/plugin/bootstrap boundaries and scaffold `catalog.yaml`, schemas, and their
+validation workflow. Establish the no-capability evaluation baseline before
+implementing one small vertical capability slice, and do not build the bootstrap
+installer until those foundation artifacts and policy-activation targets are
+validated.
