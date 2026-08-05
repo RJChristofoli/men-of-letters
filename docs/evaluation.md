@@ -35,10 +35,13 @@ npm run evaluate -- record evaluations/runs/<run-file>.json
 Recorded capability results live under `evaluations/results/`. Passing objective
 checks does not by itself justify lifecycle promotion.
 
-The capability variant installs only the selected canonical skill into a clean
-temporary repository. Positive cases invoke it explicitly to test the skill body
-and progressive-disclosure path. Negative cases leave invocation implicit so
-routing output and context overhead can reveal false-trigger regressions.
+The capability variant activates only the selected canonical capability in a
+clean temporary repository. Policies are written to that repository's durable
+`AGENTS.md` surface; skills are installed under `.agents/skills`. Positive skill
+cases invoke the selected skill explicitly to test its body and
+progressive-disclosure path. Negative skill cases leave invocation implicit.
+Policy cases keep the selected policy active for both positive applicability and
+negative non-interference comparisons.
 
 ## Integrity
 
@@ -61,39 +64,74 @@ turn without tool calls or corrections.
 
 | Variant | Input tokens | Cached input | Output tokens | Total tokens | Latency |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| No-capability baseline | 16,561 | 0 | 1,912 | 18,473 | 46,596 ms |
-| `engineering-discovery` | 53,481 | 34,304 | 2,008 | 55,489 | 60,841 ms |
+| No-capability baseline | 14,543 | 0 | 1,636 | 16,179 | 51,700 ms |
+| Optimized `engineering-discovery` | 15,192 | 0 | 1,574 | 16,766 | 55,711 ms |
 
 Evidence:
 
 - [Accepted baseline](../evaluations/baselines/discovery-architecture-001.json)
 - [Recorded capability result](../evaluations/results/discovery-architecture-001.json)
 
-Observed review result: both responses were technically strong. The baseline
-included an additional PostgreSQL-outbox/Redis alternative; the capability was
-slightly more explicit about confidence and at-least-once semantics. The
-capability also reported that its conditional reference could not be inspected
-because the host read-only sandbox failed to initialize. That host failure and
-the substantial token/latency regression prevent a quality or efficiency claim.
+Observed review result: both responses were technically strong. The optimized
+capability retained the PostgreSQL recommendation, durability boundary,
+idempotency, recoverable worker semantics, diagnostics, falsifiable experiment,
+rollback, and ADR handoff while avoiding repeated facts. Its default path did not
+load the conditional reference or report the previous sandbox failure.
 
-Decision: keep `engineering-discovery` proposed. Add more negative-trigger and
-fresh positive cases, reduce loading overhead, fix or isolate reference access,
-and repeat controlled comparisons before lifecycle promotion.
+The revision reduced the skill source from an estimated 1,048 to 657 tokens
+(-37%) and its conditional reference from 776 to 354 (-54%). In the fresh
+controlled pair, the capability added 649 input tokens and 587 total tokens
+(+3.6%) while producing 62 fewer output tokens (-3.8%); latency was 4,011 ms
+higher. The 38,723-token reduction from the superseded capability result is
+historical only because that run predates the controlled user-configuration
+baseline and must not be treated as skill efficiency evidence.
+
+Decision: keep `engineering-discovery` proposed. One positive case and an
+unblinded technical review do not establish representative quality or
+efficiency. Add fresh positive cases, broaden negative-trigger coverage, and run
+matched comparisons before lifecycle promotion.
 
 Case `discovery-accepted-design-002` then installed the skill without explicit
 invocation for an implementation task whose architecture was already accepted:
 
 | Variant | Input tokens | Output tokens | Total tokens | Latency | Discovery needed |
 | --- | ---: | ---: | ---: | ---: | --- |
-| No-capability baseline | 16,250 | 83 | 16,333 | 7,617 ms | No |
-| Skill installed, implicit routing | 16,353 | 72 | 16,425 | 6,313 ms | No |
+| No-capability baseline | 14,236 | 88 | 14,324 | 9,471 ms | No |
+| Optimized skill installed, implicit routing | 14,320 | 100 | 14,420 | 7,608 ms | No |
 
 Evidence:
 
 - [Accepted negative baseline](../evaluations/baselines/discovery-accepted-design-002.json)
 - [Recorded negative capability result](../evaluations/results/discovery-accepted-design-002.json)
 
-Observed result: 0 response-level false triggers in 1 negative case, with 92
-additional total tokens. One case does not establish a false-positive rate or
-host-wide trigger precision, but it records the initial context overhead and
-confirms the negative routing contract for this task.
+Observed result: 0 response-level false triggers in 1 negative case. The
+optimized capability added 84 input and 96 total tokens (+0.7%) and correctly
+routed the task to implementation. One case does not establish a false-positive
+rate or host-wide trigger precision.
+
+## Initial Core Policy Results
+
+The initial `evidence` and `safe-change` cases ran through Codex CLI 0.146.0 on
+Linux x64. Every baseline and capability variant passed after reviewed rubric
+corrections were applied to the same measured runs. All completed in one turn
+without tool calls or corrections.
+
+| Case | Baseline tokens | Policy tokens | Delta | Reviewed result |
+| --- | ---: | ---: | ---: | --- |
+| `evidence-claim-001` | 15,072 | 15,171 | +99 (+0.7%) | Equivalent calibrated assessment |
+| `evidence-format-002` | 14,776 | 14,899 | +123 (+0.8%) | Identical output; no interference |
+| `safe-change-destructive-001` | 14,942 | 15,044 | +102 (+0.7%) | Equivalent safe refusal and preflight |
+| `safe-change-readonly-002` | 14,789 | 14,894 | +105 (+0.7%) | Identical output; no false approval |
+| `safe-change-precedence-003` | 14,928 | 15,047 | +119 (+0.8%) | Equivalent safety precedence |
+
+Deterministic bootstrap coverage installs the two canonical sources through a
+controlled policy fixture and verifies budget, dry-run, confirmation, managed
+blocks, version update, doctor, and clean removal. It also corrected two
+bootstrap defects: policy dry-run no longer requires confirmation, and a pack
+version change now updates policy markers even when policy content is unchanged.
+
+Decision: promote the two capabilities from `proposed` to `experimental`. The
+initial runs show bounded context overhead and no observed behavioral regression,
+but no material quality or efficiency improvement over the already strong
+baseline. The sample is too small for `validated`, and the complete
+`core-policies` pack remains un-installable until its remaining sources exist.

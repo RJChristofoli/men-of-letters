@@ -1,7 +1,8 @@
 # Capability Specification: `engineering-discovery`
 
-Status: proposed implementation; promotion to experimental requires the initial
-plugin, skill, repository, and capability-run checks to pass.
+Status: proposed implementation; plugin, skill, repository, and initial
+comparative checks pass, but promotion still requires repeated material quality
+or efficiency benefit without unacceptable regressions.
 
 ## Identity and Ownership
 
@@ -61,9 +62,13 @@ plugin, skill, repository, and capability-run checks to pass.
 
 ## Progressive Disclosure
 
-- `SKILL.md`: routing, core workflow, safety, and output contract.
-- Conditional reference: evidence and alternative-analysis rigor for disputed,
-  technology-selection, or cross-boundary decisions.
+- `SKILL.md`: compact routing, decision workflow, cost controls, safety, and
+  output contract.
+- Default path: use supplied evidence and do not load a reference for routine
+  technology or architecture comparisons.
+- Conditional reference: load deeper evidence and alternative-analysis rigor only
+  when material evidence conflicts or a costly-to-reverse decision remains
+  ambiguous.
 - Scripts/assets: none.
 
 ## Evidence and Evaluation
@@ -83,8 +88,12 @@ plugin, skill, repository, and capability-run checks to pass.
 
 ## Budgets
 
-- `SKILL.md`: fewer than 200 lines and 1,800 catalog context-budget tokens.
+- `SKILL.md`: fewer than 100 lines and 800 catalog context-budget tokens,
+  enforced by repository validation.
 - References: one level deep and conditionally loaded.
+- Default output: compact decision boundary, evidence/unknowns, options,
+  recommendation, validation, and risk/rollback/ADR sections without repeated
+  facts.
 - Side-effect/tool budget: read-only; stop research when it cannot change the
   decision or experiment.
 - Total tokens: compare per completed task; no unmeasured savings claim.
@@ -92,10 +101,10 @@ plugin, skill, repository, and capability-run checks to pass.
 ## Compatibility and Lifecycle
 
 - Tested host: Codex CLI 0.146.0 on the two recorded initial cases.
-- Pack/bootstrap: plugin pack `0.1.0-dev.0`; bootstrap compatibility not yet
-  implemented.
-- Lifecycle: promote to experimental only after plugin/skill validation and the first
-  capability forward run pass. Stable compatibility is not claimed.
+- Pack/bootstrap: plugin pack and bootstrap `0.1.0-dev.0`; clean copied and
+  local-link install, discovery, doctor, removal, dry-run, and archive checks pass.
+- Lifecycle: remain proposed until broader matched comparisons establish material
+  benefit and acceptable routing behavior. Stable compatibility is not claimed.
 
 ## Alternatives and Decision
 

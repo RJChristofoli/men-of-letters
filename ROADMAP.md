@@ -55,6 +55,11 @@ A phase is not complete while its affected documentation is stale.
 - Use progressive disclosure: small skill metadata, concise `SKILL.md`, conditional references, and deterministic scripts where useful.
 - Version skills and test them against repeatable evaluations.
 - Keep specialized capabilities installable without forcing every skill into every session.
+- Provide a one-command suite installation path while preserving modular packs,
+  explicit scope, managed policy activation, and safe rollback.
+- Let Codex discover installed capabilities automatically and load only the
+  narrow workflow justified by implementation, research, investigation, review,
+  optimization, or documentation intent.
 
 ## Architecture Decision
 
@@ -66,7 +71,7 @@ Build a governed engineering capability platform rather than a flat catalog of s
 | --- | --- | --- |
 | Policies | Apply compact cross-cutting constraints | `engineering-principles`, `evidence`, `backend-defaults`, `documentation`, `token-efficiency`, `versioning-and-lifecycle`, `safe-change` |
 | Routers | Select the relevant path and load only required context | `engineering-discovery`, `backend-review`, `optimize-engineering` |
-| Workflows | Execute operations with defined inputs, outputs, side effects, and validation | `security-review`, `test-change`, `refactor-safely`, `generate-adr`, `generate-docs` |
+| Workflows | Execute operations with defined inputs, outputs, side effects, and validation | `implement-task`, `investigate-problem`, `security-review`, `test-change`, `refactor-safely`, `generate-adr`, `generate-docs` |
 | References | Supply conditional specialist knowledge | Architecture, API, database, performance, observability, Kafka, runtime, pipeline, and technology evaluation |
 | Resources | Provide deterministic or reusable implementation material | Scripts, templates, assets, schemas, benchmarks, checklists, and fixtures |
 
@@ -85,7 +90,7 @@ Engineering Discovery
         ↓
 Decision / Optional ADR
         ↓
-Implementation
+Implementation / Problem Investigation
         ↓
 Testing / Safe Refactoring
         ↓
@@ -160,39 +165,85 @@ capability or authorize a public release.
 ### Phase 1 — Core Policies and Discovery
 
 - [ ] Create the compact core policy set.
+  - [x] Implement and initially evaluate `evidence` and `safe-change`.
+  - [ ] Implement the remaining compact policy sources and complete-pack tests.
 - [ ] Version the existing token-efficiency setup instead of duplicating Caveman and RTK.
 - [x] Create `engineering-discovery` for feature design, technology research, architecture proposals, and trade-off analysis.
 - [ ] Create a discovery-brief template and optional ADR handoff.
 - [x] Forward-test discovery against the no-skill baseline.
+- [x] Reduce `engineering-discovery` default-path context cost and repeat its
+  initial positive and negative comparisons.
 
-### Phase 2 — Review and Optimization
+Initial Phase 1 evidence (2026-08-04): `evidence` and `safe-change` have canonical
+sources, specifications, positive/negative cases, and five accepted comparative
+pairs on Codex CLI 0.146.0. All pairs passed in one turn without tools or
+corrections. Reviewed outputs were equivalent to their baselines, with 99–123
+additional total tokens per task (0.7–0.8%). Sixteen deterministic tests pass,
+including policy budgets, dry-run, activation confirmation, checksummed blocks,
+version update, doctor, and clean removal. Both policies advance to
+`experimental`; the evidence is too narrow and shows no material benefit, so
+neither is `validated` and the incomplete `core-policies` pack remains proposed.
+Current repository validation covers 16 capabilities, six packs, seven cases,
+seven accepted baselines, seven capability results, and zero third-party records.
 
+### Phase 2 — Investigation, Review, and Optimization
+
+- [ ] Create `investigate-problem` for evidence-backed diagnosis, root-cause
+  analysis, library/runtime failures, and concrete next-step experiments without
+  conflating debugging with pre-implementation discovery.
 - [ ] Create `backend-review` as the central review router.
 - [ ] Create risk-triggered `security-review` as an independent workflow.
 - [x] Define and approve the scope and validation contract for `optimize-engineering`.
 - [ ] Create `optimize-engineering` as an on-demand optimization router.
 - [ ] Add architecture, API, database, performance, observability, runtime, pipeline, and technology-evaluation references.
-- [ ] Forward-test review and optimization on representative backend tasks.
+- [ ] Forward-test investigation, review, and optimization on representative backend tasks.
 
-### Phase 3 — Engineering Workflows
+### Phase 3 — Complete Workflows and Installable Suite
 
+- [ ] Create `implement-task` as the end-to-end implementation orchestrator with
+  narrow routing and conditional capability loading.
 - [ ] Create `test-change` for focused test selection, implementation, and verification.
 - [ ] Create `refactor-safely`.
 - [ ] Create `generate-adr` with a reusable template.
 - [ ] Create `generate-docs` with scoped templates and freshness checks.
+- [ ] Define and implement an `engineering-suite` dependency-only convenience
+  pack or installation profile that composes the modular packs without
+  duplicating capability sources.
+- [ ] Extend the bootstrap so one explicit command can install the suite at user
+  or repository scope, activate selected compact policies after a reviewed
+  confirmation, and preserve update, rollback, diagnostics, and clean removal.
+- [ ] Verify in clean smoke environments that Codex discovers the installed
+  suite and that narrow implementation, research, investigation, review,
+  optimization, and documentation intents route without skill-by-skill setup.
+- [ ] Produce a feature-complete release candidate; do not claim token or quality
+  improvement until the Phase 4 controlled evaluation gates pass.
 - [ ] Create Kafka-specific capability only after recurring demand is demonstrated.
 - [ ] Reassess prompt compression only if Caveman and `caveman-compress` leave a measurable gap.
 
-### Phase 4 — Evaluation, Regression, and Lifecycle
+### Phase 4 — Suite Validation, Efficiency, and Initial Release
 
-- [ ] Run benchmark and regression suites across all packs.
-- [ ] Compare task success, token usage, latency, correction turns, false triggers, and context overhead.
+- [ ] Run end-to-end benchmark and regression suites across every modular pack,
+  the convenience suite, and each supported automatic route.
+- [ ] Compare against matched no-capability baselines for implementation,
+  library research, problem investigation, optimization, documentation, review,
+  testing, and safe refactoring tasks.
+- [ ] Calculate absolute and relative changes in total tokens per completed task,
+  task success, technical correctness, latency, turns, correction cycles, tool
+  calls, false triggers, and unrelated-task context overhead.
 - [ ] Run blinded human-preference comparisons for subjective outputs.
-- [ ] Detect skill conflicts and policy-precedence failures.
+- [ ] Validate clean user/repository installation, Codex discovery, implicit
+  routing, updates, policy precedence, conflicts, rollback, and clean removal.
+- [ ] Detect skill conflicts, policy-precedence failures, and automatic-routing
+  regressions under the complete installed suite.
 - [ ] Promote, revise, deprecate, or retire capabilities using recorded evidence.
+- [ ] Publish the first supported usable release only when the suite meets its
+  recorded quality, efficiency, safety, and installation gates.
 - [ ] Create cost-optimization capability only when real cost data and evaluation cases exist.
 
-Evaluation starts in Phase 0 and gates every phase. Phase 4 evaluates the complete ecosystem and manages lifecycle decisions.
+Evaluation starts in Phase 0 and gates every phase. Phase 3 produces the
+feature-complete installable candidate; Phase 4 validates the complete ecosystem,
+quantifies efficiency, manages lifecycle decisions, and gates the first supported
+release.
 
 ## Engineering Discovery Track
 
@@ -386,8 +437,13 @@ Prefer modular installation packs:
 - `engineering-optimization`
 - `documentation-workflows`
 - `specialist-reviews`
+- `engineering-suite` as a Phase 3 dependency-only convenience pack or
+  installation profile; it must compose the modular packs without duplicating
+  their capability sources.
 
 Install only relevant packs to reduce metadata, context overhead, and conflicts.
+The complete suite is an explicit convenience option, not the only installation
+path.
 
 ## Distribution and Installation Track
 
@@ -454,6 +510,8 @@ Use links for local authoring when appropriate and immutable copied or packaged 
 | ADR Generator | Independent template-driven workflow |
 | Documentation Generator | Independent scoped workflow |
 | Engineering Discovery | Router for pre-implementation decisions |
+| Problem Investigation | Independent `investigate-problem` workflow for diagnosis and root-cause analysis |
+| End-to-End Implementation | Explicit `implement-task` orchestrator with narrow conditional routing |
 | Engineering Optimization | On-demand router with conditional references |
 | Algorithm Improvement | `optimize-engineering` mode with benchmarks and complexity evidence |
 | Code Cleanup | `simplify` mode integrated with `refactor-safely` |
@@ -492,6 +550,59 @@ Adopt or promote a capability only when it provides measurable quality or effici
 For optimization work, require reproducible before-and-after measurements. If measurement is impractical, document the change as a hypothesis or simplification instead of a validated optimization.
 
 ## Decision Log
+
+### 2026-08-04 — Initial evidence and safe-change policy slice evaluated
+
+- Implement compact canonical `evidence` and `safe-change` sources within their
+  120- and 100-token declared budgets and document their full contracts outside
+  the always-loaded text.
+- Extend the evaluation harness to activate policies in a clean repository's
+  durable instruction surface and add positive, negative, and precedence cases.
+- Record five matched pairs: all passed with equivalent reviewed behavior and
+  99–123 additional total tokens (0.7–0.8%) in the capability variants.
+- Fix policy dry-run so it does not require confirmation and update unchanged
+  policy blocks when the owning pack version changes.
+- Promote both capabilities to `experimental`, not `validated`: initial safety
+  and non-interference pass, but no material incremental quality or efficiency
+  benefit is established and representative coverage is absent.
+- Keep `core-policies` proposed until all declared sources and complete-pack
+  installation evidence exist.
+
+### 2026-08-05 — Engineering discovery default path optimized
+
+- Reduce `engineering-discovery/SKILL.md` from an estimated 1,048 to 657
+  context tokens and its conditional reference from 776 to 354.
+- Lower the catalog budget from 1,800 to 800 tokens and enforce router/workflow
+  source budgets in repository validation and deterministic tests.
+- Keep routine discovery on supplied evidence, limit alternatives and repeated
+  facts, and load the deep reference only for unresolved material evidence in a
+  costly-to-reverse decision.
+- Record a fresh controlled positive pair: the capability preserved reviewed
+  technical substance and used 62 fewer output tokens, but added 587 total
+  tokens (+3.6%) and 4,011 ms versus the no-capability baseline.
+- Record a fresh controlled negative pair at 14,420 total tokens: +96 (+0.7%)
+  with `discovery_needed: false`, preserving the accepted-design boundary.
+- Treat the 69.8% reduction from the superseded capability run as historical,
+  not controlled skill-efficiency evidence.
+- Keep status `proposed`: no material total-token benefit is established,
+  coverage is one positive and one negative case, and review was not blinded.
+
+### 2026-08-04 — Installable suite and validation boundary clarified
+
+- Keep Phase 0 closed at its experimental foundation scope; its remaining
+  capability and efficiency gaps belong to later phases rather than reopening
+  the platform milestone.
+- Make Phase 3 responsible for the feature-complete candidate: end-to-end
+  implementation, problem investigation, testing, safe refactoring,
+  documentation, a dependency-only convenience suite, one-command installation,
+  and Codex discovery without skill-by-skill setup.
+- Make Phase 4 responsible for controlled tests, validation, absolute and
+  relative efficiency calculations, automatic-routing regression checks,
+  lifecycle promotion, and the first supported release decision.
+- Preserve modular installation and explicit approval for persistent policy
+  activation even when the suite offers a single installation command.
+- Planning boundary approved; the new workflow, suite profile, automatic routing,
+  measured benefit, and public release remain unimplemented and unvalidated.
 
 ### 2026-07-30 — Initial direction confirmed
 
@@ -618,23 +729,25 @@ For optimization work, require reproducible before-and-after measurements. If me
 - No stable or public artifact has been published. Marketplace/registry flows,
   signatures, attestations, Windows behavior, and a broader clean-host matrix
   remain unvalidated.
-- `engineering-discovery` remains proposed because its positive comparison
-  regressed token usage and latency; the host read-only sandbox also prevented
-  its conditional reference from loading in that run.
+- `engineering-discovery` remains proposed: its controlled positive result used
+  3.6% more total tokens despite 3.8% fewer output tokens, coverage is narrow,
+  and blinded preference evidence is absent. The revised default path avoided,
+  but did not independently fix, the prior host sandbox failure.
 - One negative case records zero observed response-level false triggers, but it
   does not establish a false-positive rate or broad implicit-trigger precision.
-- Core policy sources are not implemented. Policy activation is validated only
-  through clean fixture policies and cannot yet install `core-policies`.
+- Only `evidence` and `safe-change` have implemented core policy sources. Their
+  canonical text passes controlled partial-pack activation, update, and removal,
+  but the complete `core-policies` pack cannot install until the remaining
+  sources exist.
 - The provenance inventory is empty; every future third-party addition still
   requires license, immutable source, attribution, and reviewer evidence.
 
 ## Next Action
 
-Begin Phase 1 with the compact `evidence` and `safe-change` policy sources and
-their positive, negative, precedence, context-budget, activation, update, and
-removal evaluations. Then integrate the existing RTK and Caveman setup by
-reference and provenance rather than duplication. In parallel with that policy
-work, add the discovery-brief/ADR handoff template and revise
-`engineering-discovery` to reduce positive-case context cost and avoid the
-read-only reference-loading failure; do not promote it until fresh comparisons
-show a material benefit without trigger regressions.
+Continue Phase 1 by integrating the existing RTK and Caveman setup through
+references and reviewed provenance rather than duplicated content, then
+implement and evaluate the compact `token-efficiency` policy. In parallel, add
+the discovery-brief/ADR handoff template, broaden `engineering-discovery`
+positive and negative cases, and run matched comparisons with blinded preference
+review; do not promote it until material benefit repeats without trigger
+regressions.

@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "case_id": "evidence-claim-001",
+  "capability": "evidence",
+  "variant": "baseline",
+  "timestamp": "2026-08-04T18:41:10.004Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14886,
+    "cached_input_tokens": 0,
+    "output_tokens": 186,
+    "total_tokens": 15072,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 9558,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:limitations",
+      "passed": true,
+      "detail": "limitations is populated"
+    },
+    {
+      "name": "nonempty:next_action",
+      "passed": true,
+      "detail": "next_action is populated"
+    },
+    {
+      "name": "minimum-items:limitations",
+      "passed": true,
+      "detail": "limitations has 5 items"
+    },
+    {
+      "name": "required-term:status:partially-supported",
+      "passed": true,
+      "detail": "status includes partially-supported"
+    },
+    {
+      "name": "required-term:evidence_class:measured",
+      "passed": true,
+      "detail": "evidence_class includes measured"
+    },
+    {
+      "name": "required-term:observed_reduction_percent:27",
+      "passed": true,
+      "detail": "observed_reduction_percent includes 27"
+    },
+    {
+      "name": "required-term:next_action:repeat",
+      "passed": true,
+      "detail": "next_action includes repeat"
+    },
+    {
+      "name": "required-term:next_action:correctness",
+      "passed": true,
+      "detail": "next_action includes correctness"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "status": "partially-supported",
+    "evidence_class": "measured",
+    "observed_reduction_percent": 27.27,
+    "limitations": [
+      "The two samples show a 27.27% reduction, not the claimed 40%.",
+      "Samples were collected during different traffic periods, so they are not directly comparable.",
+      "A single before/after observation does not establish a repeatable p95 latency improvement.",
+      "No correctness result supports functional safety.",
+      "No rollback rehearsal supports rollout readiness."
+    ],
+    "next_action": "Run repeated, traffic-controlled benchmarks and complete correctness validation and a rollback rehearsal before approving rollout."
+  }
+}

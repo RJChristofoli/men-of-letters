@@ -125,10 +125,19 @@ function validateSkill(capability) {
   }
 
   if (capability.type === "policy") {
-    if (!capability.source.startsWith("policies/") || !capability.source.endsWith(".md")) {
+    if (capability.source !== `policies/${capability.id}.md`) {
       errors.push(`${capability.id}: policy source must be policies/<id>.md`);
     }
-    const estimatedTokens = Math.ceil(fs.readFileSync(absolute, "utf8").length / 4);
+    const policySource = fs.readFileSync(absolute, "utf8");
+    const metadata = policySource.match(
+      /^<!-- owner: ([^;]+); priority: ([^;]+); conflicts: ([^;]+) -->\n/,
+    );
+    if (!metadata) {
+      errors.push(`${capability.id}: policy needs owner, priority, and conflict metadata`);
+    } else if (metadata[1] !== capability.owner) {
+      errors.push(`${capability.id}: policy owner must match catalog owner`);
+    }
+    const estimatedTokens = Math.ceil(policySource.length / 4);
     if (estimatedTokens > capability.context_budget_tokens) {
       errors.push(
         `${capability.id}: estimated ${estimatedTokens} policy tokens exceed budget ${capability.context_budget_tokens}`,
@@ -168,6 +177,12 @@ function validateSkill(capability) {
   }
   if (typeof metadata?.description !== "string" || metadata.description.length < 20) {
     errors.push(`${capability.id}: description must be trigger-specific`);
+  }
+  const estimatedTokens = Math.ceil(source.length / 4);
+  if (estimatedTokens > capability.context_budget_tokens) {
+    errors.push(
+      `${capability.id}: estimated ${estimatedTokens} skill tokens exceed budget ${capability.context_budget_tokens}`,
+    );
   }
   const lines = source.split("\n").length;
   if (lines > 501) errors.push(`${capability.id}: SKILL.md exceeds 500 lines`);

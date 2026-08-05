@@ -174,11 +174,18 @@ if (variant === "capability") {
   const catalog = YAML.parse(fs.readFileSync(path.join(root, "catalog.yaml"), "utf8"));
   const capability = catalog.capabilities.find(({ id }) => id === specification.capability);
   if (!capability?.source) fail(`${specification.capability} has no implemented source`);
-  const sourceDirectory = path.dirname(path.join(root, capability.source));
-  const targetDirectory = path.join(workspace, ".agents", "skills", specification.capability);
-  fs.mkdirSync(path.dirname(targetDirectory), { recursive: true });
-  fs.cpSync(sourceDirectory, targetDirectory, { recursive: true });
-  if (specification.kind === "positive") prompt = `$${specification.capability}\n\n${prompt}`;
+  const source = path.join(root, capability.source);
+  if (capability.type === "policy") {
+    fs.writeFileSync(path.join(workspace, "AGENTS.md"), fs.readFileSync(source, "utf8"));
+  } else if (["router", "workflow"].includes(capability.type)) {
+    const sourceDirectory = path.dirname(source);
+    const targetDirectory = path.join(workspace, ".agents", "skills", specification.capability);
+    fs.mkdirSync(path.dirname(targetDirectory), { recursive: true });
+    fs.cpSync(sourceDirectory, targetDirectory, { recursive: true });
+    if (specification.kind === "positive") prompt = `$${specification.capability}\n\n${prompt}`;
+  } else {
+    fail(`${specification.capability} cannot be activated by the evaluation harness`);
+  }
 }
 
 const startedAt = Date.now();

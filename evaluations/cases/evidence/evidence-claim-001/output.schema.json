@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "evidence_class",
+    "observed_reduction_percent",
+    "limitations",
+    "next_action"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["supported", "partially-supported", "unsupported"]
+    },
+    "evidence_class": {
+      "type": "string",
+      "enum": ["measured", "observed", "documented", "inferred", "assumed"]
+    },
+    "observed_reduction_percent": { "type": "number" },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "minItems": 2
+    },
+    "next_action": { "type": "string", "minLength": 1 }
+  }
+}

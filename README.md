@@ -19,9 +19,11 @@ The planned capabilities support engineering discovery, backend and security rev
 
 ## Status
 
-Phase 0 foundation is implemented and validated at an experimental level. The
-catalog, schemas, evaluation harness, bootstrap CLI, and first proposed plugin
-slice exist. No stable capability or public release is available yet.
+Phase 0 foundation is implemented and validated at an experimental level. Phase
+1 has experimental `evidence` and `safe-change` policies with initial controlled
+comparisons; the catalog, schemas, evaluation harness, bootstrap CLI, and first
+proposed plugin slice also exist. No stable capability or public release is
+available yet.
 
 ## Installation
 
@@ -50,7 +52,7 @@ installation is for evaluation only.
 Start a new thread in this repository with:
 
 ```text
-Read ROADMAP.md and the repository, determine the current state, and start executing Phase -1 from the current Next Action. Keep the roadmap and affected documentation synchronized with validated decisions.
+Read ROADMAP.md and the repository, determine the current state, and continue Phase 1 from the current Next Action. Keep the roadmap and affected documentation synchronized with validated decisions.
 ```
 
 The next thread must treat [ROADMAP.md](ROADMAP.md) as the source of truth and read the linked documentation before changing direction.

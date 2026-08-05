@@ -3,20 +3,20 @@
   "case_id": "discovery-accepted-design-002",
   "capability": "engineering-discovery",
   "variant": "capability",
-  "timestamp": "2026-07-30T18:24:46.634Z",
+  "timestamp": "2026-08-05T14:19:39.663Z",
   "environment": {
     "codex_cli": "codex-cli 0.146.0",
     "node": "v18.19.1",
     "platform": "linux-x64"
   },
   "metrics": {
-    "input_tokens": 16353,
+    "input_tokens": 14320,
     "cached_input_tokens": 0,
-    "output_tokens": 72,
-    "total_tokens": 16425,
+    "output_tokens": 100,
+    "total_tokens": 14420,
     "turns": 1,
     "tool_calls": 0,
-    "latency_ms": 6313,
+    "latency_ms": 7608,
     "correction_turns": 0
   },
   "checks": [
@@ -44,7 +44,7 @@
   "passed": true,
   "response": {
     "discovery_needed": false,
-    "reason": "The accepted ADR already fixes the technology, architecture, persistence model, and transactional claiming approach, so this is an implementation task with no unresolved engineering decision requiring discovery.",
-    "next_action": "Implement the first PostgreSQL migration and repository model exactly as specified by the accepted ADR."
+    "reason": "The accepted ADR has already resolved the technology, architecture, and transactional claiming design; this is a specified implementation task with no open decision requiring discovery.",
+    "next_action": "Implement the first PostgreSQL migration and repository model exactly as defined by the accepted ADR, then verify them with the relevant migration and repository tests."
   }
 }

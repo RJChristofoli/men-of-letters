@@ -381,7 +381,11 @@ function buildInstallPlan(options, repository, paths, state, sourceRoot) {
         version: pack.version,
         content: fs.readFileSync(source, "utf8"),
       });
-      const action = existing?.actual_checksum === desired.checksum ? "noop" : existing ? "update" : "create";
+      const unchanged =
+        existing?.actual_checksum === desired.checksum &&
+        existing.version === pack.version &&
+        stateRecord?.version === pack.version;
+      const action = unchanged ? "noop" : existing ? "update" : "create";
       const prefixAdded = action === "create" && content.length > 0 && !content.endsWith("\n");
       if (action === "create") content = appendBlock(content, desired.text);
       else if (action === "update") content = replaceBlock(content, existing, desired.text);
@@ -430,10 +434,10 @@ function discardSnapshots(snapshot) {
 }
 
 function performInstall(options, installPlan, paths, state) {
+  if (options.dry_run) return { changed: false, plan: installPlan.plan };
   if (installPlan.instructionOperation && !options.yes) {
     throw new Error("policy activation changes persistent instructions; rerun with --yes after reviewing --dry-run");
   }
-  if (options.dry_run) return { changed: false, plan: installPlan.plan };
   const operationId = `${Date.now()}-${crypto.randomBytes(4).toString("hex")}`;
   const possibleContainers = [
     path.join(paths.targetRoot, ".agents"),
@@ -539,7 +543,13 @@ function buildUninstallPlan(packId, paths, state) {
     }
     const holder = byInstruction.get(instruction);
     const block = holder.blocks.find(({ policy_id: id }) => id === policyId);
-    if (!block || block.actual_checksum !== record.checksum || block.declared_checksum !== record.checksum) {
+    if (
+      !block ||
+      block.pack_id !== record.pack_id ||
+      block.version !== record.version ||
+      block.actual_checksum !== record.checksum ||
+      block.declared_checksum !== record.checksum
+    ) {
       throw new Error(`modified or missing managed policy block ${policyId}`);
     }
     holder.content = removeBlock(holder.content, block, record.prefix_added);
@@ -551,10 +561,10 @@ function buildUninstallPlan(packId, paths, state) {
 }
 
 function performUninstall(options, uninstallPlan, packId, paths, state) {
+  if (options.dry_run) return { changed: false, plan: uninstallPlan.plan };
   if (uninstallPlan.policies.length > 0 && !options.yes) {
     throw new Error("policy removal changes persistent instructions; rerun with --yes after reviewing --dry-run");
   }
-  if (options.dry_run) return { changed: false, plan: uninstallPlan.plan };
   const targets = [
     ...uninstallPlan.artifacts.map(({ target }) => target),
     ...uninstallPlan.instructions.keys(),
@@ -604,7 +614,13 @@ function doctor(paths, state) {
         instructionCache.set(instruction, parseManagedBlocks(fs.readFileSync(instruction, "utf8")));
       }
       const block = instructionCache.get(instruction).find(({ policy_id: id }) => id === policyId);
-      if (!block || block.actual_checksum !== record.checksum || block.declared_checksum !== record.checksum) {
+      if (
+        !block ||
+        block.pack_id !== record.pack_id ||
+        block.version !== record.version ||
+        block.actual_checksum !== record.checksum ||
+        block.declared_checksum !== record.checksum
+      ) {
         issues.push(`${record.instruction_path}: policy ${policyId} is missing or modified`);
       }
     } catch (error) {

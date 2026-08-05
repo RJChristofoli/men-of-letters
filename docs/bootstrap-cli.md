@@ -73,10 +73,12 @@ npm run cli -- install core-policies \
   --yes
 ```
 
-The current `core-policies` pack has no implemented sources, so these commands
-stop before mutation today. The generic activation path is tested with fixture
-policies. It uses checksummed managed blocks, preserves unmanaged bytes, backs up
-existing instruction files, and requires `--yes` after dry-run review.
+The current `core-policies` pack implements `evidence` and `safe-change`, but its
+remaining policy sources are absent, so installing the complete pack still stops
+before mutation. The activation path is tested with the canonical policies in a
+controlled partial-pack fixture. It uses checksummed managed blocks, preserves
+unmanaged bytes, backs up existing instruction files, and requires `--yes` only
+when applying changes after dry-run review.
 
 ## State and Safety
 
@@ -106,9 +108,9 @@ development archive does not authorize publishing it.
 
 ## Validated Scope
 
-The Node test suite covers repository and user scopes, dry-run, proposed-pack
+The Node test suite covers repository and user scopes, policy budget, dry-run, proposed-pack
 gating, copied and linked installs, idempotency, update, discovery path, doctor,
 collision handling, modified-content refusal, policy confirmation and byte
-preservation, uninstall, state schema, state-path traversal rejection, and forced
-rollback. Marketplace install, signed releases, Windows behavior, and stable host
-compatibility remain unvalidated.
+preservation, policy version-marker update, uninstall, state schema, state-path
+traversal rejection, and forced rollback. Marketplace install, signed releases,
+Windows behavior, and stable host compatibility remain unvalidated.
