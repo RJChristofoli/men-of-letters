@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["findings"],
+  "properties": {
+    "findings": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["area", "evidence", "risk", "remediation"],
+        "properties": {
+          "area": {
+            "enum": [
+              "correctness",
+              "security",
+              "data",
+              "operations",
+              "rollback",
+              "compatibility"
+            ]
+          },
+          "evidence": { "type": "string", "minLength": 1 },
+          "risk": { "type": "string", "minLength": 1 },
+          "remediation": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

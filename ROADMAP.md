@@ -48,7 +48,14 @@ A phase is not complete while its affected documentation is stale.
 
 ## Goals
 
+- Use the model's reasoning strength to produce responses that are more correct,
+  direct, useful, and controllable than the no-capability baseline.
+- Treat response quality as a non-negotiable floor: never retain a capability
+  whose token savings come from losing required substance, accuracy, safety,
+  evidence, or actionability.
 - Reduce total tokens per completed task, not only tokens per response.
+- Prefer concise answers and lower context/tool consumption only when they
+  preserve or improve the completed-task outcome and avoid later rework.
 - Improve correctness, security, maintainability, and production readiness.
 - Improve algorithms, code, runtime behavior, delivery pipelines, engineering flow, architecture, and technology choices through measurable optimization.
 - Minimize always-loaded context.
@@ -167,7 +174,8 @@ capability or authorize a public release.
 - [ ] Create the compact core policy set.
   - [x] Implement and initially evaluate `evidence` and `safe-change`.
   - [ ] Implement the remaining compact policy sources and complete-pack tests.
-- [ ] Create and evaluate a repository-native compact `token-efficiency` policy.
+- [x] Create and initially evaluate a repository-native compact
+  `token-efficiency` policy.
 - [x] Create `engineering-discovery` for feature design, technology research, architecture proposals, and trade-off analysis.
 - [ ] Create a discovery-brief template and optional ADR handoff.
 - [x] Forward-test discovery against the no-skill baseline.
@@ -187,6 +195,11 @@ capability or authorize a public release.
 Phase 1 exit gate: all retained Phase 1 capabilities must reach at least
 `validated`, the complete retained policy pack must install and remove cleanly,
 and matched evaluation must demonstrate material quality and total-token gains.
+Every retained capability must also satisfy a quality non-regression floor,
+including when its individual value is primarily lower token consumption; a
+token-only win cannot compensate for objectively worse or reviewer-disfavored
+answers. Quality means required correctness, substance, safety, evidence, and
+actionability—not verbosity.
 Source-size reduction, schema compliance, or isolated passing cases are not
 sufficient. If the gate cannot be met, revise, narrow, or retire the ineffective
 capability instead of closing the phase or weakening the evidence threshold.
@@ -200,8 +213,20 @@ including policy budgets, dry-run, activation confirmation, checksummed blocks,
 version update, doctor, and clean removal. Both policies advance to
 `experimental`; the evidence is too narrow and shows no material benefit, so
 neither is `validated` and the incomplete `core-policies` pack remains proposed.
-Current repository validation covers 16 capabilities, six packs, seven cases,
-seven accepted baselines, seven capability results, and zero third-party records.
+Current repository validation covers 16 capabilities, six packs, nine cases,
+nine accepted baselines, nine capability results, zero blinded reviews, and zero
+third-party records.
+
+Token-efficiency evidence (2026-08-10): the original repository-native policy
+source is exactly 100 estimated tokens and passes controlled partial-pack
+install, update, `doctor`, and removal. One positive and one explicit-detail
+negative comparison both passed in one turn without tools or corrections on
+Codex CLI 0.146.0. The policy reduced aggregate output from 822 to 714 tokens
+(-13.1%) but increased aggregate total usage from 29,779 to 29,897 (+118,
++0.4%) because of its fixed input cost. Required implementation and audit detail
+was preserved, and negative-case overhead was +0.3%. This supports
+`experimental`, not `validated`: blinded preference and representative matrix
+coverage are pending, and no material total-token gain is established.
 
 ### Phase 2 — Investigation, Review, and Optimization
 
@@ -569,6 +594,34 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ## Decision Log
 
+### 2026-08-10 — Response quality is the efficiency floor
+
+- Use agent capabilities to improve correctness, directness, usefulness, and
+  control rather than to produce shorter but weaker answers.
+- Measure economy as total tokens per completed task, including rework and
+  corrections, not as response length alone.
+- Require every retained capability to preserve required substance, accuracy,
+  safety, evidence, and actionability even when its individual value comes from
+  token savings.
+- Reject or revise a capability that reviewers prefer less or that loses
+  objective quality, regardless of its token reduction.
+
+### 2026-08-10 — Native token-efficiency enters experimental evaluation
+
+- Implement a standalone 100-estimated-token policy that minimizes only
+  insufficiently valuable context, tools, turns, repetition, narration, and
+  unrelated findings.
+- Make requested detail, correctness, safety, evidence, validation, and required
+  clarification explicit higher-priority boundaries; the policy grants no
+  authority and has no external dependency.
+- Add initial positive and explicit-detail negative pairs plus deterministic
+  partial-pack lifecycle coverage.
+- Record that both objective pairs passed and aggregate output fell 13.1%, while
+  total tokens increased 0.4%; output brevity is not a material completed-task
+  gain.
+- Keep the policy `experimental`. Representative fresh cases must demonstrate
+  incremental quality or token value, otherwise revise, narrow, or remove it.
+
 ### 2026-08-10 — Phase 1 aggregate evaluation harness implemented
 
 - Add `individual-capability`, `complete-core-policies`, and
@@ -800,19 +853,25 @@ For optimization work, require reproducible before-and-after measurements. If me
   but did not independently fix, the prior host sandbox failure.
 - One negative case records zero observed response-level false triggers, but it
   does not establish a false-positive rate or broad implicit-trigger precision.
-- Only `evidence` and `safe-change` have implemented core policy sources. Their
-  canonical text passes controlled partial-pack activation, update, and removal,
-  but the complete `core-policies` pack cannot install until the remaining
-  sources exist.
+- `evidence`, `token-efficiency`, and `safe-change` have implemented core policy
+  sources. Their canonical text passes controlled partial-pack activation,
+  update, and removal, but the complete `core-policies` pack cannot install until
+  the four remaining sources exist.
+- `token-efficiency` reduced output 13.1% in its initial pair but increased total
+  tokens 0.4%; it has no demonstrated incremental value yet, and its blinded and
+  representative cases remain pending.
 - The provenance inventory is empty; every future third-party addition still
   requires license, immutable source, attribution, and reviewer evidence.
 
 ## Next Action
 
-Continue Phase 1 by specifying, implementing, and initially evaluating the
-repository-native compact `token-efficiency` policy, then complete the remaining
-core policy sources and complete-pack lifecycle tests. In parallel, add the
+Continue Phase 1 by implementing `engineering-principles`, `backend-defaults`,
+`documentation`, and `versioning-and-lifecycle`, then run complete-pack lifecycle
+tests. Add fresh representative positive/negative `token-efficiency` cases that
+exercise context and tool selection; enforce the per-capability quality floor in
+the executable gate, and retain it only if quality does not regress and reviewed
+quality or total-token value clears the individual gate. In parallel, add the
 discovery-brief/ADR handoff template and broaden positive and negative discovery
-cases. Do not close Phase 1 or promote a capability until repeated evidence
-passes the pre-registered quality, token, safety, routing, latency, and
+cases. Do not close Phase 1 until every retained capability and the combined
+configuration pass the frozen quality, token, safety, routing, latency, and
 correction-turn thresholds.

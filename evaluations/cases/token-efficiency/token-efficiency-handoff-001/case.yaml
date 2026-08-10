@@ -1,0 +1,27 @@
+schema_version: 1
+id: token-efficiency-handoff-001
+capability: token-efficiency
+kind: positive
+gate_dimensions: [primary-rule]
+preference_review: required
+prompt_file: prompt.md
+output_schema: output.schema.json
+sandbox: read-only
+checks:
+  required_nonempty:
+    - decision
+    - constraints
+    - verification
+    - rollback
+  minimum_items:
+    constraints: 4
+    verification: 3
+  required_terms:
+    - path: decision
+      terms: [retry worker, retry table]
+    - path: constraints
+      terms: [order_id, attempt, payment_retry_exhausted]
+    - path: verification
+      terms: ["30", "120", "600", duplicate, charge, terminal]
+    - path: rollback
+      terms: [payment_retry_v2]

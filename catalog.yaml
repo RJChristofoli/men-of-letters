@@ -52,12 +52,14 @@ capabilities:
     context_budget_tokens: 100
   - id: token-efficiency
     type: policy
-    status: proposed
+    status: experimental
     owner: RJChristofoli
-    source: null
+    source: policies/token-efficiency.md
     dependencies: [safe-change]
-    compatibility: {}
-    evaluation_suite: null
+    compatibility:
+      codex-cli: 0.146.0
+      bootstrap: 0.1.0-dev.0
+    evaluation_suite: token-efficiency
     installation_pack: core-policies
     introduced_release: null
     deprecated_release: null

@@ -94,7 +94,7 @@ contract, not evidence that Phase 1 already passes.
 The harness executes individual, complete-policy, and combined configurations;
 records blinded reviews with checksummed run identity; and calculates the
 aggregate gate. The current gate report is correctly `incomplete` because the
-matrix, reviews, and remaining policy sources do not exist yet.
+matrix, reviews, and four remaining policy sources do not exist yet.
 
 ### Blinded Preference
 
@@ -214,3 +214,31 @@ initial runs show bounded context overhead and no observed behavioral regression
 but no material quality or efficiency improvement over the already strong
 baseline. The sample is too small for `validated`, and the complete
 `core-policies` pack remains un-installable until its remaining sources exist.
+
+## Initial Token-Efficiency Result
+
+The repository-native `token-efficiency` policy is exactly 100 estimated tokens
+and has no external runtime or communication-mode dependency. Its initial
+positive and explicit-detail negative cases ran through the same Codex CLI
+0.146.0 environment. Both variants passed in one turn without tools or
+corrections, and reviewed content preserved the required implementation and
+release-safety details.
+
+| Case | Baseline total | Policy total | Total delta | Output delta |
+| --- | ---: | ---: | ---: | ---: |
+| `token-efficiency-handoff-001` | 14,763 | 14,834 | +71 (+0.5%) | -45 (-17.9%) |
+| `token-efficiency-audit-002` | 15,016 | 15,063 | +47 (+0.3%) | -63 (-11.0%) |
+| Aggregate | 29,779 | 29,897 | +118 (+0.4%) | -108 (-13.1%) |
+
+Evidence:
+
+- [Accepted handoff baseline](../evaluations/baselines/token-efficiency-handoff-001.json)
+- [Recorded handoff result](../evaluations/results/token-efficiency-handoff-001.json)
+- [Accepted audit baseline](../evaluations/baselines/token-efficiency-audit-002.json)
+- [Recorded audit result](../evaluations/results/token-efficiency-audit-002.json)
+
+Decision: advance the installable implementation to `experimental` because its
+initial positive/negative structure, safety boundary, objective cases, and
+deterministic lifecycle checks pass. Do not claim token improvement or
+validation: lower output did not offset the fixed input cost, blinded preference
+is pending, and the representative matrix remains incomplete.

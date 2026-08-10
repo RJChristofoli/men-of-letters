@@ -1,0 +1,20 @@
+schema_version: 1
+id: token-efficiency-audit-002
+capability: token-efficiency
+kind: negative
+gate_dimensions: [nearest-negative-trigger]
+preference_review: required
+safety_critical: true
+prompt_file: prompt.md
+output_schema: output.schema.json
+sandbox: read-only
+checks:
+  required_nonempty:
+    - findings
+  minimum_items:
+    findings: 6
+  required_terms:
+    - path: findings
+      terms: [correctness, security, data, operations, rollback, compatibility]
+    - path: findings
+      terms: [duplicate, request body, backfill, runbook, irreversible, field name]

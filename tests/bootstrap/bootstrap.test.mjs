@@ -422,7 +422,7 @@ test("policy activation requires confirmation and preserves unmanaged bytes", (t
 
 test("implemented capabilities fit their declared context budgets", () => {
   const catalog = YAML.parse(fs.readFileSync(path.join(repositoryRoot, "catalog.yaml"), "utf8"));
-  for (const id of ["evidence", "safe-change", "engineering-discovery"]) {
+  for (const id of ["evidence", "safe-change", "token-efficiency", "engineering-discovery"]) {
     const capability = catalog.capabilities.find((candidate) => candidate.id === id);
     const source = fs.readFileSync(path.join(repositoryRoot, capability.source), "utf8");
     assert.ok(Math.ceil(source.length / 4) <= capability.context_budget_tokens);
@@ -431,7 +431,7 @@ test("implemented capabilities fit their declared context budgets", () => {
 
 test("implemented policies activate, update versions, diagnose, and remove cleanly", (t) => {
   const target = temporaryDirectory(t);
-  const source = createImplementedPolicyFixture(t, ["evidence", "safe-change"]);
+  const source = createImplementedPolicyFixture(t, ["evidence", "token-efficiency", "safe-change"]);
   const instructions = path.join(target, "AGENTS.md");
   const manual = "# Manual project instructions\n";
   fs.writeFileSync(instructions, manual);
@@ -449,12 +449,16 @@ test("implemented policies activate, update versions, diagnose, and remove clean
 
   const preview = execute([...args, "--dry-run"], context(target, source));
   assert.equal(preview.changed, false);
-  assert.deepEqual(preview.plan.map(({ action }) => action), ["create", "create"]);
+  assert.deepEqual(preview.plan.map(({ action }) => action), ["create", "create", "create"]);
   assert.equal(fs.readFileSync(instructions, "utf8"), manual);
 
   execute([...args, "--yes"], context(target, source));
   let blocks = parseManagedBlocks(fs.readFileSync(instructions, "utf8"));
-  assert.deepEqual(blocks.map(({ policy_id: id }) => id), ["evidence", "safe-change"]);
+  assert.deepEqual(blocks.map(({ policy_id: id }) => id), [
+    "evidence",
+    "token-efficiency",
+    "safe-change",
+  ]);
   assert.ok(blocks.every(({ version }) => version === "0.1.0-dev.0"));
   assert.equal(execute(["doctor", "--scope", "repo", "--target", target], context(target, source)).healthy, true);
 
@@ -463,7 +467,7 @@ test("implemented policies activate, update versions, diagnose, and remove clean
   pack.version = "0.1.1-dev.0";
   writeYaml(packFile, pack);
   const update = execute([...args, "--yes"], context(target, source));
-  assert.deepEqual(update.plan.map(({ action }) => action), ["update", "update"]);
+  assert.deepEqual(update.plan.map(({ action }) => action), ["update", "update", "update"]);
   blocks = parseManagedBlocks(fs.readFileSync(instructions, "utf8"));
   assert.ok(blocks.every(({ version }) => version === "0.1.1-dev.0"));
   assert.equal(execute(["doctor", "--scope", "repo", "--target", target], context(target, source)).healthy, true);
@@ -478,8 +482,8 @@ test("implemented policies activate, update versions, diagnose, and remove clean
   ];
   const removalPreview = execute([...uninstallArgs, "--dry-run"], context(target, source));
   assert.equal(removalPreview.changed, false);
-  assert.deepEqual(removalPreview.plan.map(({ action }) => action), ["remove", "remove"]);
-  assert.equal(parseManagedBlocks(fs.readFileSync(instructions, "utf8")).length, 2);
+  assert.deepEqual(removalPreview.plan.map(({ action }) => action), ["remove", "remove", "remove"]);
+  assert.equal(parseManagedBlocks(fs.readFileSync(instructions, "utf8")).length, 3);
 
   execute(
     [...uninstallArgs, "--yes"],
