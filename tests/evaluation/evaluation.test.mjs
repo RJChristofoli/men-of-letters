@@ -243,3 +243,64 @@ test("aggregate gate passes complete evidence and rejects a false trigger", () =
   assert.equal(failing.status, "fail");
   assert.equal(failing.combined.regressions.false_triggers, 1);
 });
+
+test("token wins cannot override objective or reviewed quality regression", () => {
+  const objectiveFixture = passingGateFixture();
+  for (const baseline of objectiveFixture.baselines) {
+    const evaluationCase = objectiveFixture.cases.find(({ id }) => id === baseline.case_id);
+    if (evaluationCase.kind !== "negative") baseline.passed = true;
+  }
+  const objectiveTarget = objectiveFixture.results.find(
+    (run) =>
+      run.capability === "token-efficiency" &&
+      objectiveFixture.cases.find(({ id }) => id === run.case_id).kind === "positive",
+  );
+  objectiveTarget.passed = false;
+  const objectiveRegression = calculatePhaseOneGate(objectiveFixture);
+  assert.equal(objectiveRegression.individual["token-efficiency"].tokens.material, true);
+  assert.equal(
+    objectiveRegression.individual["token-efficiency"].quality.non_regression.objective_pass,
+    false,
+  );
+  assert.equal(objectiveRegression.individual["token-efficiency"].incremental_value, false);
+
+  const preferenceFixture = passingGateFixture();
+  for (const baseline of preferenceFixture.baselines) {
+    const evaluationCase = preferenceFixture.cases.find(({ id }) => id === baseline.case_id);
+    if (evaluationCase.kind !== "negative") baseline.passed = true;
+  }
+  const reviewCase = preferenceFixture.cases.find(
+    ({ capability, kind }) => capability === "token-efficiency" && kind === "positive",
+  );
+  reviewCase.preference_review = "required";
+  const baseline = preferenceFixture.baselines.find(({ case_id: id }) => id === reviewCase.id);
+  const capability = preferenceFixture.results.find(({ case_id: id }) => id === reviewCase.id);
+  for (const reviewer of ["reviewer-1", "reviewer-2"]) {
+    const { bundle, key } = createBlindReview({
+      caseId: reviewCase.id,
+      configuration: "individual-capability",
+      reviewer,
+      role: "primary",
+      prompt: "compare quality",
+      checks: {},
+      baseline,
+      capability,
+      capabilityFirst: false,
+      timestamp: `2026-08-10T12:00:0${preferenceFixture.reviews.length}.000Z`,
+    });
+    preferenceFixture.reviews.push(
+      resolveBlindReview({
+        bundle,
+        key,
+        verdict: "a",
+        reason: "Output A preserves more required substance and is more actionable.",
+      }),
+    );
+  }
+  const preferenceRegression = calculatePhaseOneGate(preferenceFixture);
+  const assessment = preferenceRegression.individual["token-efficiency"];
+  assert.equal(assessment.tokens.material, true);
+  assert.equal(assessment.quality.baseline_preference_rate, 1);
+  assert.equal(assessment.quality.non_regression.preference_pass, false);
+  assert.equal(assessment.incremental_value, false);
+});

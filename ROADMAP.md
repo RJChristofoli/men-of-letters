@@ -171,9 +171,9 @@ capability or authorize a public release.
 
 ### Phase 1 — Core Policies and Discovery
 
-- [ ] Create the compact core policy set.
+- [x] Create the compact core policy set.
   - [x] Implement and initially evaluate `evidence` and `safe-change`.
-  - [ ] Implement the remaining compact policy sources and complete-pack tests.
+  - [x] Implement the remaining compact policy sources and complete-pack tests.
 - [x] Create and initially evaluate a repository-native compact
   `token-efficiency` policy.
 - [x] Create `engineering-discovery` for feature design, technology research, architecture proposals, and trade-off analysis.
@@ -227,6 +227,16 @@ Codex CLI 0.146.0. The policy reduced aggregate output from 822 to 714 tokens
 was preserved, and negative-case overhead was +0.3%. This supports
 `experimental`, not `validated`: blinded preference and representative matrix
 coverage are pending, and no material total-token gain is established.
+
+Core-policy completion evidence (2026-08-10): all seven canonical sources now
+exist and total 780 estimated tokens within the declared 800-token ceiling.
+`engineering-principles`, `backend-defaults`, `documentation`, and
+`versioning-and-lifecycle` have specifications and remain `proposed` pending
+comparative behavior tests. The complete pack passes deterministic install,
+version update, `doctor`, uninstall, and rollback coverage. A canonical temporary
+repository-scope smoke test also installed all seven blocks, returned
+`healthy: true`, and removed all managed content. This completes implementation
+and lifecycle infrastructure, not effectiveness validation.
 
 ### Phase 2 — Investigation, Review, and Optimization
 
@@ -594,6 +604,19 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ## Decision Log
 
+### 2026-08-10 — Core policy sources completed within budget
+
+- Implement the four missing sources with distinct ownership: general
+  engineering decisions, backend production defaults, documentation artifacts,
+  and version/compatibility lifecycle decisions.
+- Keep evidence, safe mutation, and token efficiency in their existing owners;
+  avoid a redundant all-purpose policy.
+- Hold the complete source set to 780 estimated tokens under the frozen 800-token
+  ceiling and verify all seven managed blocks through complete-pack lifecycle
+  tests and a canonical clean-scope smoke run.
+- Keep the four new policies and the pack `proposed`; installability and source
+  size do not establish response quality or incremental value.
+
 ### 2026-08-10 — Response quality is the efficiency floor
 
 - Use agent capabilities to improve correctness, directness, usefulness, and
@@ -605,6 +628,12 @@ For optimization work, require reproducible before-and-after measurements. If me
   token savings.
 - Reject or revise a capability that reviewers prefer less or that loses
   objective quality, regardless of its token reduction.
+- Enforce this decision in the Phase 1 calculator with a 100% capability
+  objective-pass floor and at most 20% baseline preference whenever blinded
+  review is required; token-only value cannot bypass either condition.
+- Add the stricter floor before expanded representative runs for a product-
+  quality reason independent of observed outcomes; it cannot turn an existing
+  failure into a pass.
 
 ### 2026-08-10 — Native token-efficiency enters experimental evaluation
 
@@ -853,10 +882,9 @@ For optimization work, require reproducible before-and-after measurements. If me
   but did not independently fix, the prior host sandbox failure.
 - One negative case records zero observed response-level false triggers, but it
   does not establish a false-positive rate or broad implicit-trigger precision.
-- `evidence`, `token-efficiency`, and `safe-change` have implemented core policy
-  sources. Their canonical text passes controlled partial-pack activation,
-  update, and removal, but the complete `core-policies` pack cannot install until
-  the four remaining sources exist.
+- All seven core policy sources exist and the complete pack installs, diagnoses,
+  updates, rolls back, and removes in controlled scope. Four new policies remain
+  `proposed` and unevaluated; pack installability is not effectiveness evidence.
 - `token-efficiency` reduced output 13.1% in its initial pair but increased total
   tokens 0.4%; it has no demonstrated incremental value yet, and its blinded and
   representative cases remain pending.
@@ -865,13 +893,12 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ## Next Action
 
-Continue Phase 1 by implementing `engineering-principles`, `backend-defaults`,
-`documentation`, and `versioning-and-lifecycle`, then run complete-pack lifecycle
-tests. Add fresh representative positive/negative `token-efficiency` cases that
-exercise context and tool selection; enforce the per-capability quality floor in
-the executable gate, and retain it only if quality does not regress and reviewed
-quality or total-token value clears the individual gate. In parallel, add the
-discovery-brief/ADR handoff template and broaden positive and negative discovery
-cases. Do not close Phase 1 until every retained capability and the combined
-configuration pass the frozen quality, token, safety, routing, latency, and
-correction-turn thresholds.
+Continue Phase 1 by creating fresh representative positive and negative cases
+for `engineering-principles`, `backend-defaults`, `documentation`, and
+`versioning-and-lifecycle`, then run matched individual comparisons under the
+quality floor. Expand `token-efficiency` with context/tool-selection cases and
+retain it only if reviewed quality does not regress and it clears individual
+value. Then execute complete-policy and combined configurations. In parallel,
+add the discovery-brief/ADR handoff and broaden discovery cases. Do not close the
+phase until every retained capability and the combined configuration pass the
+frozen quality, token, safety, routing, latency, and correction thresholds.

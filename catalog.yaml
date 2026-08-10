@@ -4,9 +4,10 @@ capabilities:
     type: policy
     status: proposed
     owner: RJChristofoli
-    source: null
+    source: policies/engineering-principles.md
     dependencies: []
-    compatibility: {}
+    compatibility:
+      bootstrap: 0.1.0-dev.0
     evaluation_suite: null
     installation_pack: core-policies
     introduced_release: null
@@ -30,9 +31,10 @@ capabilities:
     type: policy
     status: proposed
     owner: RJChristofoli
-    source: null
+    source: policies/backend-defaults.md
     dependencies: [engineering-principles, evidence, safe-change]
-    compatibility: {}
+    compatibility:
+      bootstrap: 0.1.0-dev.0
     evaluation_suite: null
     installation_pack: core-policies
     introduced_release: null
@@ -42,9 +44,10 @@ capabilities:
     type: policy
     status: proposed
     owner: RJChristofoli
-    source: null
+    source: policies/documentation.md
     dependencies: [evidence]
-    compatibility: {}
+    compatibility:
+      bootstrap: 0.1.0-dev.0
     evaluation_suite: null
     installation_pack: core-policies
     introduced_release: null
@@ -68,9 +71,10 @@ capabilities:
     type: policy
     status: proposed
     owner: RJChristofoli
-    source: null
+    source: policies/versioning-and-lifecycle.md
     dependencies: [evidence]
-    compatibility: {}
+    compatibility:
+      bootstrap: 0.1.0-dev.0
     evaluation_suite: null
     installation_pack: core-policies
     introduced_release: null

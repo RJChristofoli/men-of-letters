@@ -44,7 +44,7 @@ The capability variant accepts three configurations:
 - `phase-1-combined` activates the complete policy pack plus
   `engineering-discovery`.
 
-Run a combined comparison after all declared sources exist:
+All declared sources now exist. Run a combined comparison with:
 
 ```bash
 npm run evaluate -- run discovery-architecture-001 \
@@ -93,8 +93,10 @@ contract, not evidence that Phase 1 already passes.
 
 The harness executes individual, complete-policy, and combined configurations;
 records blinded reviews with checksummed run identity; and calculates the
-aggregate gate. The current gate report is correctly `incomplete` because the
-matrix, reviews, and four remaining policy sources do not exist yet.
+aggregate gate. All Phase 1 capability sources now exist, so complete-policy and
+combined model runs can execute. The current gate report remains correctly
+`incomplete` because the representative matrix and blinded reviews do not exist
+yet.
 
 ### Blinded Preference
 
@@ -130,10 +132,10 @@ npm run evaluate -- gate phase-1
 
 The command writes a full ignored report under `evaluations/runs/`, prints its
 summary, and returns zero only for `pass`; `incomplete` and `fail` return status
-2. It checks matrix coverage, individual incremental value, combined quality and
-token gains, unrelated-task overhead, safety, false triggers, corrections,
-additional tool calls, latency, environment comparability, and blinded review
-integrity.
+2. It checks matrix coverage, per-capability objective and blinded-preference
+quality non-regression, individual incremental value, combined quality and token
+gains, unrelated-task overhead, safety, false triggers, corrections, additional
+tool calls, latency, environment comparability, and blinded review integrity.
 
 ## Initial Engineering Discovery Result
 
@@ -213,7 +215,7 @@ Decision: promote the two capabilities from `proposed` to `experimental`. The
 initial runs show bounded context overhead and no observed behavioral regression,
 but no material quality or efficiency improvement over the already strong
 baseline. The sample is too small for `validated`, and the complete
-`core-policies` pack remains un-installable until its remaining sources exist.
+`core-policies` pack was incomplete at the time of these runs.
 
 ## Initial Token-Efficiency Result
 
@@ -242,3 +244,20 @@ initial positive/negative structure, safety boundary, objective cases, and
 deterministic lifecycle checks pass. Do not claim token improvement or
 validation: lower output did not offset the fixed input cost, blinded preference
 is pending, and the representative matrix remains incomplete.
+
+## Complete Core Policy Sources
+
+All seven canonical policy sources now resolve within the declared 800-token
+pack ceiling. Their estimated source total is 780 tokens: 131 engineering
+principles, 118 evidence, 143 backend defaults, 100 documentation, 100 token
+efficiency, 89 version/lifecycle, and 99 safe change.
+
+Deterministic tests activate all seven managed blocks, update the pack version,
+run `doctor`, preview and apply removal, and preserve unmanaged content. A second
+smoke test against the canonical repository installed the full pack in temporary
+repository scope, reported `healthy: true`, and removed every managed block.
+
+This evidence makes the pack source-complete and installable for evaluation. It
+does not validate the four new policy behaviors: they remain `proposed` without
+matched positive/negative results, and the pack remains `proposed` until the
+representative and combined gates pass.

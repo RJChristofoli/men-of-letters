@@ -72,8 +72,10 @@
       "required": [
         "material_if",
         "objective_pass_rate_delta_min_percentage_points",
+        "capability_objective_pass_rate_min",
         "capability_preference_rate_min",
         "baseline_preference_rate_max",
+        "non_regression_baseline_preference_rate_max",
         "blinded_reviewers_min",
         "adjudicate_disagreements"
       ],
@@ -84,12 +86,18 @@
           "exclusiveMinimum": 0,
           "maximum": 100
         },
+        "capability_objective_pass_rate_min": { "const": 1 },
         "capability_preference_rate_min": {
           "type": "number",
           "exclusiveMinimum": 0.5,
           "maximum": 1
         },
         "baseline_preference_rate_max": {
+          "type": "number",
+          "minimum": 0,
+          "exclusiveMaximum": 0.5
+        },
+        "non_regression_baseline_preference_rate_max": {
           "type": "number",
           "minimum": 0,
           "exclusiveMaximum": 0.5
@@ -173,6 +181,7 @@
       "additionalProperties": false,
       "required": [
         "individual_incremental_value",
+        "token_value_requires_quality_non_regression",
         "combined_material_gain",
         "retained_lifecycle_minimum",
         "required_installation_checks",
@@ -180,6 +189,7 @@
       ],
       "properties": {
         "individual_incremental_value": { "const": "quality-or-token" },
+        "token_value_requires_quality_non_regression": { "const": true },
         "combined_material_gain": { "const": "quality-and-token" },
         "retained_lifecycle_minimum": { "const": "validated" },
         "required_installation_checks": {

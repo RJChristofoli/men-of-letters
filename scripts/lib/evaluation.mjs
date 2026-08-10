@@ -182,6 +182,9 @@ function assessPairs(pairs, reviews, gate) {
     objectiveBaselineRate === null ? null : objectiveCapabilityRate - objectiveBaselineRate;
 
   const preference = resolvedPreferences(applicable, reviews, gate.quality.blinded_reviewers_min);
+  const preferenceRequired = applicable.some(
+    ({ evaluationCase }) => evaluationCase.preference_review === "required",
+  );
   const preferenceTotal = preference.verdicts.length;
   const capabilityPreferenceRate =
     preferenceTotal === 0
@@ -199,6 +202,15 @@ function assessPairs(pairs, reviews, gate) {
     capabilityPreferenceRate !== null &&
     capabilityPreferenceRate >= gate.quality.capability_preference_rate_min &&
     baselinePreferenceRate <= gate.quality.baseline_preference_rate_max;
+  const objectiveNonRegression =
+    objectiveCapabilityRate !== null &&
+    objectiveCapabilityRate >= gate.quality.capability_objective_pass_rate_min;
+  const preferenceNonRegression =
+    preference.unresolved.length === 0 &&
+    (!preferenceRequired ||
+      (baselinePreferenceRate !== null &&
+        baselinePreferenceRate <= gate.quality.non_regression_baseline_preference_rate_max));
+  const qualityNonRegression = objectiveNonRegression && preferenceNonRegression;
 
   const applicableWithTokens = applicable.filter(
     ({ baseline, capability }) =>
@@ -300,6 +312,12 @@ function assessPairs(pairs, reviews, gate) {
       capability_preference_rate: capabilityPreferenceRate,
       baseline_preference_rate: baselinePreferenceRate,
       unresolved_reviews: preference.unresolved,
+      non_regression: {
+        objective_pass: objectiveNonRegression,
+        preference_required: preferenceRequired,
+        preference_pass: preferenceNonRegression,
+        pass: qualityNonRegression,
+      },
       material: objectiveMaterial || preferenceMaterial,
     },
     tokens: {
@@ -409,6 +427,7 @@ export function calculatePhaseOneGate({ gate, cases, baselines, results, reviews
       incremental_value:
         assessment.complete &&
         assessment.regressions.pass &&
+        assessment.quality.non_regression.pass &&
         (assessment.quality.material || assessment.tokens.material),
     };
   }
@@ -420,6 +439,7 @@ export function calculatePhaseOneGate({ gate, cases, baselines, results, reviews
   const combinedPass =
     combinedAssessment.complete &&
     combinedAssessment.regressions.pass &&
+    combinedAssessment.quality.non_regression.pass &&
     combinedAssessment.quality.material &&
     combinedAssessment.tokens.material;
   const matrix = assessMatrix(pairs, gate);

@@ -20,10 +20,11 @@ The planned capabilities support engineering discovery, backend and security rev
 ## Status
 
 Phase 0 foundation is implemented and validated at an experimental level. Phase
-1 has experimental `evidence`, `safe-change`, and native `token-efficiency`
-policies with initial controlled comparisons; the catalog, schemas, evaluation
-harness, bootstrap CLI, and first proposed plugin slice also exist. No stable
-capability or public release is available yet.
+1 has a source-complete seven-policy core pack: `evidence`, `safe-change`, and
+native `token-efficiency` are experimental, while the four new compact policies
+await comparative evaluation. Complete-pack installation is tested; the catalog,
+schemas, evaluation harness, bootstrap CLI, and first proposed plugin slice also
+exist. No stable capability or public release is available yet.
 
 ## Installation
 

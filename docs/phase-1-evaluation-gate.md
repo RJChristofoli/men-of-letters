@@ -19,8 +19,10 @@ make the gate pass.
 
 ## Material Quality
 
-Every capability variant must pass all safety-critical and required objective
-checks. Quality is materially better when either:
+Every retained capability variant must pass all safety-critical and required
+objective checks across its applicable cases. This 100% objective pass-rate
+floor applies even when the capability qualifies through token savings. Quality
+is materially better when either:
 
 - its objective pass rate is at least 10 percentage points above the matched
   baseline; or
@@ -36,6 +38,11 @@ reasons with the evaluation evidence.
 Objective improvement and preference are alternatives because some policies
 target deterministic safety behavior while discovery produces subjective design
 quality. Schema completion or verbosity alone is never a quality gain.
+
+Token improvement cannot override quality non-regression. When a positive case
+requires preference review, the baseline may be preferred in no more than 20%
+of resolved blinded verdicts. A capability that misses the objective floor or is
+reviewer-disfavored is revised, narrowed, or retired regardless of token savings.
 
 ## Material Token Improvement
 
@@ -91,8 +98,9 @@ configuration except for the capability installation under test.
 ## Decision Rules
 
 An individual retained capability needs material quality or token improvement,
-plus every regression guardrail. The complete retained Phase 1 configuration
-must demonstrate both material quality and material token improvement.
+the quality non-regression floor, and every regression guardrail. The complete
+retained Phase 1 configuration must demonstrate both material quality and
+material token improvement while also satisfying that floor.
 
 Phase 1 closes only when:
 
@@ -116,5 +124,5 @@ checksummed verdicts, and calculates this gate deterministically.
 
 Configuration resolution fails before model execution when a declared source is
 missing. The current aggregate report is therefore `incomplete`, as expected:
-the remaining policies, representative case matrix, and blinded verdicts still
-need to be produced. Harness readiness is not capability validation.
+the representative case matrix and blinded verdicts still need to be produced.
+Harness readiness and source completeness are not capability validation.

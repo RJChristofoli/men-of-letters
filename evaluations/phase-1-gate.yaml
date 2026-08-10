@@ -26,8 +26,10 @@ comparability:
 quality:
   material_if: objective-or-preference
   objective_pass_rate_delta_min_percentage_points: 10
+  capability_objective_pass_rate_min: 1.0
   capability_preference_rate_min: 0.60
   baseline_preference_rate_max: 0.20
+  non_regression_baseline_preference_rate_max: 0.20
   blinded_reviewers_min: 2
   adjudicate_disagreements: true
 tokens:
@@ -79,6 +81,7 @@ matrix:
     dimensions: [mechanical, creative, accepted-design, read-only]
 exit_gate:
   individual_incremental_value: quality-or-token
+  token_value_requires_quality_non_regression: true
   combined_material_gain: quality-and-token
   retained_lifecycle_minimum: validated
   required_installation_checks: [install, update, doctor, uninstall, rollback]

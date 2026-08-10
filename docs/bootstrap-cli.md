@@ -73,13 +73,13 @@ npm run cli -- install core-policies \
   --yes
 ```
 
-The current `core-policies` pack implements `evidence`, `token-efficiency`, and
-`safe-change`, but its four remaining policy sources are absent, so installing
-the complete pack still stops before mutation. The activation path is tested
-with the canonical implemented policies in a controlled partial-pack fixture. It
-uses checksummed managed blocks, preserves unmanaged bytes, backs up existing
-instruction files, and requires `--yes` only when applying changes after dry-run
-review.
+The current `core-policies` pack has all seven canonical sources. Complete-pack
+install, version update, `doctor`, uninstall, and rollback behavior run in clean
+controlled scope, and a canonical temporary install/doctor/uninstall smoke test
+passes. Four policies remain `proposed`, so `--allow-proposed` is still required
+and installation is for evaluation only. Activation uses checksummed managed
+blocks, preserves unmanaged bytes, backs up existing instruction files, and
+requires `--yes` only when applying changes after dry-run review.
 
 ## State and Safety
 
