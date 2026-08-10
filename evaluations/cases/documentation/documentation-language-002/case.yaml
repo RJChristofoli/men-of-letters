@@ -1,0 +1,23 @@
+schema_version: 1
+id: documentation-language-002
+capability: documentation
+kind: positive
+gate_dimensions: [boundary]
+preference_review: not-required
+prompt_file: prompt.md
+output_schema: ../decision.schema.json
+sandbox: read-only
+checks:
+  required_nonempty: [changes, verification]
+  minimum_items:
+    changes: 1
+    verification: 2
+  required_terms:
+    - path: artifact_language
+      terms: [english]
+    - path: entry_doc_action
+      terms: [concise-update]
+    - path: changes
+      terms: [--dry-run]
+    - path: verification
+      terms: [command]

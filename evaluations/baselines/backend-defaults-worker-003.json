@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "case_id": "backend-defaults-worker-003",
+  "capability": "backend-defaults",
+  "variant": "baseline",
+  "configuration": "individual-capability",
+  "timestamp": "2026-08-10T18:40:18.354Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14454,
+    "cached_input_tokens": 0,
+    "output_tokens": 347,
+    "total_tokens": 14801,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 15578,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:data_controls",
+      "passed": true,
+      "detail": "data_controls is populated"
+    },
+    {
+      "name": "nonempty:failure_handling",
+      "passed": true,
+      "detail": "failure_handling is populated"
+    },
+    {
+      "name": "nonempty:observability",
+      "passed": true,
+      "detail": "observability is populated"
+    },
+    {
+      "name": "minimum-items:data_controls",
+      "passed": true,
+      "detail": "data_controls has 3 items"
+    },
+    {
+      "name": "minimum-items:failure_handling",
+      "passed": true,
+      "detail": "failure_handling has 6 items"
+    },
+    {
+      "name": "minimum-items:observability",
+      "passed": true,
+      "detail": "observability has 4 items"
+    },
+    {
+      "name": "required-term:contract_impact:unknown",
+      "passed": true,
+      "detail": "contract_impact includes unknown"
+    },
+    {
+      "name": "required-term:data_controls:recipient",
+      "passed": true,
+      "detail": "data_controls includes recipient"
+    },
+    {
+      "name": "required-term:authorization:required",
+      "passed": true,
+      "detail": "authorization includes required"
+    },
+    {
+      "name": "required-term:idempotency:required",
+      "passed": true,
+      "detail": "idempotency includes required"
+    },
+    {
+      "name": "required-term:failure_handling:retry",
+      "passed": true,
+      "detail": "failure_handling includes retry"
+    },
+    {
+      "name": "required-term:failure_handling:dead-letter",
+      "passed": true,
+      "detail": "failure_handling includes dead-letter"
+    },
+    {
+      "name": "required-term:failure_handling:timeout",
+      "passed": true,
+      "detail": "failure_handling includes timeout"
+    },
+    {
+      "name": "required-term:observability:job_id",
+      "passed": true,
+      "detail": "observability includes job_id"
+    },
+    {
+      "name": "required-term:observability:alert",
+      "passed": true,
+      "detail": "observability includes alert"
+    },
+    {
+      "name": "required-term:architecture:reuse-existing-boundary",
+      "passed": false,
+      "detail": "architecture omits reuse-existing-boundary"
+    },
+    {
+      "name": "required-term:optimization_claim:unsupported",
+      "passed": true,
+      "detail": "optimization_claim includes unsupported"
+    }
+  ],
+  "passed": false,
+  "response": {
+    "contract_impact": "unknown",
+    "data_controls": [
+      "Validate and normalize recipient addresses before enqueue/send",
+      "Transmit only provider-required fields and avoid recipient or message content in logs",
+      "Define retention, encryption, and deletion rules for email payloads and provider identifiers"
+    ],
+    "authorization": "required",
+    "idempotency": "required",
+    "failure_handling": [
+      "Set an explicit provider timeout",
+      "Use job_id as a durable idempotency key and record send outcomes atomically",
+      "Classify transient, permanent, authorization, throttling, and ambiguous timeout failures",
+      "Use bounded retries with exponential backoff and jitter; do not retry forever",
+      "Route exhausted or permanent failures to a defined dead-letter workflow with replay controls",
+      "Prevent DLQ replay and consumer redelivery from sending an already accepted email"
+    ],
+    "observability": [
+      "Log structured lifecycle states, attempt count, job_id, provider request ID, and failure category—not only failed",
+      "Emit delivery, retry, duplicate-suppression, timeout, DLQ, and latency metrics",
+      "Alert on sustained failures, DLQ growth, authorization errors, and duplicate-send signals",
+      "Redact recipient addresses, credentials, and email content"
+    ],
+    "architecture": "insufficient-evidence",
+    "optimization_claim": "unsupported"
+  }
+}

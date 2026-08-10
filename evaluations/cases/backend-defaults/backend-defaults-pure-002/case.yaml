@@ -1,0 +1,23 @@
+schema_version: 1
+id: backend-defaults-pure-002
+capability: backend-defaults
+kind: positive
+gate_dimensions: [boundary]
+preference_review: not-required
+prompt_file: prompt.md
+output_schema: ../decision.schema.json
+sandbox: read-only
+checks:
+  required_nonempty: []
+  minimum_items: {}
+  required_terms:
+    - path: contract_impact
+      terms: [none]
+    - path: authorization
+      terms: [not-applicable]
+    - path: idempotency
+      terms: [not-applicable]
+    - path: architecture
+      terms: [reuse-existing-boundary]
+    - path: optimization_claim
+      terms: [not-claimed]

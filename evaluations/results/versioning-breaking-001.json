@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "case_id": "versioning-breaking-001",
+  "capability": "versioning-and-lifecycle",
+  "variant": "capability",
+  "configuration": "individual-capability",
+  "timestamp": "2026-08-10T18:36:12.888Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14521,
+    "cached_input_tokens": 0,
+    "output_tokens": 193,
+    "total_tokens": 14714,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 10188,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:consumers",
+      "passed": true,
+      "detail": "consumers is populated"
+    },
+    {
+      "name": "nonempty:migration",
+      "passed": true,
+      "detail": "migration is populated"
+    },
+    {
+      "name": "nonempty:rollback",
+      "passed": true,
+      "detail": "rollback is populated"
+    },
+    {
+      "name": "nonempty:notice",
+      "passed": true,
+      "detail": "notice is populated"
+    },
+    {
+      "name": "nonempty:evidence_required",
+      "passed": true,
+      "detail": "evidence_required is populated"
+    },
+    {
+      "name": "minimum-items:consumers",
+      "passed": true,
+      "detail": "consumers has 2 items"
+    },
+    {
+      "name": "minimum-items:migration",
+      "passed": true,
+      "detail": "migration has 3 items"
+    },
+    {
+      "name": "minimum-items:evidence_required",
+      "passed": true,
+      "detail": "evidence_required has 7 items"
+    },
+    {
+      "name": "required-term:classification:breaking",
+      "passed": true,
+      "detail": "classification includes breaking"
+    },
+    {
+      "name": "required-term:version_effect:major",
+      "passed": true,
+      "detail": "version_effect includes major"
+    },
+    {
+      "name": "required-term:status_effect:keep-current",
+      "passed": true,
+      "detail": "status_effect includes keep-current"
+    },
+    {
+      "name": "required-term:consumers:mobile",
+      "passed": true,
+      "detail": "consumers includes mobile"
+    },
+    {
+      "name": "required-term:consumers:partner",
+      "passed": true,
+      "detail": "consumers includes partner"
+    },
+    {
+      "name": "required-term:migration:window",
+      "passed": true,
+      "detail": "migration includes window"
+    },
+    {
+      "name": "required-term:rollback:restore",
+      "passed": true,
+      "detail": "rollback includes restore"
+    },
+    {
+      "name": "required-term:notice:timeline",
+      "passed": true,
+      "detail": "notice includes timeline"
+    },
+    {
+      "name": "required-term:evidence_required:consumer",
+      "passed": true,
+      "detail": "evidence_required includes consumer"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "classification": "breaking",
+    "version_effect": "major",
+    "status_effect": "keep-current",
+    "consumers": [
+      "mobile app",
+      "partner integration"
+    ],
+    "migration": [
+      "Define replacements or removal handling for both consumers.",
+      "Update and validate the mobile app and partner integration.",
+      "Provide a migration window before removing `legacy_id`."
+    ],
+    "rollback": "Required before release: document and test a procedure to restore the `legacy_id` response field or revert the release.",
+    "notice": "Required before release: notify the mobile app owners and partner integration with the removal timeline, migration instructions, and support path.",
+    "evidence_required": [
+      "Consumer inventory confirming all readers of `legacy_id`.",
+      "Compatibility tests demonstrating migrated consumers no longer require `legacy_id`.",
+      "Approval or validation from the mobile app owner.",
+      "Approval or validation from the partner integration owner.",
+      "Documented migration window and completion evidence.",
+      "Documented and tested rollback procedure.",
+      "Recorded deprecation/removal notice and delivery evidence."
+    ]
+  }
+}

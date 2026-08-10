@@ -16,6 +16,7 @@ import {
   assertImplementedCapabilities,
   calculatePhaseOneGate,
   createBlindReview,
+  evaluationRunIsRecordable,
   resolveBlindReview,
   resolveConfigurationCapabilities,
   runConfiguration,
@@ -323,7 +324,7 @@ if (["accept", "record"].includes(options.command)) {
   );
   run.checks = score(run.response, outputSchema, evaluationCase.data.checks);
   run.passed = run.checks.every(({ passed }) => passed);
-  if (!run.passed) {
+  if (!evaluationRunIsRecordable(options.command, run.passed)) {
     const failed = run.checks.filter(({ passed }) => !passed).map(({ detail }) => detail);
     fail(`run does not pass the current case:\n- ${failed.join("\n- ")}`);
   }

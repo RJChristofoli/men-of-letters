@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_impact",
+    "data_controls",
+    "authorization",
+    "idempotency",
+    "failure_handling",
+    "observability",
+    "architecture",
+    "optimization_claim"
+  ],
+  "properties": {
+    "contract_impact": {
+      "enum": ["none", "backward-compatible", "breaking", "unknown"]
+    },
+    "data_controls": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "authorization": { "enum": ["required", "not-applicable", "unknown"] },
+    "idempotency": { "enum": ["required", "not-applicable", "unknown"] },
+    "failure_handling": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "observability": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "architecture": {
+      "enum": ["reuse-existing-boundary", "add-new-layer", "insufficient-evidence"]
+    },
+    "optimization_claim": { "enum": ["measured", "not-claimed", "unsupported"] }
+  }
+}

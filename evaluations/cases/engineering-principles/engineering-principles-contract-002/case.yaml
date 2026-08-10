@@ -1,0 +1,23 @@
+schema_version: 1
+id: engineering-principles-contract-002
+capability: engineering-principles
+kind: positive
+gate_dimensions: [boundary]
+preference_review: not-required
+prompt_file: prompt.md
+output_schema: ../decision.schema.json
+sandbox: read-only
+checks:
+  required_nonempty: [root_problem, tradeoffs, uncertainty]
+  minimum_items:
+    constraints: 2
+    validation: 2
+  required_terms:
+    - path: decision
+      terms: [use-smaller-compatible-change]
+    - path: constraints
+      terms: ["null", contract]
+    - path: preserve_behavior
+      terms: ["true"]
+    - path: validation
+      terms: [contract, regression]

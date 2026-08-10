@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "case_id": "backend-defaults-webhook-001",
+  "capability": "backend-defaults",
+  "variant": "baseline",
+  "configuration": "individual-capability",
+  "timestamp": "2026-08-10T18:35:39.984Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14443,
+    "cached_input_tokens": 0,
+    "output_tokens": 307,
+    "total_tokens": 14750,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 19254,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:data_controls",
+      "passed": true,
+      "detail": "data_controls is populated"
+    },
+    {
+      "name": "nonempty:failure_handling",
+      "passed": true,
+      "detail": "failure_handling is populated"
+    },
+    {
+      "name": "nonempty:observability",
+      "passed": true,
+      "detail": "observability is populated"
+    },
+    {
+      "name": "minimum-items:data_controls",
+      "passed": true,
+      "detail": "data_controls has 3 items"
+    },
+    {
+      "name": "minimum-items:failure_handling",
+      "passed": true,
+      "detail": "failure_handling has 6 items"
+    },
+    {
+      "name": "minimum-items:observability",
+      "passed": true,
+      "detail": "observability has 4 items"
+    },
+    {
+      "name": "required-term:contract_impact:backward-compatible",
+      "passed": true,
+      "detail": "contract_impact includes backward-compatible"
+    },
+    {
+      "name": "required-term:data_controls:signature",
+      "passed": true,
+      "detail": "data_controls includes signature"
+    },
+    {
+      "name": "required-term:idempotency:required",
+      "passed": true,
+      "detail": "idempotency includes required"
+    },
+    {
+      "name": "required-term:failure_handling:retry",
+      "passed": true,
+      "detail": "failure_handling includes retry"
+    },
+    {
+      "name": "required-term:failure_handling:event_id",
+      "passed": true,
+      "detail": "failure_handling includes event_id"
+    },
+    {
+      "name": "required-term:observability:failure",
+      "passed": true,
+      "detail": "observability includes failure"
+    },
+    {
+      "name": "required-term:observability:event_id",
+      "passed": true,
+      "detail": "observability includes event_id"
+    },
+    {
+      "name": "required-term:architecture:reuse-existing-boundary",
+      "passed": true,
+      "detail": "architecture includes reuse-existing-boundary"
+    },
+    {
+      "name": "required-term:optimization_claim:not-claimed",
+      "passed": true,
+      "detail": "optimization_claim includes not-claimed"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "contract_impact": "backward-compatible",
+    "data_controls": [
+      "Verify the signature against the raw request body before parsing or processing.",
+      "Store only the minimum webhook payload fields needed for audit and replay; redact secrets and sensitive payment data from logs.",
+      "Apply existing retention and encryption controls to webhook events."
+    ],
+    "authorization": "not-applicable",
+    "idempotency": "required",
+    "failure_handling": [
+      "Persist and atomically claim event_id before applying payment state changes.",
+      "Treat an already successfully processed event_id as success and return 2xx without repeating side effects.",
+      "Validate event type, schema, payment identity, amount, currency, and allowed state transition before mutation.",
+      "Return non-2xx for invalid signatures and retryable processing failures; return 2xx for unsupported but authenticated event types when no retry can help.",
+      "Commit the idempotency record and payment-state mutation in one transaction where possible; otherwise use a durable inbox and retry-safe state transition.",
+      "Do not acknowledge with 2xx until required durable processing has completed."
+    ],
+    "observability": [
+      "Emit structured logs containing event_id, event type, payment identifier, processing outcome, duplicate status, and retryable classification without sensitive payload data.",
+      "Record counters for received, processed, duplicate, rejected-signature, ignored, and failed events.",
+      "Measure processing latency and alert on sustained failures, signature failures, backlog growth, and repeated delivery attempts.",
+      "Preserve an auditable event-processing status and error reason for reconciliation."
+    ],
+    "architecture": "reuse-existing-boundary",
+    "optimization_claim": "not-claimed"
+  }
+}

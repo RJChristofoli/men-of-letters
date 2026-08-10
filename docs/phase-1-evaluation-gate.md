@@ -123,6 +123,8 @@ stores the identity key separately under ignored run artifacts, records resolved
 checksummed verdicts, and calculates this gate deterministically.
 
 Configuration resolution fails before model execution when a declared source is
-missing. The current aggregate report is therefore `incomplete`, as expected:
-the representative case matrix and blinded verdicts still need to be produced.
-Harness readiness and source completeness are not capability validation.
+missing. The current aggregate report remains `incomplete`: the four new
+policies now have complete individual positive/negative rows, but the older
+policies, discovery, complete-pack precedence, combined configurations, and
+blinded verdicts remain incomplete. Harness readiness and partial matrix
+coverage are not capability validation.

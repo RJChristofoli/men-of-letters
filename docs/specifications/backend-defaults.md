@@ -1,7 +1,8 @@
 # Capability Specification: `backend-defaults`
 
-Status: proposed implementation; canonical source and controlled installation
-exist, but comparative evaluation is pending.
+Status: proposed implementation; source, installation, and the individual
+representative matrix exist, but blinded review and final value remain
+unresolved.
 
 ## Identity and Ownership
 
@@ -65,7 +66,10 @@ exist, but comparative evaluation is pending.
 
 ## Evidence and Evaluation
 
-- Evidence today: source budget and complete-pack lifecycle checks pass.
+- Evidence today: six matched pairs pass with 100% capability objective success,
+  no tools or corrections, and 0.98% unrelated overhead. One adverse baseline
+  missed the existing-boundary decision, producing an initial 33.3-point
+  objective gain.
 - No-capability baseline: matched backend tasks without this policy.
 - Planned positive coverage: primary rule, scope boundary, and adverse or
   ambiguous production change.
@@ -84,7 +88,9 @@ exist, but comparative evaluation is pending.
 - Host behavior compatibility: unknown until comparative runs.
 - Alternatives: a large production-readiness skill, rejected as always-loaded
   scope; do nothing remains the evaluation baseline.
-- Decision: keep narrow defaults proposed and route specialist depth elsewhere.
+- Decision: keep narrow defaults proposed. The initial objective gain is
+  promising, but applicable tokens increased 1.1% and blinded review is
+  unresolved.
 
 ## Documentation Impact
 

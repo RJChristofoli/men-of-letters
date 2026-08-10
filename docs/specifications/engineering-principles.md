@@ -1,7 +1,8 @@
 # Capability Specification: `engineering-principles`
 
-Status: proposed implementation; canonical source and controlled installation
-exist, but comparative evaluation is pending.
+Status: proposed implementation; source, installation, and the individual
+representative matrix exist, but blinded review and incremental value remain
+unresolved.
 
 ## Identity and Ownership
 
@@ -64,7 +65,9 @@ exist, but comparative evaluation is pending.
 
 ## Evidence and Evaluation
 
-- Evidence today: source budget and complete-pack lifecycle checks pass.
+- Evidence today: source budget and complete-pack lifecycle checks pass; six
+  matched individual pairs pass with 100% capability objective success, 0.91%
+  unrelated overhead, and no tool calls or corrections.
 - No-capability baseline: matched runs without this policy.
 - Planned positive coverage: primary rule, boundary, and adverse or ambiguous
   engineering decisions.
@@ -83,8 +86,9 @@ exist, but comparative evaluation is pending.
 - Host behavior compatibility: unknown until comparative runs.
 - Alternatives: repeat principles in every workflow, rejected as duplication; do
   nothing remains the evaluation baseline.
-- Decision: retain as a proposed compact cross-cutting implementation until
-  evaluation supports promotion, revision, or removal.
+- Decision: retain as proposed. Applicable total tokens increased 0.8%, no
+  objective gain appeared over the strong baseline, and blinded review is
+  unresolved.
 
 ## Documentation Impact
 

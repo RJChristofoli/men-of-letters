@@ -238,6 +238,19 @@ repository-scope smoke test also installed all seven blocks, returned
 `healthy: true`, and removed all managed content. This completes implementation
 and lifecycle infrastructure, not effectiveness validation.
 
+New-policy representative evidence (2026-08-10): the four newly implemented
+policies each have three applicable and three negative matched pairs on Codex
+CLI 0.146.0. All 24 capability runs passed in one turn without tools or
+corrections, and unrelated aggregate overhead stayed between 0.20% and 0.98%.
+`backend-defaults` and `versioning-and-lifecycle` improved applicable objective
+pass rate from 2/3 to 3/3; `engineering-principles` and `documentation` matched
+3/3 baselines. No policy cleared the frozen token gate: the first two increased
+applicable totals 0.8% and 1.1%, while apparent 40% aggregate reductions for the
+last two won only one of three pairs and were dominated by single high-input
+baselines. Four required blinded comparisons remain unresolved, so every policy
+stays `proposed`. Repository validation now covers 33 cases, 33 baselines, 33
+capability results, and zero blinded reviews; 21/21 deterministic tests pass.
+
 ### Phase 2 — Investigation, Review, and Optimization
 
 - [ ] Create `investigate-problem` for evidence-backed diagnosis, root-cause
@@ -604,6 +617,21 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ## Decision Log
 
+### 2026-08-10 — Four-policy individual matrix executed
+
+- Add three applicable and three negative cases for each newly implemented
+  policy, covering every frozen individual-policy dimension.
+- Keep objective rubrics semantic: correct checks that depended on synonyms or
+  misplaced terms before recording evidence, without weakening a real decision
+  failure.
+- Treat an accepted baseline as a valid reference observation, including when
+  it fails objective checks; continue refusing failed capability results.
+- Record objective gains for backend defaults and version/lifecycle, equivalence
+  for engineering principles and documentation, and no material token win for
+  any of the four.
+- Keep all four policies `proposed` until independent blinded reviews resolve
+  the quality floor and the individual value decision.
+
 ### 2026-08-10 — Core policy sources completed within budget
 
 - Implement the four missing sources with distinct ownership: general
@@ -883,8 +911,9 @@ For optimization work, require reproducible before-and-after measurements. If me
 - One negative case records zero observed response-level false triggers, but it
   does not establish a false-positive rate or broad implicit-trigger precision.
 - All seven core policy sources exist and the complete pack installs, diagnoses,
-  updates, rolls back, and removes in controlled scope. Four new policies remain
-  `proposed` and unevaluated; pack installability is not effectiveness evidence.
+  updates, rolls back, and removes in controlled scope. The four new policies
+  complete their individual objective matrices but remain `proposed` pending
+  blinded review and incremental-value decisions.
 - `token-efficiency` reduced output 13.1% in its initial pair but increased total
   tokens 0.4%; it has no demonstrated incremental value yet, and its blinded and
   representative cases remain pending.
@@ -893,12 +922,12 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ## Next Action
 
-Continue Phase 1 by creating fresh representative positive and negative cases
-for `engineering-principles`, `backend-defaults`, `documentation`, and
-`versioning-and-lifecycle`, then run matched individual comparisons under the
-quality floor. Expand `token-efficiency` with context/tool-selection cases and
-retain it only if reviewed quality does not regress and it clears individual
-value. Then execute complete-policy and combined configurations. In parallel,
-add the discovery-brief/ADR handoff and broaden discovery cases. Do not close the
-phase until every retained capability and the combined configuration pass the
-frozen quality, token, safety, routing, latency, and correction thresholds.
+Continue Phase 1 by obtaining two independent blinded reviews for each of the
+four new adverse/ambiguous pairs. Expand `token-efficiency` with context and
+tool-selection cases, then retain it only if reviewed quality does not regress
+and it clears individual value. Complete the representative rows for `evidence`,
+`safe-change`, and discovery before executing complete-policy precedence and
+combined configurations. In parallel, add the discovery-brief/ADR handoff. Do
+not close the phase until every retained capability and the combined
+configuration pass the frozen quality, token, safety, routing, latency, and
+correction thresholds.

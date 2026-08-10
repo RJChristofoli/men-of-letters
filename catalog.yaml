@@ -7,8 +7,9 @@ capabilities:
     source: policies/engineering-principles.md
     dependencies: []
     compatibility:
+      codex-cli: 0.146.0
       bootstrap: 0.1.0-dev.0
-    evaluation_suite: null
+    evaluation_suite: engineering-principles
     installation_pack: core-policies
     introduced_release: null
     deprecated_release: null
@@ -34,8 +35,9 @@ capabilities:
     source: policies/backend-defaults.md
     dependencies: [engineering-principles, evidence, safe-change]
     compatibility:
+      codex-cli: 0.146.0
       bootstrap: 0.1.0-dev.0
-    evaluation_suite: null
+    evaluation_suite: backend-defaults
     installation_pack: core-policies
     introduced_release: null
     deprecated_release: null
@@ -47,8 +49,9 @@ capabilities:
     source: policies/documentation.md
     dependencies: [evidence]
     compatibility:
+      codex-cli: 0.146.0
       bootstrap: 0.1.0-dev.0
-    evaluation_suite: null
+    evaluation_suite: documentation
     installation_pack: core-policies
     introduced_release: null
     deprecated_release: null
@@ -74,8 +77,9 @@ capabilities:
     source: policies/versioning-and-lifecycle.md
     dependencies: [evidence]
     compatibility:
+      codex-cli: 0.146.0
       bootstrap: 0.1.0-dev.0
-    evaluation_suite: null
+    evaluation_suite: versioning-and-lifecycle
     installation_pack: core-policies
     introduced_release: null
     deprecated_release: null

@@ -9,9 +9,17 @@ import {
   assertImplementedCapabilities,
   calculatePhaseOneGate,
   createBlindReview,
+  evaluationRunIsRecordable,
   resolveBlindReview,
   resolveConfigurationCapabilities,
 } from "../../scripts/lib/evaluation.mjs";
+
+test("failed baselines remain recordable but failed capability runs do not", () => {
+  assert.equal(evaluationRunIsRecordable("accept", false), true);
+  assert.equal(evaluationRunIsRecordable("record", true), true);
+  assert.equal(evaluationRunIsRecordable("record", false), false);
+  assert.throws(() => evaluationRunIsRecordable("publish", true), /unsupported/);
+});
 
 const policyIds = [
   "engineering-principles",

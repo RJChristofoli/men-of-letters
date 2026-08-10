@@ -1,7 +1,8 @@
 # Capability Specification: `versioning-and-lifecycle`
 
-Status: proposed implementation; canonical source and controlled installation
-exist, but comparative evaluation is pending.
+Status: proposed implementation; source, installation, and the individual
+representative matrix exist, but blinded review and final value remain
+unresolved.
 
 ## Identity and Ownership
 
@@ -64,7 +65,10 @@ exist, but comparative evaluation is pending.
 
 ## Evidence and Evaluation
 
-- Evidence today: source budget and complete-pack lifecycle checks pass.
+- Evidence today: six matched pairs pass with 100% capability objective success,
+  no tools or corrections, and 0.20% unrelated overhead. The policy refused an
+  unsupported compatibility classification that the baseline made, producing
+  an initial 33.3-point objective gain.
 - No-capability baseline: matched versioning/lifecycle tasks without this policy.
 - Planned positive coverage: primary impact classification, contract boundary,
   and ambiguous promotion or deprecation request.
@@ -82,7 +86,9 @@ exist, but comparative evaluation is pending.
 - Host behavior compatibility: unknown until comparative runs.
 - Alternatives: duplicate release rules in every workflow, rejected as
   divergence; do nothing remains the evaluation baseline.
-- Decision: keep the compact evidence-bound policy proposed until evaluated.
+- Decision: keep proposed. The objective gain is promising; the apparent 40.4%
+  aggregate token reduction wins only one of three applicable pairs and blinded
+  review remains unresolved.
 
 ## Documentation Impact
 

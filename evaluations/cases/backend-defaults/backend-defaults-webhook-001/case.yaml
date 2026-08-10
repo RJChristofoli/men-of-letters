@@ -1,0 +1,31 @@
+schema_version: 1
+id: backend-defaults-webhook-001
+capability: backend-defaults
+kind: positive
+gate_dimensions: [primary-rule]
+preference_review: not-required
+safety_critical: true
+prompt_file: prompt.md
+output_schema: ../decision.schema.json
+sandbox: read-only
+checks:
+  required_nonempty: [data_controls, failure_handling, observability]
+  minimum_items:
+    data_controls: 2
+    failure_handling: 2
+    observability: 2
+  required_terms:
+    - path: contract_impact
+      terms: [backward-compatible]
+    - path: data_controls
+      terms: [signature]
+    - path: idempotency
+      terms: [required]
+    - path: failure_handling
+      terms: [retry, event_id]
+    - path: observability
+      terms: [failure, event_id]
+    - path: architecture
+      terms: [reuse-existing-boundary]
+    - path: optimization_claim
+      terms: [not-claimed]

@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "case_id": "engineering-principles-ambiguity-003",
+  "capability": "engineering-principles",
+  "variant": "capability",
+  "configuration": "individual-capability",
+  "timestamp": "2026-08-10T18:40:19.878Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14552,
+    "cached_input_tokens": 0,
+    "output_tokens": 453,
+    "total_tokens": 15005,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 21987,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:root_problem",
+      "passed": true,
+      "detail": "root_problem is populated"
+    },
+    {
+      "name": "nonempty:tradeoffs",
+      "passed": true,
+      "detail": "tradeoffs is populated"
+    },
+    {
+      "name": "nonempty:uncertainty",
+      "passed": true,
+      "detail": "uncertainty is populated"
+    },
+    {
+      "name": "minimum-items:constraints",
+      "passed": true,
+      "detail": "constraints has 5 items"
+    },
+    {
+      "name": "minimum-items:validation",
+      "passed": true,
+      "detail": "validation has 7 items"
+    },
+    {
+      "name": "required-term:decision:defer-pending-evidence",
+      "passed": true,
+      "detail": "decision includes defer-pending-evidence"
+    },
+    {
+      "name": "required-term:constraints:two weeks",
+      "passed": true,
+      "detail": "constraints includes two weeks"
+    },
+    {
+      "name": "required-term:constraints:uptime",
+      "passed": true,
+      "detail": "constraints includes uptime"
+    },
+    {
+      "name": "required-term:constraints:partner",
+      "passed": true,
+      "detail": "constraints includes partner"
+    },
+    {
+      "name": "required-term:preserve_behavior:true",
+      "passed": true,
+      "detail": "preserve_behavior includes true"
+    },
+    {
+      "name": "required-term:validation:baseline",
+      "passed": true,
+      "detail": "validation includes baseline"
+    },
+    {
+      "name": "required-term:validation:rollback",
+      "passed": true,
+      "detail": "validation includes rollback"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "decision": "defer-pending-evidence",
+    "root_problem": "The requested rewrite is a proposed solution without evidence that the current architecture causes a performance problem. The actual latency baseline, bottleneck, sale-critical acceptance criteria, and partner-integration contracts are unknown.",
+    "constraints": [
+      "The sale is in two weeks, leaving insufficient margin for a complete rewrite, integration discovery, stabilization, and rollback-safe release.",
+      "The current service meets its uptime target, so reliability must not be degraded without demonstrated benefit.",
+      "Three undocumented partner integrations must remain compatible.",
+      "No latency baseline, bottleneck, new functional requirement, or measurable performance target has been supplied.",
+      "Any production change needs a rollback path and must preserve existing observable behavior."
+    ],
+    "preserve_behavior": true,
+    "tradeoffs": "Defer the rewrite and use the two-week window for measurement and narrowly targeted remediation. This may forgo architectural cleanup or a speculative speed improvement before the sale, but it materially reduces outage, regression, schedule, and partner-breakage risk. If evidence identifies a bounded bottleneck, implement the smallest compatible optimization; consider a rewrite later only if measurements show that incremental changes cannot meet an agreed target.",
+    "uncertainty": "It is unknown whether latency is currently problematic, which request paths matter to the sale, where time is spent, what performance target management expects, and which behaviors the partner integrations depend on. A rewrite's benefit, cost, and compatibility therefore cannot be estimated responsibly.",
+    "validation": [
+      "Agree on one sale-relevant latency target and workload, such as p95/p99 latency and throughput for critical paths.",
+      "Capture a minimal production-representative baseline using existing telemetry or a short, non-disruptive measurement run.",
+      "Profile the critical path enough to identify the dominant bottleneck before selecting a change.",
+      "Record current requests, responses, error semantics, authentication, timing-sensitive behavior, and callbacks used by all three partner integrations as characterization/contract tests.",
+      "Apply and benchmark only the smallest evidence-backed optimization in a staging or shadow environment under the representative workload.",
+      "Run uptime/error-rate checks and partner contract tests, canary the change if feasible, and retain an immediate rollback path.",
+      "Revisit the rewrite decision only if measured evidence shows the agreed target cannot be reached safely through bounded changes."
+    ]
+  }
+}

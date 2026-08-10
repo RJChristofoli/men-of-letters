@@ -18,6 +18,11 @@ Add `--accept-baseline` only to a reviewed baseline run. Accepted baseline files
 are committed under `evaluations/baselines/`; raw runs under `evaluations/runs/`
 are local and ignored by Git.
 
+An accepted baseline is a valid reference observation, not necessarily a
+successful answer. The `accept` command re-scores and may retain a failing
+baseline so objective improvement remains measurable. The `record` command
+refuses a failing capability result.
+
 If review corrects only an objective rubric without changing the task or output,
 re-score and accept the existing measured run without another model call:
 
@@ -95,8 +100,8 @@ The harness executes individual, complete-policy, and combined configurations;
 records blinded reviews with checksummed run identity; and calculates the
 aggregate gate. All Phase 1 capability sources now exist, so complete-policy and
 combined model runs can execute. The current gate report remains correctly
-`incomplete` because the representative matrix and blinded reviews do not exist
-yet.
+`incomplete`: four policy rows are complete, while the older policy, discovery,
+precedence, combined, and blinded-review evidence remains unfinished.
 
 ### Blinded Preference
 
@@ -258,6 +263,30 @@ smoke test against the canonical repository installed the full pack in temporary
 repository scope, reported `healthy: true`, and removed every managed block.
 
 This evidence makes the pack source-complete and installable for evaluation. It
-does not validate the four new policy behaviors: they remain `proposed` without
-matched positive/negative results, and the pack remains `proposed` until the
-representative and combined gates pass.
+does not by itself validate policy behavior, and the pack remains `proposed`
+until the representative and combined gates pass.
+
+## New Core Policy Individual Matrix
+
+On 2026-08-10, `engineering-principles`, `backend-defaults`, `documentation`,
+and `versioning-and-lifecycle` each completed three applicable and three
+negative matched pairs on Codex CLI 0.146.0. Every capability result passed in
+one turn with no tool calls or corrections, and every negative case stayed
+within the frozen 1% aggregate and 2% single-case overhead limits.
+
+| Policy | Objective baseline → capability | Applicable token change | Paired token wins | Unrelated overhead |
+| --- | ---: | ---: | ---: | ---: |
+| Engineering principles | 3/3 → 3/3 | +339 (+0.8%) | 0/3 | +0.91% |
+| Backend defaults | 2/3 → 3/3 | +476 (+1.1%) | 0/3 | +0.98% |
+| Documentation | 3/3 → 3/3 | -29,477 (-40.1%) | 1/3 | +0.76% |
+| Version/lifecycle | 2/3 → 3/3 | -29,803 (-40.4%) | 1/3 | +0.20% |
+
+Backend defaults and version/lifecycle show an initial 33.3 percentage-point
+objective gain. Engineering principles and documentation are objectively
+equivalent to strong baselines. The large aggregate token reductions for the
+last two policies are each dominated by one high-input baseline and fail the
+required 70% paired-improvement rate, so they are not material token wins.
+
+One adverse or ambiguous case per policy requires two independent blinded
+reviewers. Those verdicts are unresolved; all four policies therefore remain
+`proposed`, and no incremental-value or promotion claim is made.

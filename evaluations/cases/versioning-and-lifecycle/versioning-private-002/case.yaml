@@ -1,0 +1,26 @@
+schema_version: 1
+id: versioning-private-002
+capability: versioning-and-lifecycle
+kind: positive
+gate_dimensions: [boundary]
+preference_review: not-required
+prompt_file: prompt.md
+output_schema: ../decision.schema.json
+sandbox: read-only
+checks:
+  required_nonempty: [rollback, notice, evidence_required]
+  minimum_items:
+    evidence_required: 1
+  required_terms:
+    - path: classification
+      terms: [non-breaking]
+    - path: version_effect
+      terms: [none]
+    - path: status_effect
+      terms: [none]
+    - path: rollback
+      terms: [revert]
+    - path: notice
+      terms: [No external]
+    - path: evidence_required
+      terms: [test]

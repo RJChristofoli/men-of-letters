@@ -1,0 +1,22 @@
+schema_version: 1
+id: versioning-promotion-003
+capability: versioning-and-lifecycle
+kind: positive
+gate_dimensions: [adverse-or-ambiguous]
+preference_review: required
+prompt_file: prompt.md
+output_schema: ../decision.schema.json
+sandbox: read-only
+checks:
+  required_nonempty: [rollback, notice, evidence_required]
+  minimum_items:
+    evidence_required: 3
+  required_terms:
+    - path: classification
+      terms: [unknown]
+    - path: version_effect
+      terms: [none]
+    - path: status_effect
+      terms: [keep-current]
+    - path: evidence_required
+      terms: [behavior, compatibility, blinded]

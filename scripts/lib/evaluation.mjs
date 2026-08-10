@@ -7,6 +7,13 @@ export const CONFIGURATIONS = [
   "phase-1-combined",
 ];
 
+export function evaluationRunIsRecordable(command, passed) {
+  if (!["accept", "record"].includes(command)) {
+    throw new Error(`unsupported persistence command: ${command}`);
+  }
+  return command === "accept" || passed;
+}
+
 export function runConfiguration(run) {
   return run.configuration ?? DEFAULT_CONFIGURATION;
 }

@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "case_id": "documentation-release-001",
+  "capability": "documentation",
+  "variant": "capability",
+  "configuration": "individual-capability",
+  "timestamp": "2026-08-10T18:36:14.510Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14529,
+    "cached_input_tokens": 0,
+    "output_tokens": 303,
+    "total_tokens": 14832,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 11627,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:changes",
+      "passed": true,
+      "detail": "changes is populated"
+    },
+    {
+      "name": "nonempty:excluded_claims",
+      "passed": true,
+      "detail": "excluded_claims is populated"
+    },
+    {
+      "name": "nonempty:verification",
+      "passed": true,
+      "detail": "verification is populated"
+    },
+    {
+      "name": "minimum-items:changes",
+      "passed": true,
+      "detail": "changes has 3 items"
+    },
+    {
+      "name": "minimum-items:excluded_claims",
+      "passed": true,
+      "detail": "excluded_claims has 2 items"
+    },
+    {
+      "name": "minimum-items:verification",
+      "passed": true,
+      "detail": "verification has 5 items"
+    },
+    {
+      "name": "required-term:artifact_language:english",
+      "passed": true,
+      "detail": "artifact_language includes english"
+    },
+    {
+      "name": "required-term:entry_doc_action:concise-update",
+      "passed": true,
+      "detail": "entry_doc_action includes concise-update"
+    },
+    {
+      "name": "required-term:changes:doctor",
+      "passed": true,
+      "detail": "changes includes doctor"
+    },
+    {
+      "name": "required-term:changes:exit",
+      "passed": true,
+      "detail": "changes includes exit"
+    },
+    {
+      "name": "required-term:excluded_claims:repair",
+      "passed": true,
+      "detail": "excluded_claims includes repair"
+    },
+    {
+      "name": "required-term:verification:link",
+      "passed": true,
+      "detail": "verification includes link"
+    },
+    {
+      "name": "required-term:verification:status",
+      "passed": true,
+      "detail": "verification includes status"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "artifact_language": "english",
+    "implementation_status": "planned",
+    "entry_doc_action": "concise-update",
+    "changes": [
+      "Add the implemented `doctor` command to the README’s command overview.",
+      "Briefly document that `doctor --json` exits with status 0 when healthy and 2 when issues are found.",
+      "Link to `docs/doctor.md` for detailed diagnostics and usage guidance instead of duplicating that content in the README."
+    ],
+    "excluded_claims": [
+      "Do not mention or imply that the proposed `repair` command is available or implemented.",
+      "Do not present the planned README edits as already completed."
+    ],
+    "verification": [
+      "Confirm the documented `doctor` and `doctor --json` syntax matches the CLI help output.",
+      "Run `doctor --json` in healthy and issue-producing scenarios and verify exit statuses 0 and 2 respectively.",
+      "Confirm `docs/doctor.md` exists and the README link resolves correctly.",
+      "Run the repository’s Markdown, documentation, and link checks before publishing.",
+      "Review the README diff to ensure it remains concise and contains no detailed diagnostics duplicated from `docs/doctor.md`."
+    ]
+  }
+}

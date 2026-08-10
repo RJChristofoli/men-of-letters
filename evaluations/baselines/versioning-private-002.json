@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "case_id": "versioning-private-002",
+  "capability": "versioning-and-lifecycle",
+  "variant": "baseline",
+  "configuration": "individual-capability",
+  "timestamp": "2026-08-10T18:38:37.044Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14411,
+    "cached_input_tokens": 0,
+    "output_tokens": 112,
+    "total_tokens": 14523,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 7318,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:rollback",
+      "passed": true,
+      "detail": "rollback is populated"
+    },
+    {
+      "name": "nonempty:notice",
+      "passed": true,
+      "detail": "notice is populated"
+    },
+    {
+      "name": "nonempty:evidence_required",
+      "passed": true,
+      "detail": "evidence_required is populated"
+    },
+    {
+      "name": "minimum-items:evidence_required",
+      "passed": true,
+      "detail": "evidence_required has 4 items"
+    },
+    {
+      "name": "required-term:classification:non-breaking",
+      "passed": true,
+      "detail": "classification includes non-breaking"
+    },
+    {
+      "name": "required-term:version_effect:none",
+      "passed": true,
+      "detail": "version_effect includes none"
+    },
+    {
+      "name": "required-term:status_effect:none",
+      "passed": true,
+      "detail": "status_effect includes none"
+    },
+    {
+      "name": "required-term:rollback:revert",
+      "passed": true,
+      "detail": "rollback includes revert"
+    },
+    {
+      "name": "required-term:notice:No external",
+      "passed": true,
+      "detail": "notice includes No external"
+    },
+    {
+      "name": "required-term:evidence_required:test",
+      "passed": true,
+      "detail": "evidence_required includes test"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "classification": "non-breaking",
+    "version_effect": "none",
+    "status_effect": "none",
+    "consumers": [],
+    "migration": [],
+    "rollback": "Revert the internal helper rename and its in-repository reference updates if needed.",
+    "notice": "No external compatibility or lifecycle notice is required.",
+    "evidence_required": [
+      "Confirm the helper is private and unexported.",
+      "Confirm all in-repository references were updated.",
+      "Passing tests demonstrating identical behavior.",
+      "Confirm no changes to public API, stored data, configuration, release artifacts, or lifecycle status."
+    ]
+  }
+}

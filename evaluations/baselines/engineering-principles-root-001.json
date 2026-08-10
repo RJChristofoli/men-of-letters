@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "case_id": "engineering-principles-root-001",
+  "capability": "engineering-principles",
+  "variant": "baseline",
+  "configuration": "individual-capability",
+  "timestamp": "2026-08-10T18:35:40.733Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14421,
+    "cached_input_tokens": 0,
+    "output_tokens": 428,
+    "total_tokens": 14849,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 18637,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:root_problem",
+      "passed": true,
+      "detail": "root_problem is populated"
+    },
+    {
+      "name": "nonempty:tradeoffs",
+      "passed": true,
+      "detail": "tradeoffs is populated"
+    },
+    {
+      "name": "nonempty:uncertainty",
+      "passed": true,
+      "detail": "uncertainty is populated"
+    },
+    {
+      "name": "minimum-items:constraints",
+      "passed": true,
+      "detail": "constraints has 5 items"
+    },
+    {
+      "name": "minimum-items:validation",
+      "passed": true,
+      "detail": "validation has 6 items"
+    },
+    {
+      "name": "required-term:decision:use-smaller-compatible-change",
+      "passed": true,
+      "detail": "decision includes use-smaller-compatible-change"
+    },
+    {
+      "name": "required-term:root_problem:unique",
+      "passed": true,
+      "detail": "root_problem includes unique"
+    },
+    {
+      "name": "required-term:constraints:monolith",
+      "passed": true,
+      "detail": "constraints includes monolith"
+    },
+    {
+      "name": "required-term:preserve_behavior:true",
+      "passed": true,
+      "detail": "preserve_behavior includes true"
+    },
+    {
+      "name": "required-term:validation:rollback",
+      "passed": true,
+      "detail": "validation includes rollback"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "decision": "use-smaller-compatible-change",
+    "root_problem": "The duplicate rows are caused by missing database-enforced uniqueness and unsafe concurrent retry handling inside the transaction-owning monolith, not by the absence of a separate service.",
+    "constraints": [
+      "Delivery is due in three days.",
+      "The monolith already owns the transaction boundary.",
+      "All callers rely on the existing response contract.",
+      "A new microservice would introduce distributed consistency, deployment, and contract-migration risk.",
+      "Existing data may already contain duplicate (payment_id, attempt) pairs."
+    ],
+    "preserve_behavior": true,
+    "tradeoffs": "Keep retry handling in the monolith and make the smallest compatible correction: identify and reconcile existing duplicates, add a unique constraint or unique index on (payment_id, attempt), and make the transactional write idempotent by treating a uniqueness conflict as the existing retry result. This avoids a risky service extraction but postpones any broader architectural separation. It may add contention on the unique index, which is preferable to incorrect duplicate records and should be measured.",
+    "uncertainty": "The stated facts do not reveal the database engine, current transaction isolation, duplicate-cleanup policy, or whether the response can be reconstructed deterministically after a uniqueness conflict. Those details affect implementation mechanics, but not the decision to avoid a three-day microservice extraction.",
+    "validation": [
+      "Measure and classify existing duplicates before adding the constraint; define a reversible reconciliation procedure and retain an audit record.",
+      "Add concurrency tests that issue simultaneous retries for the same (payment_id, attempt) and verify exactly one row exists while every caller receives the established response shape and semantics.",
+      "Run existing contract and regression tests for all retry callers.",
+      "Test uniqueness-conflict handling, transaction rollback, timeouts, and repeated requests under production-like concurrency.",
+      "Deploy incrementally with duplicate-rate, conflict-rate, latency, error-rate, and database-lock monitoring.",
+      "Rollback application logic to the prior version if error or latency thresholds regress; retain the uniqueness constraint when compatible because it protects data integrity, but prepare a reviewed reversible migration if it must be removed. Do not restore reconciled duplicates; preserve their audit/backup data."
+    ]
+  }
+}

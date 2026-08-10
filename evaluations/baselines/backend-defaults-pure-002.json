@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "case_id": "backend-defaults-pure-002",
+  "capability": "backend-defaults",
+  "variant": "baseline",
+  "configuration": "individual-capability",
+  "timestamp": "2026-08-10T18:38:38.046Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14436,
+    "cached_input_tokens": 0,
+    "output_tokens": 87,
+    "total_tokens": 14523,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 10880,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "required-term:contract_impact:none",
+      "passed": true,
+      "detail": "contract_impact includes none"
+    },
+    {
+      "name": "required-term:authorization:not-applicable",
+      "passed": true,
+      "detail": "authorization includes not-applicable"
+    },
+    {
+      "name": "required-term:idempotency:not-applicable",
+      "passed": true,
+      "detail": "idempotency includes not-applicable"
+    },
+    {
+      "name": "required-term:architecture:reuse-existing-boundary",
+      "passed": true,
+      "detail": "architecture includes reuse-existing-boundary"
+    },
+    {
+      "name": "required-term:optimization_claim:not-claimed",
+      "passed": true,
+      "detail": "optimization_claim includes not-claimed"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "contract_impact": "none",
+    "data_controls": [
+      "Trim labels only at display-formatting time",
+      "Do not modify stored data",
+      "Rely on existing label validation"
+    ],
+    "authorization": "not-applicable",
+    "idempotency": "not-applicable",
+    "failure_handling": [
+      "Run the local unit-test suite"
+    ],
+    "observability": [],
+    "architecture": "reuse-existing-boundary",
+    "optimization_claim": "not-claimed"
+  }
+}

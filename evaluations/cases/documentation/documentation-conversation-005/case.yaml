@@ -1,0 +1,15 @@
+schema_version: 1
+id: documentation-conversation-005
+capability: documentation
+kind: negative
+gate_dimensions: [nearest-negative-trigger]
+preference_review: not-required
+prompt_file: prompt.md
+output_schema: ../answer.schema.json
+sandbox: read-only
+checks:
+  required_nonempty: [answer]
+  minimum_items: {}
+  required_terms:
+    - path: answer
+      terms: [O comando passou]

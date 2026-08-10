@@ -1,0 +1,15 @@
+schema_version: 1
+id: engineering-principles-accepted-005
+capability: engineering-principles
+kind: negative
+gate_dimensions: [nearest-negative-trigger]
+preference_review: not-required
+prompt_file: prompt.md
+output_schema: ../answer.schema.json
+sandbox: read-only
+checks:
+  required_nonempty: [answer]
+  minimum_items: {}
+  required_terms:
+    - path: answer
+      terms: [retry_exhausted]

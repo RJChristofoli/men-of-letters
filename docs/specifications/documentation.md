@@ -1,7 +1,8 @@
 # Capability Specification: `documentation`
 
-Status: proposed implementation; canonical source and controlled installation
-exist, but comparative evaluation is pending.
+Status: proposed implementation; source, installation, and the individual
+representative matrix exist, but blinded review and incremental value remain
+unresolved.
 
 ## Identity and Ownership
 
@@ -64,7 +65,8 @@ exist, but comparative evaluation is pending.
 
 ## Evidence and Evaluation
 
-- Evidence today: source budget and complete-pack lifecycle checks pass.
+- Evidence today: six matched pairs pass with 100% capability objective success,
+  no tools or corrections, and 0.76% unrelated overhead.
 - No-capability baseline: matched documentation tasks without this policy.
 - Planned positive coverage: primary language/accuracy rule, scope boundary, and
   ambiguous plan-versus-implementation case.
@@ -82,7 +84,10 @@ exist, but comparative evaluation is pending.
 - Host behavior compatibility: unknown until comparative runs.
 - Alternatives: hard-code one global language, rejected because repository and
   user scope differ; do nothing remains the evaluation baseline.
-- Decision: retain the contextual documentation policy as proposed.
+- Decision: retain as proposed. Objective quality matched the baseline; an
+  apparent 40.1% aggregate token reduction is dominated by one high-input
+  baseline, wins only one of three applicable pairs, and is not material under
+  the frozen gate. Blinded review is unresolved.
 
 ## Documentation Impact
 

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact_language",
+    "implementation_status",
+    "entry_doc_action",
+    "changes",
+    "excluded_claims",
+    "verification"
+  ],
+  "properties": {
+    "artifact_language": { "enum": ["english", "portuguese", "other", "unknown"] },
+    "implementation_status": { "enum": ["implemented", "planned", "mixed", "unknown"] },
+    "entry_doc_action": { "enum": ["concise-update", "detailed-update", "no-change"] },
+    "changes": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "excluded_claims": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "verification": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "case_id": "engineering-principles-contract-002",
+  "capability": "engineering-principles",
+  "variant": "capability",
+  "configuration": "individual-capability",
+  "timestamp": "2026-08-10T18:38:40.538Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14541,
+    "cached_input_tokens": 0,
+    "output_tokens": 241,
+    "total_tokens": 14782,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 13227,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:root_problem",
+      "passed": true,
+      "detail": "root_problem is populated"
+    },
+    {
+      "name": "nonempty:tradeoffs",
+      "passed": true,
+      "detail": "tradeoffs is populated"
+    },
+    {
+      "name": "nonempty:uncertainty",
+      "passed": true,
+      "detail": "uncertainty is populated"
+    },
+    {
+      "name": "minimum-items:constraints",
+      "passed": true,
+      "detail": "constraints has 4 items"
+    },
+    {
+      "name": "minimum-items:validation",
+      "passed": true,
+      "detail": "validation has 4 items"
+    },
+    {
+      "name": "required-term:decision:use-smaller-compatible-change",
+      "passed": true,
+      "detail": "decision includes use-smaller-compatible-change"
+    },
+    {
+      "name": "required-term:constraints:null",
+      "passed": true,
+      "detail": "constraints includes null"
+    },
+    {
+      "name": "required-term:constraints:contract",
+      "passed": true,
+      "detail": "constraints includes contract"
+    },
+    {
+      "name": "required-term:preserve_behavior:true",
+      "passed": true,
+      "detail": "preserve_behavior includes true"
+    },
+    {
+      "name": "required-term:validation:contract",
+      "passed": true,
+      "detail": "validation includes contract"
+    },
+    {
+      "name": "required-term:validation:regression",
+      "passed": true,
+      "detail": "validation includes regression"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "decision": "use-smaller-compatible-change",
+    "root_problem": "One duplicated parser incorrectly maps a blank middle_name to an empty string instead of the contractually required JSON null.",
+    "constraints": [
+      "Preserve the accepted customer API contract: blank middle_name must serialize as JSON null.",
+      "Avoid changing the four compliant parsers.",
+      "Do not introduce a generic abstraction unless independently justified by demonstrated needs.",
+      "Keep the correction narrowly scoped to the violating parser."
+    ],
+    "preserve_behavior": true,
+    "tradeoffs": "A targeted fix leaves parser duplication in place, but minimizes regression risk and restores contract consistency. Generic consolidation can be evaluated separately without coupling cleanup to a breaking API change.",
+    "uncertainty": "Low: the required behavior and the single noncompliant parser are explicitly identified. Confirm no narrower repository contract overrides this mapping.",
+    "validation": [
+      "Add or update a regression test for the violating parser asserting blank middle_name becomes JSON null.",
+      "Run the equivalent contract tests across all five parsers, covering blank, null, and nonblank middle_name values.",
+      "Run relevant serialization/API integration tests to verify the emitted JSON contains null rather than an empty string.",
+      "Run the affected test suite to check for regressions."
+    ]
+  }
+}

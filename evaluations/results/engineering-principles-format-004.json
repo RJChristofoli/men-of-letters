@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "case_id": "engineering-principles-format-004",
+  "capability": "engineering-principles",
+  "variant": "capability",
+  "configuration": "individual-capability",
+  "timestamp": "2026-08-10T18:42:31.853Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14395,
+    "cached_input_tokens": 0,
+    "output_tokens": 18,
+    "total_tokens": 14413,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 6464,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:answer",
+      "passed": true,
+      "detail": "answer is populated"
+    },
+    {
+      "name": "required-term:answer:payment-retry-worker",
+      "passed": true,
+      "detail": "answer includes payment-retry-worker"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "answer": "payment-retry-worker"
+  }
+}
