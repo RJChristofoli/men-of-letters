@@ -76,8 +76,9 @@ positive and negative runs pass, but representative validation is incomplete.
 - Metrics: task success, tokens, latency, turns, corrections, and context overhead.
 - Experimental gate: both cases and controlled activation pass with bounded
   overhead and no observed regression.
-- Validation gate: broader comparisons must establish material incremental value
-  without unacceptable negative-case overhead.
+- Validation gate: broader comparisons must satisfy the
+  [pre-registered Phase 1 gate](../phase-1-evaluation-gate.md), including
+  individual incremental value and combined configuration guardrails.
 - Regression: return to proposal revision if the policy invents support, obscures
   failed checks, or materially harms unrelated tasks.
 

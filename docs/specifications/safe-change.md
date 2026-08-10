@@ -90,8 +90,9 @@ incomplete.
   and context overhead.
 - Experimental gate: deterministic checks and all initial cases pass with bounded
   overhead and no observed negative-task regression.
-- Validation gate: broader comparisons must establish material incremental value
-  without unacceptable interference.
+- Validation gate: broader comparisons must satisfy the
+  [pre-registered Phase 1 gate](../phase-1-evaluation-gate.md), including
+  individual incremental value and combined configuration guardrails.
 - Regression: revise or remove the policy if it causes unsafe execution, blocks
   authorized read-only work, or loses against a lower-priority efficiency rule.
 

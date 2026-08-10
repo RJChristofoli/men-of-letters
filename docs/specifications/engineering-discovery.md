@@ -81,8 +81,9 @@ or efficiency benefit without unacceptable regressions.
   trigger; broader negative coverage remains required before promotion.
 - Metrics: task checks, technical correctness, input/output/total tokens, turns,
   tool calls, latency, correction turns, trigger precision, and human preference.
-- Promotion: representative positive and negative cases must show material quality
-  or efficiency gain without unacceptable safety or trigger regressions.
+- Promotion: representative positive and negative cases must satisfy the
+  [pre-registered Phase 1 gate](../phase-1-evaluation-gate.md), including
+  individual incremental value and the combined quality-and-token gate.
 - Rollback: return status to `proposed` or revise the skill if the initial
   capability run regresses against baseline.
 

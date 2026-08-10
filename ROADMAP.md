@@ -167,12 +167,27 @@ capability or authorize a public release.
 - [ ] Create the compact core policy set.
   - [x] Implement and initially evaluate `evidence` and `safe-change`.
   - [ ] Implement the remaining compact policy sources and complete-pack tests.
-- [ ] Version the existing token-efficiency setup instead of duplicating Caveman and RTK.
+- [ ] Create and evaluate a repository-native compact `token-efficiency` policy.
 - [x] Create `engineering-discovery` for feature design, technology research, architecture proposals, and trade-off analysis.
 - [ ] Create a discovery-brief template and optional ADR handoff.
 - [x] Forward-test discovery against the no-skill baseline.
 - [x] Reduce `engineering-discovery` default-path context cost and repeat its
   initial positive and negative comparisons.
+- [x] Define explicit materiality thresholds and a representative Phase 1
+  evaluation matrix before the next promotion decision.
+- [ ] Validate every retained Phase 1 capability across representative positive,
+  negative, precedence, and combined-installation cases; revise or remove any
+  capability that does not demonstrate incremental value.
+- [ ] Demonstrate a material improvement in both reviewed task quality and total
+  tokens per completed task for the retained Phase 1 configuration, without
+  unacceptable safety, routing, latency, or correction-turn regressions.
+
+Phase 1 exit gate: all retained Phase 1 capabilities must reach at least
+`validated`, the complete retained policy pack must install and remove cleanly,
+and matched evaluation must demonstrate material quality and total-token gains.
+Source-size reduction, schema compliance, or isolated passing cases are not
+sufficient. If the gate cannot be met, revise, narrow, or retire the ineffective
+capability instead of closing the phase or weakening the evidence threshold.
 
 Initial Phase 1 evidence (2026-08-04): `evidence` and `safe-change` have canonical
 sources, specifications, positive/negative cases, and five accepted comparative
@@ -218,7 +233,8 @@ seven accepted baselines, seven capability results, and zero third-party records
 - [ ] Produce a feature-complete release candidate; do not claim token or quality
   improvement until the Phase 4 controlled evaluation gates pass.
 - [ ] Create Kafka-specific capability only after recurring demand is demonstrated.
-- [ ] Reassess prompt compression only if Caveman and `caveman-compress` leave a measurable gap.
+- [ ] Reassess prompt compression only if representative evaluation demonstrates
+  a material gap that compact policies and progressive disclosure do not solve.
 
 ### Phase 4 — Suite Validation, Efficiency, and Initial Release
 
@@ -494,7 +510,7 @@ Use links for local authoring when appropriate and immutable copied or packaged 
 | --- | --- |
 | Documentation Language | Compact policy |
 | Production Ready Mindset | Merge into `backend-defaults` policy |
-| Token Optimization | Version current RTK and Caveman setup |
+| Token Optimization | Repository-native compact `token-efficiency` policy |
 | Naming Consistency | Merge into `backend-defaults` policy |
 | Clean Architecture Guard | Merge non-dogmatic boundary rules into `backend-defaults` |
 | Code Reviewer | Route through `backend-review` |
@@ -518,7 +534,7 @@ Use links for local authoring when appropriate and immutable copied or packaged 
 | Pipeline and Flow Optimization | Conditional `optimize-engineering` references |
 | Kafka Review | Defer until recurring demand |
 | Cost Optimization | Defer until measurable cost data exists |
-| Prompt Compression | Defer due to overlap with Caveman tooling |
+| Prompt Compression | Defer until representative evaluation demonstrates a material gap |
 
 ## Evaluation Criteria
 
@@ -550,6 +566,33 @@ Adopt or promote a capability only when it provides measurable quality or effici
 For optimization work, require reproducible before-and-after measurements. If measurement is impractical, document the change as a hypothesis or simplification instead of a validated optimization.
 
 ## Decision Log
+
+### 2026-08-10 — Phase 1 value gate and standalone token efficiency approved
+
+- Remove the previously planned external token-tooling integration from the
+  repository roadmap; Phase 1 must remain standalone.
+- Keep `token-efficiency` as an original, compact repository policy evaluated
+  through the same governed capability lifecycle.
+- Require every retained Phase 1 capability to reach at least `validated` before
+  the phase closes; revise, narrow, or retire capabilities that do not prove
+  incremental value.
+- Require representative matched comparisons to demonstrate both material
+  reviewed-quality improvement and lower total tokens per completed task for the
+  retained Phase 1 configuration, without unacceptable safety, routing, latency,
+  or correction-turn regressions.
+- Define the materiality thresholds before running the expanded evaluation set;
+  do not select thresholds after seeing results.
+- Decision approved as a stricter Phase 1 completion gate. The gain remains an
+  evaluation target, not a result already established.
+- Pre-registration evidence (2026-08-10):
+  [`evaluations/phase-1-gate.yaml`](evaluations/phase-1-gate.yaml) fixes a 10
+  percentage-point objective-quality threshold or 60% blinded preference, 5%
+  aggregate total-token reduction on applicable tasks, 70% paired token wins,
+  1% aggregate unrelated-task overhead, and zero safety failures or false
+  triggers. [`docs/phase-1-evaluation-gate.md`](docs/phase-1-evaluation-gate.md)
+  defines the representative matrix, review procedure, regression limits, and
+  failure decision. Repository validation enforces the gate schema and catalog
+  references. Expanded runs remain pending.
 
 ### 2026-08-04 — Initial evidence and safe-change policy slice evaluated
 
@@ -608,7 +651,8 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 - Use a small always-on layer rather than eight independent always-on skills.
 - Prefer one backend review router with conditionally loaded specialist references.
-- Avoid recreating functionality already supplied by Caveman, `caveman-compress`, and RTK.
+- Require token-efficiency work to prove incremental repository-level value
+  against the no-capability baseline.
 - Build evaluation and versioning foundations before expanding the catalog.
 - Keep this roadmap updated whenever validation changes status or direction.
 
@@ -723,9 +767,6 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ## Known Issues and Open Questions
 
-- RTK exists at `$HOME/.headroom/bin/rtk` but is absent from the current shell's
-  `PATH`; commands work through the absolute path. Installation/discovery is not
-  yet validated for a clean environment.
 - No stable or public artifact has been published. Marketplace/registry flows,
   signatures, attestations, Windows behavior, and a broader clean-host matrix
   remain unvalidated.
@@ -744,10 +785,11 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ## Next Action
 
-Continue Phase 1 by integrating the existing RTK and Caveman setup through
-references and reviewed provenance rather than duplicated content, then
-implement and evaluate the compact `token-efficiency` policy. In parallel, add
-the discovery-brief/ADR handoff template, broaden `engineering-discovery`
-positive and negative cases, and run matched comparisons with blinded preference
-review; do not promote it until material benefit repeats without trigger
-regressions.
+Continue Phase 1 by extending the evaluation harness to execute complete-policy
+and combined Phase 1 configurations, record blinded preference verdicts, and
+calculate the pre-registered aggregate gate. Then implement and evaluate the
+repository-native compact `token-efficiency` policy, complete the remaining core
+policy sources and complete-pack tests, add the discovery-brief/ADR handoff
+template, and broaden positive and negative discovery cases. Do not close Phase
+1 or promote a capability until repeated evidence passes the pre-registered
+quality, token, safety, routing, latency, and correction-turn thresholds.

@@ -204,6 +204,13 @@ validateSchema("schemas/catalog.schema.json", "catalog.yaml", catalog);
 const provenance = readStructured("provenance.yaml");
 validateSchema("schemas/provenance.schema.json", "provenance.yaml", provenance);
 
+const phaseOneGate = readStructured("evaluations/phase-1-gate.yaml");
+validateSchema(
+  "schemas/evaluation-gate.schema.json",
+  "evaluations/phase-1-gate.yaml",
+  phaseOneGate,
+);
+
 const packFiles = fs
   .readdirSync(path.join(root, "packs"))
   .filter((file) => file.endsWith(".yaml"))
@@ -262,6 +269,33 @@ if (catalog !== null) {
   const duplicateCapabilities = duplicates(capabilities.map(({ id }) => id));
   for (const id of duplicateCapabilities) errors.push(`catalog.yaml: duplicate capability ${id}`);
   const capabilityById = new Map(capabilities.map((capability) => [capability.id, capability]));
+
+  if (phaseOneGate !== null) {
+    for (const capabilityId of phaseOneGate.scope.capabilities) {
+      if (!capabilityById.has(capabilityId)) {
+        errors.push(`evaluations/phase-1-gate.yaml: unknown capability ${capabilityId}`);
+      }
+    }
+    for (const id of duplicates(phaseOneGate.matrix.map(({ id }) => id))) {
+      errors.push(`evaluations/phase-1-gate.yaml: duplicate matrix row ${id}`);
+    }
+    if (
+      phaseOneGate.tokens.unrelated_single_case_overhead_max <
+      phaseOneGate.tokens.unrelated_aggregate_overhead_max
+    ) {
+      errors.push(
+        "evaluations/phase-1-gate.yaml: single-case overhead cannot be stricter than aggregate overhead",
+      );
+    }
+    if (
+      phaseOneGate.quality.capability_preference_rate_min <=
+      phaseOneGate.quality.baseline_preference_rate_max
+    ) {
+      errors.push(
+        "evaluations/phase-1-gate.yaml: capability preference must exceed baseline preference",
+      );
+    }
+  }
 
   const duplicatePacks = duplicates(packs.map(({ data }) => data.id));
   for (const id of duplicatePacks) errors.push(`packs: duplicate pack ${id}`);

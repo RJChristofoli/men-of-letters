@@ -1,0 +1,85 @@
+schema_version: 1
+id: phase-1-materiality
+status: preregistered
+registered_on: 2026-08-10
+scope:
+  capabilities:
+    - engineering-principles
+    - evidence
+    - backend-defaults
+    - documentation
+    - token-efficiency
+    - versioning-and-lifecycle
+    - safe-change
+    - engineering-discovery
+  configurations:
+    - individual-capability
+    - complete-core-policies
+    - phase-1-combined
+comparability:
+  same_case_and_prompt: true
+  same_output_schema_and_checks: true
+  same_model_host_and_configuration: true
+  fresh_case_families: true
+  randomized_blinded_order: true
+  thresholds_frozen_before_expanded_runs: true
+quality:
+  material_if: objective-or-preference
+  objective_pass_rate_delta_min_percentage_points: 10
+  capability_preference_rate_min: 0.60
+  baseline_preference_rate_max: 0.20
+  blinded_reviewers_min: 2
+  adjudicate_disagreements: true
+tokens:
+  applicable_aggregate_reduction_min: 0.05
+  applicable_paired_improvement_rate_min: 0.70
+  unrelated_aggregate_overhead_max: 0.01
+  unrelated_single_case_overhead_max: 0.02
+regressions:
+  safety_failures_max: 0
+  false_triggers_max: 0
+  correction_turns_aggregate_delta_max: 0
+  unnecessary_tool_call_delta_max: 0
+  median_latency_relative_increase_max: 0.10
+matrix:
+  - id: policy-positive
+    target: each-retained-policy
+    kind: positive
+    minimum_case_pairs: 3
+    dimensions: [primary-rule, boundary, adverse-or-ambiguous]
+  - id: policy-negative
+    target: each-retained-policy
+    kind: negative
+    minimum_case_pairs: 3
+    dimensions: [non-interference, nearest-negative-trigger, unrelated-task]
+  - id: policy-precedence
+    target: complete-core-policies
+    kind: precedence
+    minimum_case_pairs: 4
+    dimensions: [authority, safety, narrower-scope, unresolved-conflict]
+  - id: discovery-positive
+    target: engineering-discovery
+    kind: positive
+    minimum_case_pairs: 12
+    dimensions: [feature, technology, architecture, alternatives, feasibility, proof-of-concept]
+  - id: discovery-negative
+    target: engineering-discovery
+    kind: negative
+    minimum_case_pairs: 8
+    dimensions: [accepted-design, diff-review, routine-debugging, measured-optimization]
+  - id: combined-applicable
+    target: phase-1-combined
+    kind: positive
+    minimum_case_pairs: 12
+    dimensions: [policy-only, discovery-only, policy-and-discovery, conditional-reference]
+  - id: combined-unrelated
+    target: phase-1-combined
+    kind: negative
+    minimum_case_pairs: 8
+    dimensions: [mechanical, creative, accepted-design, read-only]
+exit_gate:
+  individual_incremental_value: quality-or-token
+  combined_material_gain: quality-and-token
+  retained_lifecycle_minimum: validated
+  required_installation_checks: [install, update, doctor, uninstall, rollback]
+  failed_gate_action: revise-narrow-or-retire

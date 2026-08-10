@@ -56,6 +56,21 @@ negative non-interference comparisons.
 - A single passing case is experimental evidence, not validation across the
   capability's declared scope.
 
+## Pre-registered Phase 1 Gate
+
+The Phase 1 materiality thresholds, representative matrix, regression limits,
+and exit rules are fixed in the
+[Phase 1 evaluation gate](phase-1-evaluation-gate.md), with a validated
+machine-readable source at
+[`evaluations/phase-1-gate.yaml`](../evaluations/phase-1-gate.yaml). The gate
+requires material reviewed-quality improvement and at least 5% aggregate total-
+token reduction from the retained combined configuration. It is an acceptance
+contract, not evidence that Phase 1 already passes.
+
+The current harness still needs combined-configuration execution, blinded
+preference records, and aggregate gate calculation before the expanded matrix
+can run.
+
 ## Initial Engineering Discovery Result
 
 Case `discovery-architecture-001` was run through Codex CLI 0.146.0 on Linux
