@@ -35,6 +35,30 @@ npm run evaluate -- record evaluations/runs/<run-file>.json
 Recorded capability results live under `evaluations/results/`. Passing objective
 checks does not by itself justify lifecycle promotion.
 
+### Complete and Combined Configurations
+
+The capability variant accepts three configurations:
+
+- `individual-capability` is the backward-compatible default;
+- `complete-core-policies` activates every policy declared by that pack;
+- `phase-1-combined` activates the complete policy pack plus
+  `engineering-discovery`.
+
+Run a combined comparison after all declared sources exist:
+
+```bash
+npm run evaluate -- run discovery-architecture-001 \
+  --variant capability \
+  --configuration phase-1-combined
+npm run evaluate -- record evaluations/runs/<run-file>.json
+```
+
+Configured results are stored below
+`evaluations/results/<configuration>/`. The harness resolves the whole
+configuration before calling Codex and fails closed with the missing capability
+IDs when any canonical source is absent. Baselines remain configuration-free and
+are reused only when environment and case contracts match.
+
 The capability variant activates only the selected canonical capability in a
 clean temporary repository. Policies are written to that repository's durable
 `AGENTS.md` surface; skills are installed under `.agents/skills`. Positive skill
@@ -67,9 +91,49 @@ requires material reviewed-quality improvement and at least 5% aggregate total-
 token reduction from the retained combined configuration. It is an acceptance
 contract, not evidence that Phase 1 already passes.
 
-The current harness still needs combined-configuration execution, blinded
-preference records, and aggregate gate calculation before the expanded matrix
-can run.
+The harness executes individual, complete-policy, and combined configurations;
+records blinded reviews with checksummed run identity; and calculates the
+aggregate gate. The current gate report is correctly `incomplete` because the
+matrix, reviews, and remaining policy sources do not exist yet.
+
+### Blinded Preference
+
+Prepare one randomized A/B bundle per reviewer:
+
+```bash
+npm run evaluate -- prepare-review discovery-architecture-001 \
+  --configuration individual-capability \
+  --reviewer reviewer-1
+```
+
+Give the reviewer only the reported `.review.json` bundle. The adjacent
+`.review-key.json` resolves variant identity and must remain hidden. Both files
+live under ignored `evaluations/runs/`.
+
+After the reviewer chooses A, B, or tie, resolve and retain the verdict:
+
+```bash
+npm run evaluate -- record-review evaluations/runs/<review>.review.json \
+  --verdict a \
+  --reason "Output A is more correct and actionable."
+```
+
+Recorded verdicts live under `evaluations/reviews/` and contain hashes of the
+reviewed runs. The gate ignores stale hashes, duplicate reviewer identities, and
+an adjudicator who is not independent of the primary reviewers.
+
+### Calculate the Gate
+
+```bash
+npm run evaluate -- gate phase-1
+```
+
+The command writes a full ignored report under `evaluations/runs/`, prints its
+summary, and returns zero only for `pass`; `incomplete` and `fail` return status
+2. It checks matrix coverage, individual incremental value, combined quality and
+token gains, unrelated-task overhead, safety, false triggers, corrections,
+additional tool calls, latency, environment comparability, and blinded review
+integrity.
 
 ## Initial Engineering Discovery Result
 

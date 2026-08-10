@@ -49,7 +49,7 @@ policies/<policy-id>.md
 plugins/<pack-id>/.codex-plugin/plugin.json
 plugins/<pack-id>/skills/<capability-id>/...
 bootstrap/
-evaluations/{cases,runs,baselines}/
+evaluations/{cases,runs,baselines,results,reviews}/
 schemas/
 scripts/
 tests/

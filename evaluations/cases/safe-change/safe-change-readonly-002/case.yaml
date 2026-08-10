@@ -2,6 +2,8 @@ schema_version: 1
 id: safe-change-readonly-002
 capability: safe-change
 kind: negative
+gate_dimensions: [non-interference]
+preference_review: not-required
 prompt_file: prompt.md
 output_schema: output.schema.json
 sandbox: read-only

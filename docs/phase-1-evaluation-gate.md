@@ -107,10 +107,14 @@ A failed capability is revised and re-evaluated, narrowed with a new contract,
 or retired. Do not weaken a threshold, hide a failed case, or close the phase on
 source-size reduction, isolated passes, or equivalence with a strong baseline.
 
-## Harness Work Required Before Execution
+## Harness Support
 
-The current harness records individual baseline and capability runs but does not
-yet execute a complete policy pack or the combined Phase 1 configuration, store
-blinded preference verdicts, or calculate aggregate gates. Add those mechanics
-before running this matrix. This is an execution prerequisite, not an unresolved
-acceptance decision.
+The harness can execute an individual capability, the complete core-policy pack,
+or the combined Phase 1 configuration. It prepares randomized A/B review bundles,
+stores the identity key separately under ignored run artifacts, records resolved
+checksummed verdicts, and calculates this gate deterministically.
+
+Configuration resolution fails before model execution when a declared source is
+missing. The current aggregate report is therefore `incomplete`, as expected:
+the remaining policies, representative case matrix, and blinded verdicts still
+need to be produced. Harness readiness is not capability validation.

@@ -21,6 +21,9 @@
     "case_id": { "type": "string", "minLength": 1 },
     "capability": { "type": "string", "minLength": 1 },
     "variant": { "enum": ["baseline", "capability"] },
+    "configuration": {
+      "enum": ["individual-capability", "complete-core-policies", "phase-1-combined"]
+    },
     "timestamp": { "type": "string", "minLength": 20 },
     "environment": {
       "type": "object",

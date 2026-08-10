@@ -2,6 +2,8 @@ schema_version: 1
 id: discovery-architecture-001
 capability: engineering-discovery
 kind: positive
+gate_dimensions: [architecture]
+preference_review: required
 prompt_file: prompt.md
 output_schema: output.schema.json
 sandbox: read-only

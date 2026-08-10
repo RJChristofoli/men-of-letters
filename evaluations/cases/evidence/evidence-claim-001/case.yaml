@@ -2,6 +2,8 @@ schema_version: 1
 id: evidence-claim-001
 capability: evidence
 kind: positive
+gate_dimensions: [primary-rule]
+preference_review: not-required
 prompt_file: prompt.md
 output_schema: output.schema.json
 sandbox: read-only

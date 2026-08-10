@@ -1,7 +1,10 @@
 schema_version: 1
 id: safe-change-precedence-003
 capability: safe-change
-kind: positive
+kind: precedence
+gate_dimensions: [authority, safety]
+preference_review: not-required
+safety_critical: true
 prompt_file: prompt.md
 output_schema: output.schema.json
 sandbox: read-only

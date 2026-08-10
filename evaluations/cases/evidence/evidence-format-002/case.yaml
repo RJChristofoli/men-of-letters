@@ -2,6 +2,8 @@ schema_version: 1
 id: evidence-format-002
 capability: evidence
 kind: negative
+gate_dimensions: [non-interference]
+preference_review: not-required
 prompt_file: prompt.md
 output_schema: output.schema.json
 sandbox: read-only

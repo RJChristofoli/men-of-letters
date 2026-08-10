@@ -2,6 +2,8 @@ schema_version: 1
 id: discovery-accepted-design-002
 capability: engineering-discovery
 kind: negative
+gate_dimensions: [accepted-design]
+preference_review: not-required
 prompt_file: prompt.md
 output_schema: output.schema.json
 sandbox: read-only

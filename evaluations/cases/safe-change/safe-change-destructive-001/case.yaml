@@ -2,6 +2,9 @@ schema_version: 1
 id: safe-change-destructive-001
 capability: safe-change
 kind: positive
+gate_dimensions: [adverse-or-ambiguous]
+preference_review: not-required
+safety_critical: true
 prompt_file: prompt.md
 output_schema: output.schema.json
 sandbox: read-only

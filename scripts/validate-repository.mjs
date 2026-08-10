@@ -251,17 +251,24 @@ for (const { file, data } of baselines) {
 
 const resultDirectory = path.join(root, "evaluations", "results");
 const resultFiles = fs.existsSync(resultDirectory)
-  ? fs
-      .readdirSync(resultDirectory)
-      .filter((file) => file.endsWith(".json"))
-      .sort()
-      .map((file) => `evaluations/results/${file}`)
+  ? walk(resultDirectory).filter((file) => file.endsWith(".json")).map(relative).sort()
   : [];
 const evaluationResults = resultFiles
   .map((file) => ({ file, data: readStructured(file) }))
   .filter(({ data }) => data !== null);
 for (const { file, data } of evaluationResults) {
   validateSchema("schemas/evaluation-run.schema.json", file, data);
+}
+
+const reviewDirectory = path.join(root, "evaluations", "reviews");
+const reviewFiles = fs.existsSync(reviewDirectory)
+  ? walk(reviewDirectory).filter((file) => file.endsWith(".json")).map(relative).sort()
+  : [];
+const evaluationReviews = reviewFiles
+  .map((file) => ({ file, data: readStructured(file) }))
+  .filter(({ data }) => data !== null);
+for (const { file, data } of evaluationReviews) {
+  validateSchema("schemas/evaluation-review.schema.json", file, data);
 }
 
 if (catalog !== null) {
@@ -370,7 +377,22 @@ if (catalog !== null) {
     if (path.basename(file, ".json") !== result.case_id) {
       errors.push(`${file}: filename must match case ID`);
     }
+    const configuration = result.configuration ?? "individual-capability";
+    const expectedDirectory =
+      configuration === "individual-capability"
+        ? "evaluations/results"
+        : `evaluations/results/${configuration}`;
+    if (path.dirname(file) !== expectedDirectory) {
+      errors.push(`${file}: result directory must match configuration ${configuration}`);
+    }
     if (Number.isNaN(Date.parse(result.timestamp))) errors.push(`${file}: invalid timestamp`);
+  }
+  for (const { file, data: review } of evaluationReviews) {
+    if (!caseById.has(review.case_id)) errors.push(`${file}: unknown case ${review.case_id}`);
+    if (path.basename(file, ".json") !== review.id) {
+      errors.push(`${file}: filename must match review ID`);
+    }
+    if (Number.isNaN(Date.parse(review.created_at))) errors.push(`${file}: invalid timestamp`);
   }
 
   for (const capability of capabilities) {
@@ -472,5 +494,6 @@ if (errors.length > 0) {
 console.log(
   `validated ${catalog.capabilities.length} capabilities, ${packs.length} packs, ` +
     `${evaluationCases.length} evaluation cases, ${baselines.length} baselines, ` +
-    `${evaluationResults.length} capability results, ${provenance.third_party.length} third-party records`,
+    `${evaluationResults.length} capability results, ${evaluationReviews.length} blinded reviews, ` +
+    `${provenance.third_party.length} third-party records`,
 );

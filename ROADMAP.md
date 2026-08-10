@@ -175,6 +175,8 @@ capability or authorize a public release.
   initial positive and negative comparisons.
 - [x] Define explicit materiality thresholds and a representative Phase 1
   evaluation matrix before the next promotion decision.
+- [x] Extend the harness for complete-policy and combined configurations,
+  checksummed blinded verdicts, and deterministic aggregate gate calculation.
 - [ ] Validate every retained Phase 1 capability across representative positive,
   negative, precedence, and combined-installation cases; revise or remove any
   capability that does not demonstrate incremental value.
@@ -567,6 +569,28 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ## Decision Log
 
+### 2026-08-10 — Phase 1 aggregate evaluation harness implemented
+
+- Add `individual-capability`, `complete-core-policies`, and
+  `phase-1-combined` execution modes while keeping the individual path backward
+  compatible.
+- Resolve every configured capability before model execution and fail closed
+  with the missing source IDs; the incomplete policy pack cannot produce a
+  partial combined result.
+- Add randomized A/B review bundles with a separately stored identity key,
+  checksummed recorded verdicts, two distinct primary reviewers, and independent
+  adjudication on disagreement.
+- Add deterministic gate calculation for matrix coverage, individual value,
+  combined quality and token gains, negative overhead, safety, false triggers,
+  correction turns, additional tool calls, latency, and environment matching.
+- Classify the seven existing cases against the pre-registered matrix and keep
+  the calculated repository state `incomplete`; no lifecycle or effectiveness
+  claim changes.
+- Validation evidence: repository validation passes with configured-result and
+  review schemas, 19/19 deterministic tests pass, a synthetic complete matrix
+  passes the gate, an injected false trigger fails it, and the real combined
+  command stops before Codex with the five missing policy sources.
+
 ### 2026-08-10 — Phase 1 value gate and standalone token efficiency approved
 
 - Remove the previously planned external token-tooling integration from the
@@ -785,11 +809,10 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ## Next Action
 
-Continue Phase 1 by extending the evaluation harness to execute complete-policy
-and combined Phase 1 configurations, record blinded preference verdicts, and
-calculate the pre-registered aggregate gate. Then implement and evaluate the
-repository-native compact `token-efficiency` policy, complete the remaining core
-policy sources and complete-pack tests, add the discovery-brief/ADR handoff
-template, and broaden positive and negative discovery cases. Do not close Phase
-1 or promote a capability until repeated evidence passes the pre-registered
-quality, token, safety, routing, latency, and correction-turn thresholds.
+Continue Phase 1 by specifying, implementing, and initially evaluating the
+repository-native compact `token-efficiency` policy, then complete the remaining
+core policy sources and complete-pack lifecycle tests. In parallel, add the
+discovery-brief/ADR handoff template and broaden positive and negative discovery
+cases. Do not close Phase 1 or promote a capability until repeated evidence
+passes the pre-registered quality, token, safety, routing, latency, and
+correction-turn thresholds.
