@@ -15,6 +15,7 @@ import {
   DEFAULT_CONFIGURATION,
   assertImplementedCapabilities,
   calculatePhaseOneGate,
+  copyWorkspaceFixture,
   createBlindReview,
   evaluationRunIsRecordable,
   resolveBlindReview,
@@ -355,6 +356,13 @@ let prompt = fs.readFileSync(promptPath, "utf8").trim();
 
 const workspace = fs.mkdtempSync(path.join(os.tmpdir(), `men-of-letters-${caseId}-`));
 const lastMessagePath = path.join(workspace, "last-message.json");
+
+if (specification.workspace_fixture) {
+  copyWorkspaceFixture(
+    path.join(caseDirectory, specification.workspace_fixture),
+    workspace,
+  );
+}
 
 if (variant === "capability") {
   const catalog = YAML.parse(fs.readFileSync(path.join(root, "catalog.yaml"), "utf8"));

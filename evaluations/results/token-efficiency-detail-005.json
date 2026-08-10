@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "case_id": "token-efficiency-detail-005",
+  "capability": "token-efficiency",
+  "variant": "capability",
+  "configuration": "individual-capability",
+  "timestamp": "2026-08-10T19:10:35.160Z",
+  "environment": {
+    "codex_cli": "codex-cli 0.146.0",
+    "node": "v18.19.1",
+    "platform": "linux-x64"
+  },
+  "metrics": {
+    "input_tokens": 14500,
+    "cached_input_tokens": 0,
+    "output_tokens": 306,
+    "total_tokens": 14806,
+    "turns": 1,
+    "tool_calls": 0,
+    "latency_ms": 11335,
+    "correction_turns": 0
+  },
+  "checks": [
+    {
+      "name": "output-schema",
+      "passed": true,
+      "detail": "response matches output schema"
+    },
+    {
+      "name": "nonempty:findings",
+      "passed": true,
+      "detail": "findings is populated"
+    },
+    {
+      "name": "minimum-items:findings",
+      "passed": true,
+      "detail": "findings has 5 items"
+    },
+    {
+      "name": "required-term:findings:architecture",
+      "passed": true,
+      "detail": "findings includes architecture"
+    },
+    {
+      "name": "required-term:findings:security",
+      "passed": true,
+      "detail": "findings includes security"
+    },
+    {
+      "name": "required-term:findings:data",
+      "passed": true,
+      "detail": "findings includes data"
+    },
+    {
+      "name": "required-term:findings:operations",
+      "passed": true,
+      "detail": "findings includes operations"
+    },
+    {
+      "name": "required-term:findings:rollback",
+      "passed": true,
+      "detail": "findings includes rollback"
+    },
+    {
+      "name": "required-term:findings:shared database",
+      "passed": true,
+      "detail": "findings includes shared database"
+    },
+    {
+      "name": "required-term:findings:wildcard",
+      "passed": true,
+      "detail": "findings includes wildcard"
+    },
+    {
+      "name": "required-term:findings:backfill",
+      "passed": true,
+      "detail": "findings includes backfill"
+    },
+    {
+      "name": "required-term:findings:alert",
+      "passed": true,
+      "detail": "findings includes alert"
+    },
+    {
+      "name": "required-term:findings:restore",
+      "passed": true,
+      "detail": "findings includes restore"
+    }
+  ],
+  "passed": true,
+  "response": {
+    "findings": [
+      {
+        "area": "architecture",
+        "evidence": "Two services write directly to one shared database schema.",
+        "risk": "Direct writes by multiple services create tight coupling and can cause conflicting changes, unclear data ownership, and cross-service failures.",
+        "action": "Define schema ownership and replace direct shared writes with an explicit service boundary or controlled data-access contract."
+      },
+      {
+        "area": "security",
+        "evidence": "The service account has wildcard permissions.",
+        "risk": "A compromised or misused account could perform unintended actions across all permitted resources, increasing blast radius.",
+        "action": "Replace wildcard permissions with least-privilege permissions limited to the specific resources and operations required."
+      },
+      {
+        "area": "data",
+        "evidence": "A required column has no backfill plan.",
+        "risk": "Existing records may violate the new requirement, causing migration failures, invalid data, or runtime errors.",
+        "action": "Create and validate a backfill plan for existing records before enforcing the required constraint."
+      },
+      {
+        "area": "operations",
+        "evidence": "Queue depth is measured but has no alert.",
+        "risk": "Queue growth may go unnoticed until processing delays, resource exhaustion, or customer impact occurs.",
+        "action": "Configure and test a queue-depth alert with documented thresholds, ownership, and response guidance."
+      },
+      {
+        "area": "rollback",
+        "evidence": "The runbook says revert but has no restore rehearsal.",
+        "risk": "Rollback may fail to recover data or service state during an incident because restoration steps are unverified.",
+        "action": "Perform and document a restore rehearsal that validates the rollback procedure and recovery objectives before release."
+      }
+    ]
+  }
+}

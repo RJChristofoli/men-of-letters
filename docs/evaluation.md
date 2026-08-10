@@ -100,8 +100,8 @@ The harness executes individual, complete-policy, and combined configurations;
 records blinded reviews with checksummed run identity; and calculates the
 aggregate gate. All Phase 1 capability sources now exist, so complete-policy and
 combined model runs can execute. The current gate report remains correctly
-`incomplete`: four policy rows are complete, while the older policy, discovery,
-precedence, combined, and blinded-review evidence remains unfinished.
+`incomplete`: five policy rows are complete, while `evidence`, `safe-change`,
+discovery, precedence, combined, and blinded-review evidence remains unfinished.
 
 ### Blinded Preference
 
@@ -248,7 +248,25 @@ Decision: advance the installable implementation to `experimental` because its
 initial positive/negative structure, safety boundary, objective cases, and
 deterministic lifecycle checks pass. Do not claim token improvement or
 validation: lower output did not offset the fixed input cost, blinded preference
-is pending, and the representative matrix remains incomplete.
+is pending.
+
+Expanded representative results add context selection, batched file inspection,
+explicit-detail preservation, and unrelated work:
+
+| Case | Baseline total | Capability total | Delta | Tools baseline → capability |
+| --- | ---: | ---: | ---: | ---: |
+| `token-efficiency-context-003` | 29,445 | 29,723 | +278 (+0.9%) | 1 → 1 |
+| `token-efficiency-tools-004` | 70,787 | 29,380 | -41,407 (-58.5%) | 1 → 1 |
+| `token-efficiency-detail-005` | 14,686 | 14,806 | +120 (+0.8%) | 0 → 0 |
+| `token-efficiency-unrelated-006` | 14,271 | 14,386 | +115 (+0.8%) | 0 → 0 |
+
+Across all three applicable cases, aggregate total tokens fell 35.7%, but only
+one of three pairs improved; the reduction is dominated by the unusually large
+tools baseline and fails the frozen 70% paired-improvement requirement. All six
+capability results pass objectively in one turn. Negative aggregate overhead is
+0.64%, with no extra tools or corrections. The handoff preference review remains
+unresolved, so the quality floor and individual value decision remain
+incomplete. Do not claim material token efficiency from this matrix.
 
 ## Complete Core Policy Sources
 

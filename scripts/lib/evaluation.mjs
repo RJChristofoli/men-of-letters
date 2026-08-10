@@ -1,4 +1,6 @@
 import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
 
 export const DEFAULT_CONFIGURATION = "individual-capability";
 export const CONFIGURATIONS = [
@@ -12,6 +14,16 @@ export function evaluationRunIsRecordable(command, passed) {
     throw new Error(`unsupported persistence command: ${command}`);
   }
   return command === "accept" || passed;
+}
+
+export function copyWorkspaceFixture(sourceDirectory, targetDirectory) {
+  for (const entry of fs.readdirSync(sourceDirectory, { withFileTypes: true })) {
+    fs.cpSync(
+      path.join(sourceDirectory, entry.name),
+      path.join(targetDirectory, entry.name),
+      { recursive: entry.isDirectory() },
+    );
+  }
 }
 
 export function runConfiguration(run) {

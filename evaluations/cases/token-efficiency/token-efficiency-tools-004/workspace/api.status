@@ -1,0 +1,3 @@
+component=api
+status=ready
+evidence=contract tests passed

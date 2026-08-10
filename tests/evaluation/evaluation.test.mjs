@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
 import test from "node:test";
 
 import Ajv2020 from "ajv/dist/2020.js";
@@ -8,6 +10,7 @@ import YAML from "yaml";
 import {
   assertImplementedCapabilities,
   calculatePhaseOneGate,
+  copyWorkspaceFixture,
   createBlindReview,
   evaluationRunIsRecordable,
   resolveBlindReview,
@@ -19,6 +22,28 @@ test("failed baselines remain recordable but failed capability runs do not", () 
   assert.equal(evaluationRunIsRecordable("record", true), true);
   assert.equal(evaluationRunIsRecordable("record", false), false);
   assert.throws(() => evaluationRunIsRecordable("publish", true), /unsupported/);
+});
+
+test("workspace fixtures copy their contents into a clean evaluation root", () => {
+  const temporaryRoot = fs.mkdtempSync(path.join(os.tmpdir(), "men-of-letters-fixture-"));
+  const source = path.join(temporaryRoot, "source");
+  const target = path.join(temporaryRoot, "target");
+  fs.mkdirSync(path.join(source, "nested"), { recursive: true });
+  fs.mkdirSync(target);
+  fs.writeFileSync(path.join(source, "current.json"), "{}\n");
+  fs.writeFileSync(path.join(source, "nested", "evidence.txt"), "verified\n");
+
+  try {
+    copyWorkspaceFixture(source, target);
+    assert.equal(fs.readFileSync(path.join(target, "current.json"), "utf8"), "{}\n");
+    assert.equal(
+      fs.readFileSync(path.join(target, "nested", "evidence.txt"), "utf8"),
+      "verified\n",
+    );
+    assert.equal(fs.existsSync(path.join(target, "source")), false);
+  } finally {
+    fs.rmSync(temporaryRoot, { recursive: true, force: true });
+  }
 });
 
 const policyIds = [

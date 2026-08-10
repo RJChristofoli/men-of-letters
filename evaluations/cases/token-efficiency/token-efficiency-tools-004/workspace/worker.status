@@ -1,0 +1,3 @@
+component=worker
+status=blocked
+evidence=DLQ replay has no duplicate-delivery test

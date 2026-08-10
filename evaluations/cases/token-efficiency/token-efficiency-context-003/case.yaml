@@ -1,0 +1,27 @@
+schema_version: 1
+id: token-efficiency-context-003
+capability: token-efficiency
+kind: positive
+gate_dimensions: [boundary]
+preference_review: not-required
+prompt_file: prompt.md
+output_schema: output.schema.json
+workspace_fixture: workspace
+sandbox: read-only
+checks:
+  required_nonempty: [release, evidence, verification, rollback, ignored_context]
+  minimum_items:
+    evidence: 3
+    verification: 2
+    ignored_context: 1
+  required_terms:
+    - path: decision
+      terms: [go]
+    - path: release
+      terms: [2.4.1]
+    - path: evidence
+      terms: ["184", "27", healthy]
+    - path: rollback
+      terms: [2.4.0, 5xx]
+    - path: ignored_context
+      terms: [historical]

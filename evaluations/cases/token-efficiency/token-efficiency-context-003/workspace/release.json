@@ -1,0 +1,7 @@
+{
+  "service": "api",
+  "candidate": "2.4.1",
+  "commit": "8d31f2a",
+  "change": "additive response metadata",
+  "compatibility": "backward-compatible"
+}

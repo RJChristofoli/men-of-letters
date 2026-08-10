@@ -248,8 +248,21 @@ pass rate from 2/3 to 3/3; `engineering-principles` and `documentation` matched
 applicable totals 0.8% and 1.1%, while apparent 40% aggregate reductions for the
 last two won only one of three pairs and were dominated by single high-input
 baselines. Four required blinded comparisons remain unresolved, so every policy
-stays `proposed`. Repository validation now covers 33 cases, 33 baselines, 33
-capability results, and zero blinded reviews; 21/21 deterministic tests pass.
+stays `proposed`. Repository validation covered 33 cases, 33 baselines, 33
+capability results, and zero blinded reviews; 21/21 deterministic tests passed at
+that checkpoint.
+
+Expanded token-efficiency evidence (2026-08-10): two additional applicable and
+two negative pairs complete its frozen three-positive/three-negative individual
+matrix. All six capability results pass objectively in one turn, with no extra
+tools or corrections. Applicable aggregate tokens fell 35.7%, but only one of
+three pairs improved because a single high-input tools baseline dominates the
+aggregate; this fails the required 70% paired-win threshold. Negative aggregate
+overhead is 0.64%. The handoff blind review remains unresolved, so
+`token-efficiency` remains `experimental` without demonstrated individual value.
+Workspace fixtures are now copied safely into clean evaluation roots with
+deterministic coverage. Repository validation covers 37 cases, 37 baselines, 37
+capability results, and zero blinded reviews; 22/22 tests pass.
 
 ### Phase 2 — Investigation, Review, and Optimization
 
@@ -617,6 +630,17 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ## Decision Log
 
+### 2026-08-10 — Token-efficiency representative matrix completed
+
+- Add workspace-fixture support so context and local-tool selection can be
+  measured in clean evaluation roots without embedding all evidence in prompts.
+- Complete token-efficiency coverage with context, tool batching, explicit
+  detail, and unrelated-task cases; preserve 100% objective success.
+- Reject the apparent 35.7% aggregate reduction as material evidence because
+  only one of three applicable pairs improves and one large baseline dominates.
+- Keep the policy `experimental` pending blinded quality review and a recorded
+  revise, narrow, or remove decision; do not promote on aggregate outlier data.
+
 ### 2026-08-10 — Four-policy individual matrix executed
 
 - Add three applicable and three negative cases for each newly implemented
@@ -915,17 +939,18 @@ For optimization work, require reproducible before-and-after measurements. If me
   complete their individual objective matrices but remain `proposed` pending
   blinded review and incremental-value decisions.
 - `token-efficiency` reduced output 13.1% in its initial pair but increased total
-  tokens 0.4%; it has no demonstrated incremental value yet, and its blinded and
-  representative cases remain pending.
+  tokens 0.4%. Its representative matrix now passes objectively but still has no
+  material paired token value; blinded review and owner disposition remain
+  pending.
 - The provenance inventory is empty; every future third-party addition still
   requires license, immutable source, attribution, and reviewer evidence.
 
 ## Next Action
 
-Continue Phase 1 by obtaining two independent blinded reviews for each of the
-four new adverse/ambiguous pairs. Expand `token-efficiency` with context and
-tool-selection cases, then retain it only if reviewed quality does not regress
-and it clears individual value. Complete the representative rows for `evidence`,
+Continue Phase 1 by obtaining two independent blinded reviews for the four new
+adverse/ambiguous pairs and `token-efficiency-handoff-001`. Use the token review
+to record a revise, narrow, or remove decision; current token evidence alone does
+not justify retention. Complete the representative rows for `evidence`,
 `safe-change`, and discovery before executing complete-policy precedence and
 combined configurations. In parallel, add the discovery-brief/ADR handoff. Do
 not close the phase until every retained capability and the combined

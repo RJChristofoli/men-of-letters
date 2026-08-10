@@ -36,6 +36,7 @@
     "prompt_file": { "type": "string", "minLength": 1 },
     "output_schema": { "type": "string", "minLength": 1 },
     "sandbox": { "enum": ["read-only", "workspace-write"] },
+    "workspace_fixture": { "type": "string", "minLength": 1 },
     "checks": {
       "type": "object",
       "additionalProperties": false,

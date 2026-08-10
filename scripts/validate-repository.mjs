@@ -354,6 +354,15 @@ if (catalog !== null) {
       const target = path.join(root, path.dirname(file), evaluationCase[field]);
       if (!fs.existsSync(target)) errors.push(`${file}: missing ${field} ${evaluationCase[field]}`);
     }
+    if (evaluationCase.workspace_fixture) {
+      const caseDirectory = path.resolve(root, path.dirname(file));
+      const fixturePath = path.resolve(caseDirectory, evaluationCase.workspace_fixture);
+      if (!fixturePath.startsWith(`${caseDirectory}${path.sep}`)) {
+        errors.push(`${file}: workspace_fixture must stay inside the case directory`);
+      } else if (!fs.existsSync(fixturePath) || !fs.statSync(fixturePath).isDirectory()) {
+        errors.push(`${file}: missing workspace_fixture ${evaluationCase.workspace_fixture}`);
+      }
+    }
     const schemaPath = path.join(root, path.dirname(file), evaluationCase.output_schema);
     if (fs.existsSync(schemaPath)) {
       try {

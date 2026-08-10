@@ -124,7 +124,7 @@ checksummed verdicts, and calculates this gate deterministically.
 
 Configuration resolution fails before model execution when a declared source is
 missing. The current aggregate report remains `incomplete`: the four new
-policies now have complete individual positive/negative rows, but the older
-policies, discovery, complete-pack precedence, combined configurations, and
-blinded verdicts remain incomplete. Harness readiness and partial matrix
-coverage are not capability validation.
+policies and `token-efficiency` now have complete individual positive/negative
+rows, but `evidence`, `safe-change`, discovery, complete-pack precedence,
+combined configurations, and blinded verdicts remain incomplete. Harness
+readiness and partial matrix coverage are not capability validation.

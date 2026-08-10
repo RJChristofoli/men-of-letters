@@ -1,0 +1,19 @@
+schema_version: 1
+id: token-efficiency-detail-005
+capability: token-efficiency
+kind: negative
+gate_dimensions: [non-interference]
+preference_review: not-required
+safety_critical: true
+prompt_file: prompt.md
+output_schema: output.schema.json
+sandbox: read-only
+checks:
+  required_nonempty: [findings]
+  minimum_items:
+    findings: 5
+  required_terms:
+    - path: findings
+      terms: [architecture, security, data, operations, rollback]
+    - path: findings
+      terms: [shared database, wildcard, backfill, alert, restore]

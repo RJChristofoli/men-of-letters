@@ -1,7 +1,8 @@
 # Capability Specification: `token-efficiency`
 
-Status: experimental implementation; deterministic installation and an initial
-controlled positive/negative pair pass, but material token value is not shown.
+Status: experimental implementation; deterministic installation and the full
+individual representative matrix pass objectively, but material token value and
+blinded quality remain unresolved.
 
 ## Identity and Ownership
 
@@ -83,18 +84,17 @@ controlled positive/negative pair pass, but material token value is not shown.
 - No-capability baseline: identical case, schema, host configuration, and
   environment without the policy source.
 - Evaluation suite: `token-efficiency`.
-- Initial positive case: `token-efficiency-handoff-001` tests removal of noisy,
-  irrelevant implementation notes while preserving an actionable handoff.
-- Initial negative case: `token-efficiency-audit-002` tests preservation of an
-  explicitly requested detailed audit.
+- Positive cases cover concise handoff, context selection, and batched local file
+  inspection. Negative cases cover two explicit-detail boundaries and unrelated
+  mechanical work.
 - Objective checks: required decisions, constraints, validation, rollback, and
   audit findings remain present.
 - Metrics: task success, input/output/total tokens, turns, tool calls, latency,
   correction turns, and negative-case overhead.
-- Experimental evidence: both initial cases pass in one turn with no tools or
-  corrections. Output fell by 108 tokens (13.1%) in aggregate, but the policy's
-  input cost changed total usage from 29,779 to 29,897 tokens (+118, +0.4%). The
-  detailed negative case remained complete with +0.3% total-token overhead.
+- Experimental evidence: all six capability cases pass in one turn with no
+  corrections or additional tools. Applicable aggregate total tokens fell 35.7%,
+  but only one of three pairs improved because one high-input baseline dominates
+  the aggregate. Negative aggregate overhead is 0.64%.
 - Experimental gate: deterministic install/update/doctor/uninstall checks and
   both initial cases pass; requested detail, safety content, and correctness are
   preserved. This supports `experimental`, not `validated`.
@@ -127,9 +127,10 @@ controlled positive/negative pair pass, but material token value is not shown.
   repository-native and must measure completed-task value, not stylistic brevity.
 - Workflow-specific duplication: rejected because it repeats context and can
   diverge across capabilities.
-- Decision: retain the compact policy as `experimental` while fresh,
-  representative cases test whether tool/context savings can exceed its fixed
-  input cost. Revise, narrow, or remove it if incremental value is not shown.
+- Decision: retain as `experimental` only until the pending blinded handoff
+  review resolves the quality floor and an owner decision records revision,
+  narrowing, or removal. Current evidence does not demonstrate material token
+  efficiency.
 
 ## Documentation Impact
 
