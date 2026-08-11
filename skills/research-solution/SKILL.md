@@ -1,6 +1,6 @@
 ---
 name: research-solution
-description: Research and compare technical approaches, libraries, platforms, architecture options, and feasibility before implementation. Use when a decision depends on current external facts, authoritative sources, alternatives, or a reversible experiment. Skip accepted designs, routine debugging, code implementation, and diff review.
+description: Research and compare technical approaches, libraries, platforms, architecture options, and feasibility when a decision materially depends on current or external technical evidence such as documented behavior, compatibility, vendor capabilities, standards, licensing, or external alternatives. Use authoritative sources and reversible experiments before implementation. Skip questions answerable primarily from the existing repository, accepted designs, routine debugging, code implementation, and diff review.
 ---
 
 # Research Solution

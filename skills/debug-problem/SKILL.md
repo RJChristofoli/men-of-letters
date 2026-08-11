@@ -1,6 +1,6 @@
 ---
 name: debug-problem
-description: Diagnose software failures, regressions, incorrect behavior, flaky tests, and performance problems by finding the supported root cause. Use when the user asks to investigate, debug, reproduce, explain, or fix a bug. Stay read-only when only diagnosis is requested; skip general implementation, diff review, and open-ended technology research.
+description: Diagnose software failures, regressions, incorrect behavior, flaky tests, and performance problems when the cause is unknown or root-cause discovery is a primary part of the task. Use to investigate, reproduce, explain, or, when authorized, fix a bug after establishing its supported root cause. If the cause or intended correction is already known and the primary work is modifying the repository, use implement-change. Stay read-only for diagnosis-only requests; skip diff review and open-ended technology research.
 ---
 
 # Debug Problem

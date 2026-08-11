@@ -2,13 +2,14 @@
 
 ## Deve ativar
 
-- "Pesquise qual biblioteca atende estes requisitos."
-- "Compare estas opções de arquitetura antes da implementação."
+- "Pesquise qual biblioteca atualmente atende estes requisitos."
+- "Compare o suporte e o licenciamento atuais destas plataformas."
 - "Verifique compatibilidade e proponha um experimento reversível."
 
 ## Não deve ativar
 
 - "Implemente a arquitetura já aprovada."
+- "Analise o fluxo deste repositório e proponha uma solução com base no sistema atual."
 - "Encontre a causa deste teste quebrado."
 - "Revise este commit."
 

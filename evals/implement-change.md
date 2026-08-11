@@ -4,11 +4,12 @@
 
 - "Implemente paginação neste endpoint e adicione os testes."
 - "Refatore este serviço sem alterar o contrato público."
-- "Corrija esta falha e valide o comportamento."
+- "A causa está no parser; aplique a correção descrita e valide o comportamento."
 
 ## Não deve ativar
 
 - "Apenas encontre a causa deste erro."
+- "Não sabemos por que os pedidos duplicam; investigue e corrija a causa."
 - "Revise este pull request."
 - "Compare duas alternativas antes de implementar."
 

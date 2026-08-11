@@ -4,11 +4,12 @@
 
 - "Descubra por que este worker processa o evento duas vezes."
 - "Investigue este teste intermitente sem editar o código."
-- "Encontre e corrija a causa desta regressão."
+- "Depois do deploy os pedidos duplicam; encontre a causa e corrija-a."
 
 ## Não deve ativar
 
 - "Implemente este endpoint novo."
+- "A causa já foi isolada no parser; implemente a correção descrita."
 - "Revise o diff desta branch."
 - "Pesquise bibliotecas para filas."
 

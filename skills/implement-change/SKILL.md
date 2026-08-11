@@ -1,6 +1,6 @@
 ---
 name: implement-change
-description: Implement focused software changes in an existing repository. Use when the user asks Codex to add, modify, fix, refactor, migrate, or complete code and expects working files plus validation. Skip review-only, diagnosis-only, research, and pre-implementation architecture decisions.
+description: Implement a sufficiently defined behavior, change, or fix in an existing repository when the intended result or correction is already known and the primary work is modifying files and validating the result. Use to add, modify, fix, refactor, migrate, or complete code. If the main problem is discovering why something fails, use debug-problem. Skip review-only, diagnosis-only, research, and pre-implementation architecture decisions.
 ---
 
 # Implement Change
