@@ -1,6 +1,0 @@
-{
-  "unit_tests": { "passed": 184, "failed": 0 },
-  "integration_tests": { "passed": 27, "failed": 0 },
-  "staging_smoke": "healthy",
-  "contract_checks": "passed"
-}

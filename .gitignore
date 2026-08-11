@@ -1,4 +1,3 @@
-node_modules/
-dist/
-evaluations/runs/
-.men-of-letters/
+.DS_Store
+.serena/
+*.tmp

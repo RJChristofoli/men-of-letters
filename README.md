@@ -1,73 +1,89 @@
-# men-of-letters
+# Men of Letters
 
-A governed, versioned engineering capability platform for Codex.
+Uma coleção pequena de skills para ajudar no desenvolvimento de software com
+mais consistência, evidência e menos desperdício de contexto.
 
-## What it does
+O projeto não possui policies globais, catálogo, packs, bootstrap próprio ou
+processo de governança. Cada skill é autocontida e só entra no contexto quando
+o trabalho correspondente é selecionado.
 
-Packages compact policies, task routers, engineering workflows, references, and deterministic resources that improve software delivery without loading every instruction into every conversation.
+## Skills
 
-## How it works
+| Skill | Finalidade |
+| --- | --- |
+| `analyze-technical-solution` | Analisar problemas e decisões técnicas antes da implementação. |
+| `implement-change` | Implementar mudanças pequenas, compatíveis e verificadas. |
+| `debug-problem` | Encontrar causas raiz e corrigir falhas quando autorizado. |
+| `review-change` | Revisar diffs e apontar defeitos acionáveis. |
+| `research-solution` | Pesquisar e comparar alternativas técnicas com fontes confiáveis. |
 
-- Selected policies provide small always-on constraints.
-- Skills activate explicitly or when task intent matches a narrow description.
-- Routers load only the workflow and references required by the task.
-- Evaluations compare quality, token usage, latency, and false triggers against a no-skill baseline.
+## Instalação
 
-## What it helps with
+### Com o instalador de skills
 
-The planned capabilities support engineering discovery, backend and security review, testing, safe refactoring, architecture decisions, documentation, and measurable optimization of code, runtime, databases, pipelines, and engineering flow.
+No Codex, peça:
 
-## Status
+```text
+$skill-installer instale todas as skills de https://github.com/RJChristofoli/men-of-letters
+```
 
-Phase 0 foundation and the Phase 1 experimental field candidate are complete.
-All seven core policies and `engineering-discovery` are installable at
-`experimental` status. Deterministic validation, 37 matched comparisons,
-complete-pack lifecycle tests, the evaluation harness, and safe bootstrap CLI
-support controlled dogfooding. Field evidence and blinded review are still
-required before any capability reaches `validated`; no stable or public release
-is available.
+### Manualmente para o usuário
 
-## Installation
-
-There is no stable installation. For development and controlled field testing:
+Clone o repositório e copie as pastas para o diretório pessoal de skills:
 
 ```bash
 git clone https://github.com/RJChristofoli/men-of-letters.git
 cd men-of-letters
-npm ci
-npm run validate
-npm test
-npm run cli -- list
+mkdir -p "$HOME/.agents/skills"
+cp -R skills/. "$HOME/.agents/skills/"
 ```
 
-Preview the experimental discovery pack without changing the target repository:
+### Somente em um repositório
+
+Execute no repositório em que as skills devem ficar disponíveis:
 
 ```bash
-npm run cli -- install engineering-discovery \
-  --scope repo \
-  --target /absolute/path/to/target-repository \
-  --dry-run
+mkdir -p .agents/skills
+cp -R /caminho/para/men-of-letters/skills/. .agents/skills/
 ```
 
-See the capability and bootstrap guides before installation. Experimental packs
-are for controlled, reversible field evaluation.
+Reinicie o Codex caso uma skill recém-instalada não apareça. Use `/skills` ou
+digite `$` para selecionar uma skill explicitamente.
 
-## Continue development
+## Uso
 
-Start experimental field testing with:
+As skills podem ser ativadas automaticamente por uma solicitação compatível ou
+explicitamente:
 
 ```text
-Read ROADMAP.md and docs/capabilities.md. Install the Phase 1 experimental candidate in a reversible repository scope, record every useful or harmful outcome, and preserve evidence by capability and version.
+$analyze-technical-solution analise esta decisão antes de implementar
+$implement-change implemente esta alteração e valide o resultado
+$debug-problem encontre a causa deste teste intermitente
+$review-change revise este diff procurando regressões
+$research-solution compare estas bibliotecas e recomende uma
 ```
 
-Treat [ROADMAP.md](ROADMAP.md) as the source of truth before changing capabilities.
+## Estrutura
 
-## Documentation
+```text
+men-of-letters/
+├── .codex-plugin/plugin.json
+├── skills/
+│   ├── analyze-technical-solution/SKILL.md
+│   ├── implement-change/SKILL.md
+│   ├── debug-problem/SKILL.md
+│   ├── review-change/SKILL.md
+│   └── research-solution/
+│       ├── SKILL.md
+│       └── references/evidence-and-alternatives.md
+├── evals/
+├── README.md
+└── LICENSE
+```
 
-- [Roadmap and current next action](ROADMAP.md)
-- [Capabilities, installation, and invocation](docs/capabilities.md)
-- [Governance contracts and capability specification](docs/governance/README.md)
-- [Distribution architecture](docs/architecture/distribution-boundaries.md)
-- [Bootstrap CLI](docs/bootstrap-cli.md)
-- [Evaluation harness and current evidence](docs/evaluation.md)
-- [Implementation workflow and skill usage](docs/implementation-workflow.md)
+## Desenvolvimento
+
+Mantenha cada skill focada em um único trabalho. Adicione referências ou scripts
+somente quando o uso real demonstrar necessidade. Os casos em `evals/` são
+checklists leves para testar ativação, limites e qualidade antes de publicar uma
+mudança.
