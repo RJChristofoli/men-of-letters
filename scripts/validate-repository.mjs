@@ -419,6 +419,12 @@ if (catalog !== null) {
     }
   }
 
+  const activeLifecycleRank = new Map([
+    ["experimental", 1],
+    ["validated", 2],
+    ["stable", 3],
+  ]);
+
   for (const { file, data: pack } of packs) {
     if (path.basename(file, ".yaml") !== pack.id) {
       errors.push(`${file}: filename must match pack ID`);
@@ -434,9 +440,19 @@ if (catalog !== null) {
     }
     for (const capabilityId of pack.capabilities) {
       const capability = capabilityById.get(capabilityId);
-      if (!capability) errors.push(`${pack.id}: unknown capability ${capabilityId}`);
-      else if (capability.installation_pack !== pack.id) {
+      if (!capability) {
+        errors.push(`${pack.id}: unknown capability ${capabilityId}`);
+        continue;
+      }
+      if (capability.installation_pack !== pack.id) {
         errors.push(`${pack.id}: ${capabilityId} belongs to ${capability.installation_pack}`);
+      }
+      const packRank = activeLifecycleRank.get(pack.status);
+      const capabilityRank = activeLifecycleRank.get(capability.status) ?? 0;
+      if (packRank && (!capability.source || capabilityRank < packRank)) {
+        errors.push(
+          `${pack.id}: ${pack.status} pack requires ${capabilityId} to be implemented and at least ${pack.status}`,
+        );
       }
     }
     for (const dependency of pack.dependencies) {

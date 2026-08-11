@@ -114,15 +114,67 @@ test("list reports planned packs", () => {
   assert.ok(result.packs.some(({ id }) => id === "engineering-discovery"));
 });
 
-test("proposed pack needs explicit local-evaluation opt-in", (t) => {
+test("proposed pack fixture needs explicit local-evaluation opt-in", (t) => {
   const target = temporaryDirectory(t);
+  const capability = workflowCapability(
+    "proposed-workflow",
+    "plugins/proposed/skills/proposed-workflow/SKILL.md",
+    "proposed-pack",
+  );
+  const source = createFixtureRepository(t, [capability], {
+    schema_version: 1,
+    id: "proposed-pack",
+    version: "0.1.0-dev.0",
+    status: "proposed",
+    owner: "test",
+    distribution: "plugin",
+    plugin_path: "plugins/proposed",
+    capabilities: ["proposed-workflow"],
+    dependencies: [],
+    suggested_policies: [],
+  });
+  const skillSource = path.join(source, capability.source);
+  fs.mkdirSync(path.dirname(skillSource), { recursive: true });
+  fs.writeFileSync(
+    skillSource,
+    "---\nname: proposed-workflow\ndescription: Proposed test workflow.\n---\n",
+  );
   assert.throws(
     () =>
       execute(
-        ["install", "engineering-discovery", "--scope", "repo", "--target", target],
-        context(target),
+        ["install", "proposed-pack", "--scope", "repo", "--target", target],
+        context(target, source),
       ),
     /--allow-proposed/,
+  );
+  assert.equal(
+    execute(
+      [
+        "install",
+        "proposed-pack",
+        "--scope",
+        "repo",
+        "--target",
+        target,
+        "--allow-proposed",
+        "--dry-run",
+      ],
+      context(target, source),
+    ).plan[0].action,
+    "create",
+  );
+});
+
+test("experimental engineering discovery installs without proposed opt-in", (t) => {
+  const target = temporaryDirectory(t);
+  const installed = execute(
+    ["install", "engineering-discovery", "--scope", "repo", "--target", target],
+    context(target),
+  );
+  assert.equal(installed.changed, true);
+  assert.equal(
+    fs.existsSync(path.join(target, ".agents", "skills", "engineering-discovery", "SKILL.md")),
+    true,
   );
 });
 
@@ -136,7 +188,6 @@ test("dry-run does not create installation state or skills", (t) => {
       "repo",
       "--target",
       target,
-      "--allow-proposed",
       "--dry-run",
     ],
     context(target),
@@ -156,7 +207,6 @@ test("clean copied install is idempotent, discoverable, healthy, and removable",
     "repo",
     "--target",
     target,
-    "--allow-proposed",
   ];
   const installed = execute(args, context(target));
   const skill = path.join(target, ".agents", "skills", "engineering-discovery", "SKILL.md");
@@ -186,7 +236,6 @@ test("user scope keeps skills and state under the selected home", (t) => {
       "user",
       "--target",
       target,
-      "--allow-proposed",
     ],
     context(target),
   );
@@ -204,6 +253,53 @@ test("user scope keeps skills and state under the selected home", (t) => {
     execute(["doctor", "--scope", "user", "--target", target], context(target)).healthy,
     true,
   );
+});
+
+test("user scope honors XDG_STATE_HOME when target is implicit", (t) => {
+  const home = temporaryDirectory(t);
+  const xdgStateHome = temporaryDirectory(t);
+  const instructions = path.join(home, "AGENTS.md");
+  const manual = "# User instructions\n";
+  fs.writeFileSync(instructions, manual);
+  const environment = context(home, repositoryRoot, { xdgStateHome });
+
+  execute(
+    [
+      "install",
+      "core-policies",
+      "--scope",
+      "user",
+      "--instructions",
+      instructions,
+      "--yes",
+    ],
+    environment,
+  );
+  execute(["install", "engineering-discovery", "--scope", "user"], environment);
+
+  const stateRoot = path.join(xdgStateHome, "men-of-letters");
+  const stateFile = path.join(stateRoot, "state.json");
+  const state = JSON.parse(fs.readFileSync(stateFile, "utf8"));
+  assert.equal(
+    fs.existsSync(path.join(home, ".agents", "skills", "engineering-discovery", "SKILL.md")),
+    true,
+  );
+  assert.equal(fs.existsSync(stateFile), true);
+  assert.equal(
+    fs.existsSync(path.join(home, ".local", "state", "men-of-letters", "state.json")),
+    false,
+  );
+  assert.equal(state.backups.length, 1);
+  assert.equal(fs.existsSync(path.join(stateRoot, state.backups[0].backup)), true);
+  assert.equal(execute(["doctor", "--scope", "user"], environment).healthy, true);
+
+  execute(["uninstall", "engineering-discovery", "--scope", "user"], environment);
+  execute(["uninstall", "core-policies", "--scope", "user", "--yes"], environment);
+  assert.equal(
+    fs.existsSync(path.join(home, ".agents", "skills", "engineering-discovery")),
+    false,
+  );
+  assert.equal(fs.readFileSync(instructions, "utf8"), manual);
 });
 
 test("install updates an owned artifact and recorded pack version", (t) => {
@@ -257,7 +353,6 @@ test("local-development links are explicit and doctor detects breakage", (t) => 
       "repo",
       "--target",
       target,
-      "--allow-proposed",
       "--local-link",
     ],
     context(target),
@@ -285,7 +380,6 @@ test("unmanaged collisions fail before mutation", (t) => {
           "repo",
           "--target",
           target,
-          "--allow-proposed",
         ],
         context(target),
       ),
@@ -305,7 +399,6 @@ test("uninstall refuses locally modified managed artifacts", (t) => {
       "repo",
       "--target",
       target,
-      "--allow-proposed",
     ],
     context(target),
   );
@@ -334,7 +427,6 @@ test("tampered state cannot escape the selected scope", (t) => {
       "repo",
       "--target",
       target,
-      "--allow-proposed",
     ],
     context(target),
   );
@@ -452,7 +544,6 @@ test("complete core policies activate, update, diagnose, and remove cleanly", (t
     target,
     "--instructions",
     instructions,
-    "--allow-proposed",
   ];
 
   const preview = execute([...args, "--dry-run"], context(target, source));
@@ -496,6 +587,86 @@ test("complete core policies activate, update, diagnose, and remove cleanly", (t
   assert.equal(fs.readFileSync(instructions, "utf8"), manual);
 });
 
+
+test("experimental field candidate installs and removes cleanly in user scope", (t) => {
+  const target = temporaryDirectory(t);
+  const instructions = path.join(target, "AGENTS.md");
+  const manual = "# Personal instructions\n\nKeep this section byte-for-byte.\n";
+  fs.writeFileSync(instructions, manual);
+  const environment = context(target);
+
+  execute(
+    [
+      "install",
+      "core-policies",
+      "--scope",
+      "user",
+      "--target",
+      target,
+      "--instructions",
+      instructions,
+      "--yes",
+    ],
+    environment,
+  );
+  execute(
+    ["install", "engineering-discovery", "--scope", "user", "--target", target],
+    environment,
+  );
+
+  const skill = path.join(target, ".agents", "skills", "engineering-discovery", "SKILL.md");
+  const installedStateFile = path.join(
+    target,
+    ".local",
+    "state",
+    "men-of-letters",
+    "state.json",
+  );
+  const installedState = JSON.parse(fs.readFileSync(installedStateFile, "utf8"));
+  assert.equal(installedState.backups.length, 1);
+  assert.equal(
+    fs.existsSync(path.join(path.dirname(installedStateFile), installedState.backups[0].backup)),
+    true,
+  );
+  assert.deepEqual(Object.keys(installedState.packs).sort(), [
+    "core-policies",
+    "engineering-discovery",
+  ]);
+  assert.equal(parseManagedBlocks(fs.readFileSync(instructions, "utf8")).length, 7);
+  assert.equal(fs.existsSync(skill), true);
+  assert.equal(
+    fs.existsSync(path.join(path.dirname(skill), "assets", "discovery-brief.md")),
+    true,
+  );
+  assert.equal(
+    fs.existsSync(path.join(path.dirname(skill), "assets", "adr-handoff.md")),
+    true,
+  );
+  assert.deepEqual(
+    execute(["doctor", "--scope", "user", "--target", target], environment),
+    { command: "doctor", healthy: true, issues: [] },
+  );
+
+  execute(
+    ["uninstall", "engineering-discovery", "--scope", "user", "--target", target],
+    environment,
+  );
+  execute(
+    ["uninstall", "core-policies", "--scope", "user", "--target", target, "--yes"],
+    environment,
+  );
+
+  const removedState = JSON.parse(fs.readFileSync(installedStateFile, "utf8"));
+  assert.deepEqual(removedState.packs, {});
+  assert.deepEqual(removedState.artifacts, {});
+  assert.deepEqual(removedState.managed_blocks, {});
+  assert.equal(fs.existsSync(path.dirname(skill)), false);
+  assert.equal(fs.readFileSync(instructions, "utf8"), manual);
+  assert.deepEqual(
+    execute(["doctor", "--scope", "user", "--target", target], environment),
+    { command: "doctor", healthy: true, issues: [] },
+  );
+});
 test("failed multi-artifact install rolls back earlier writes", (t) => {
   const target = temporaryDirectory(t);
   const capabilities = [

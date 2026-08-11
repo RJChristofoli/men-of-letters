@@ -1,6 +1,6 @@
 # Capability Specification: `documentation`
 
-Status: proposed implementation; source, installation, and the individual
+Status: experimental implementation; source, installation, and the individual
 representative matrix exist, but blinded review and incremental value remain
 unresolved.
 
@@ -10,7 +10,7 @@ unresolved.
 - Type: policy
 - Owner: `RJChristofoli`
 - Installation pack: `core-policies`
-- Lifecycle status: `proposed`
+- Lifecycle status: `experimental`
 - Target introduction: `core-policies@0.1.0-dev.0`
 
 ## Problem and Goal
@@ -65,8 +65,9 @@ unresolved.
 
 ## Evidence and Evaluation
 
-- Evidence today: six matched pairs pass with 100% capability objective success,
-  no tools or corrections, and 0.76% unrelated overhead.
+- Evidence today: six matched pairs pass with 100% capability objective success
+  and 0.76% unrelated overhead. Zero tool calls were recorded; correction turns
+  were not measured.
 - No-capability baseline: matched documentation tasks without this policy.
 - Planned positive coverage: primary language/accuracy rule, scope boundary, and
   ambiguous plan-versus-implementation case.
@@ -81,10 +82,10 @@ unresolved.
 - Always-loaded context: at most 100 estimated tokens; no conditional context or
   policy-owned tool calls.
 - Bootstrap compatibility: `0.1.0-dev.0` in controlled complete-pack tests.
-- Host behavior compatibility: unknown until comparative runs.
+- Host behavior tested only on Codex CLI 0.146.0; broader compatibility unknown.
 - Alternatives: hard-code one global language, rejected because repository and
   user scope differ; do nothing remains the evaluation baseline.
-- Decision: retain as proposed. Objective quality matched the baseline; an
+- Decision: retain as experimental for controlled field testing. Objective quality matched the baseline; an
   apparent 40.1% aggregate token reduction is dominated by one high-input
   baseline, wins only one of three applicable pairs, and is not material under
   the frozen gate. Blinded review is unresolved.

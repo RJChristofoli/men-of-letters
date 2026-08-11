@@ -17,11 +17,37 @@ import {
   resolveConfigurationCapabilities,
 } from "../../scripts/lib/evaluation.mjs";
 
-test("failed baselines remain recordable but failed capability runs do not", () => {
+test("all scored observations remain recordable, including failed capability runs", () => {
   assert.equal(evaluationRunIsRecordable("accept", false), true);
   assert.equal(evaluationRunIsRecordable("record", true), true);
-  assert.equal(evaluationRunIsRecordable("record", false), false);
+  assert.equal(evaluationRunIsRecordable("record", false), true);
   assert.throws(() => evaluationRunIsRecordable("publish", true), /unsupported/);
+});
+
+test("evaluation schema accepts explicit reproducibility metadata and legacy runs", () => {
+  const schema = JSON.parse(fs.readFileSync("schemas/evaluation-run.schema.json", "utf8"));
+  const validate = new Ajv2020({ strict: true }).compile(schema);
+  const legacy = evaluationRun({
+    caseId: "case-001",
+    capability: "engineering-discovery",
+    variant: "baseline",
+    configuration: "individual-capability",
+    passed: true,
+    tokens: 100,
+  });
+  assert.equal(validate(legacy), true);
+
+  const current = structuredClone(legacy);
+  current.environment.model = "model-a";
+  current.environment.reasoning_effort = "high";
+  current.environment.model_metadata_source = "explicit-cli";
+  current.execution = {
+    sandbox: "read-only",
+    ephemeral: true,
+    user_config_ignored: true,
+    output_schema: "evaluations/cases/example/output.schema.json",
+  };
+  assert.equal(validate(current), true);
 });
 
 test("workspace fixtures copy their contents into a clean evaluation root", () => {
@@ -258,6 +284,85 @@ test("blind review hides identity and resolves the recorded verdict", () => {
   const reviewSchema = JSON.parse(fs.readFileSync("schemas/evaluation-review.schema.json", "utf8"));
   const validate = new Ajv2020({ strict: true }).compile(reviewSchema);
   assert.equal(validate(review), true);
+});
+
+test("blind review rejects explicitly different model configurations", () => {
+  const baseline = evaluationRun({
+    caseId: "case-001",
+    capability: "engineering-discovery",
+    variant: "baseline",
+    configuration: "individual-capability",
+    passed: true,
+    tokens: 100,
+  });
+  const capability = evaluationRun({
+    caseId: "case-001",
+    capability: "engineering-discovery",
+    variant: "capability",
+    configuration: "individual-capability",
+    passed: true,
+    tokens: 90,
+  });
+  baseline.environment.model = "model-a";
+  capability.environment.model = "model-b";
+  assert.throws(
+    () =>
+      createBlindReview({
+        caseId: "case-001",
+        configuration: "individual-capability",
+        reviewer: "reviewer-1",
+        role: "primary",
+        prompt: "compare",
+        checks: {},
+        baseline,
+        capability,
+      }),
+    /comparable environments/,
+  );
+});
+
+test("blind review rejects current runs without explicit model configuration", () => {
+  const baseline = evaluationRun({
+    caseId: "case-001",
+    capability: "engineering-discovery",
+    variant: "baseline",
+    configuration: "individual-capability",
+    passed: true,
+    tokens: 100,
+  });
+  const capability = evaluationRun({
+    caseId: "case-001",
+    capability: "engineering-discovery",
+    variant: "capability",
+    configuration: "individual-capability",
+    passed: true,
+    tokens: 90,
+  });
+  for (const run of [baseline, capability]) {
+    run.environment.model = null;
+    run.environment.reasoning_effort = null;
+    run.environment.model_metadata_source = "not-reported";
+    run.execution = {
+      sandbox: "read-only",
+      ephemeral: true,
+      user_config_ignored: true,
+      output_schema: "evaluations/cases/example/output.schema.json",
+    };
+  }
+  assert.throws(
+    () =>
+      createBlindReview({
+        caseId: "case-001",
+        configuration: "individual-capability",
+        reviewer: "reviewer-1",
+        role: "primary",
+        prompt: "compare",
+        checks: {},
+        baseline,
+        capability,
+      }),
+    /comparable environments/,
+  );
 });
 
 test("aggregate gate passes complete evidence and rejects a false trigger", () => {

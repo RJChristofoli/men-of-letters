@@ -1,7 +1,7 @@
 schema_version: 1
 id: engineering-discovery
 version: 0.1.0-dev.0
-status: proposed
+status: experimental
 owner: RJChristofoli
 distribution: plugin
 plugin_path: plugins/engineering-discovery

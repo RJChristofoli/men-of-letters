@@ -13,7 +13,10 @@ export function evaluationRunIsRecordable(command, passed) {
   if (!["accept", "record"].includes(command)) {
     throw new Error(`unsupported persistence command: ${command}`);
   }
-  return command === "accept" || passed;
+  // A failed observation is still evidence. Callers re-score the run before
+  // persistence, so `passed` describes the outcome; it must not decide whether
+  // the outcome is retained.
+  return true;
 }
 
 export function copyWorkspaceFixture(sourceDirectory, targetDirectory) {
@@ -62,6 +65,38 @@ function runSha256(run) {
   return sha256(JSON.stringify(run));
 }
 
+function runsHaveComparableConfiguration(baseline, capability) {
+  const environmentFields = [
+    "codex_cli",
+    "node",
+    "platform",
+    "model",
+    "reasoning_effort",
+  ];
+  const sameEnvironment = environmentFields.every(
+    (field) => (baseline.environment[field] ?? null) === (capability.environment[field] ?? null),
+  );
+  if (!sameEnvironment) return false;
+
+  // Legacy run records predate execution metadata. They remain comparable with
+  // each other, while a mixed legacy/current pair is deliberately rejected.
+  if (!baseline.execution && !capability.execution) return true;
+  if (!baseline.execution || !capability.execution) return false;
+  const hasExplicitModelConfiguration = [baseline, capability].every(
+    (run) =>
+      typeof run.environment.model === "string" &&
+      run.environment.model.length > 0 &&
+      typeof run.environment.reasoning_effort === "string" &&
+      run.environment.reasoning_effort.length > 0 &&
+      run.environment.model_metadata_source === "explicit-cli",
+  );
+  if (!hasExplicitModelConfiguration) return false;
+
+  return ["sandbox", "ephemeral", "user_config_ignored", "output_schema"].every(
+    (field) => baseline.execution[field] === capability.execution[field],
+  );
+}
+
 export function createBlindReview({
   caseId,
   configuration,
@@ -83,11 +118,7 @@ export function createBlindReview({
   if (runConfiguration(capability) !== configuration) {
     throw new Error("capability run configuration does not match review configuration");
   }
-  if (
-    baseline.environment.codex_cli !== capability.environment.codex_cli ||
-    baseline.environment.node !== capability.environment.node ||
-    baseline.environment.platform !== capability.environment.platform
-  ) {
+  if (!runsHaveComparableConfiguration(baseline, capability)) {
     throw new Error("review runs do not have comparable environments");
   }
 
@@ -296,10 +327,7 @@ function assessPairs(pairs, reviews, gate) {
     0,
   );
   const comparabilityFailures = pairs.filter(
-    ({ baseline, capability }) =>
-      baseline.environment.codex_cli !== capability.environment.codex_cli ||
-      baseline.environment.node !== capability.environment.node ||
-      baseline.environment.platform !== capability.environment.platform,
+    ({ baseline, capability }) => !runsHaveComparableConfiguration(baseline, capability),
   ).length;
   const baselineLatency = median(pairs.map(({ baseline }) => baseline.metrics.latency_ms));
   const capabilityLatency = median(pairs.map(({ capability }) => capability.metrics.latency_ms));

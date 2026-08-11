@@ -32,7 +32,21 @@
       "properties": {
         "codex_cli": { "type": "string", "minLength": 1 },
         "node": { "type": "string", "minLength": 1 },
-        "platform": { "type": "string", "minLength": 1 }
+        "platform": { "type": "string", "minLength": 1 },
+        "model": { "type": ["string", "null"], "minLength": 1 },
+        "reasoning_effort": { "type": ["string", "null"], "minLength": 1 },
+        "model_metadata_source": { "enum": ["explicit-cli", "not-reported"] }
+      }
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sandbox", "ephemeral", "user_config_ignored", "output_schema"],
+      "properties": {
+        "sandbox": { "enum": ["read-only", "workspace-write", "danger-full-access"] },
+        "ephemeral": { "const": true },
+        "user_config_ignored": { "const": true },
+        "output_schema": { "type": "string", "minLength": 1 }
       }
     },
     "metrics": {

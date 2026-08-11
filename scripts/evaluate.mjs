@@ -35,6 +35,7 @@ function parseArguments(argv) {
   const usage =
     "usage: npm run evaluate -- run <case-id> --variant baseline|capability " +
     "[--configuration individual-capability|complete-core-policies|phase-1-combined] " +
+    "[--model <model>] [--reasoning-effort <effort>] " +
     "[--accept-baseline]\n" +
     "   or: npm run evaluate -- accept <evaluations/runs/run.json>\n" +
     "   or: npm run evaluate -- record <evaluations/runs/run.json>\n" +
@@ -61,7 +62,18 @@ function parseArguments(argv) {
   for (let index = 0; index < rest.length; index += 1) {
     const argument = rest[index];
     if (argument === "--accept-baseline") parsed.acceptBaseline = true;
-    else if (["--variant", "--configuration", "--reviewer", "--role", "--verdict", "--reason"].includes(argument)) {
+    else if (
+      [
+        "--variant",
+        "--configuration",
+        "--reviewer",
+        "--role",
+        "--verdict",
+        "--reason",
+        "--model",
+        "--reasoning-effort",
+      ].includes(argument)
+    ) {
       const value = rest[++index];
       if (!value) fail(`${argument} requires a value`);
       parsed[argument.slice(2).replaceAll("-", "_")] = value;
@@ -79,6 +91,10 @@ function parseArguments(argv) {
     }
     if (parsed.variant === "baseline" && parsed.configuration !== DEFAULT_CONFIGURATION) {
       fail("baseline runs use the individual-capability configuration");
+    }
+    if (parsed.model !== undefined && !parsed.model.trim()) fail("--model requires a value");
+    if (parsed.reasoning_effort !== undefined && !parsed.reasoning_effort.trim()) {
+      fail("--reasoning-effort requires a value");
     }
   }
   if (command === "prepare-review") {
@@ -325,10 +341,7 @@ if (["accept", "record"].includes(options.command)) {
   );
   run.checks = score(run.response, outputSchema, evaluationCase.data.checks);
   run.passed = run.checks.every(({ passed }) => passed);
-  if (!evaluationRunIsRecordable(options.command, run.passed)) {
-    const failed = run.checks.filter(({ passed }) => !passed).map(({ detail }) => detail);
-    fail(`run does not pass the current case:\n- ${failed.join("\n- ")}`);
-  }
+  evaluationRunIsRecordable(options.command, run.passed);
   const configuration = runConfiguration(run);
   const destinationDirectory =
     options.command === "accept"
@@ -341,7 +354,9 @@ if (["accept", "record"].includes(options.command)) {
       : recordedResultPath(run.case_id, configuration);
   fs.writeFileSync(destinationPath, `${JSON.stringify(run, null, 2)}\n`);
   const resultKey = options.command === "accept" ? "accepted_baseline" : "recorded_result";
-  console.log(JSON.stringify({ [resultKey]: path.relative(root, destinationPath) }, null, 2));
+  console.log(
+    JSON.stringify({ [resultKey]: path.relative(root, destinationPath), passed: run.passed }, null, 2),
+  );
   process.exit(0);
 }
 
@@ -406,23 +421,29 @@ if (variant === "capability") {
   }
 }
 
+const codexArguments = [
+  "exec",
+  "--json",
+  "--ephemeral",
+  "--ignore-user-config",
+  "--skip-git-repo-check",
+  "--sandbox",
+  specification.sandbox,
+  "--output-schema",
+  outputSchemaPath,
+  "--output-last-message",
+  lastMessagePath,
+];
+if (options.model) codexArguments.push("--model", options.model);
+if (options.reasoning_effort) {
+  codexArguments.push("--config", `model_reasoning_effort=${JSON.stringify(options.reasoning_effort)}`);
+}
+codexArguments.push(prompt);
+
 const startedAt = Date.now();
 const execution = spawnSync(
   "codex",
-  [
-    "exec",
-    "--json",
-    "--ephemeral",
-    "--ignore-user-config",
-    "--skip-git-repo-check",
-    "--sandbox",
-    specification.sandbox,
-    "--output-schema",
-    outputSchemaPath,
-    "--output-last-message",
-    lastMessagePath,
-    prompt,
-  ],
+  codexArguments,
   {
     cwd: workspace,
     encoding: "utf8",
@@ -474,6 +495,15 @@ const result = {
     codex_cli: commandVersion("codex", ["--version"]),
     node: process.version,
     platform: `${process.platform}-${process.arch}`,
+    model: options.model ?? null,
+    reasoning_effort: options.reasoning_effort ?? null,
+    model_metadata_source: options.model ? "explicit-cli" : "not-reported",
+  },
+  execution: {
+    sandbox: specification.sandbox,
+    ephemeral: true,
+    user_config_ignored: true,
+    output_schema: path.relative(root, outputSchemaPath),
   },
   metrics: {
     input_tokens: usageAvailable ? usage.input_tokens : null,

@@ -1,6 +1,6 @@
 # Capability Specification: `engineering-discovery`
 
-Status: proposed implementation; plugin, skill, repository, and initial
+Status: experimental implementation; plugin, skill, repository, and initial
 comparative checks pass, but promotion still requires repeated material quality
 or efficiency benefit without unacceptable regressions.
 
@@ -69,7 +69,9 @@ or efficiency benefit without unacceptable regressions.
 - Conditional reference: load deeper evidence and alternative-analysis rigor only
   when material evidence conflicts or a costly-to-reverse decision remains
   ambiguous.
-- Scripts/assets: none.
+- Conditional assets: `assets/discovery-brief.md` for a reusable decision brief
+  and `assets/adr-handoff.md` when a proposal needs an ADR-ready handoff. Load
+  them only when the task needs those artifacts.
 
 ## Evidence and Evaluation
 
@@ -104,8 +106,9 @@ or efficiency benefit without unacceptable regressions.
 - Tested host: Codex CLI 0.146.0 on the two recorded initial cases.
 - Pack/bootstrap: plugin pack and bootstrap `0.1.0-dev.0`; clean copied and
   local-link install, discovery, doctor, removal, dry-run, and archive checks pass.
-- Lifecycle: remain proposed until broader matched comparisons establish material
-  benefit and acceptable routing behavior. Stable compatibility is not claimed.
+- Lifecycle: experimental for controlled field testing; broader matched
+  comparisons must establish material benefit and acceptable routing behavior.
+  Stable compatibility is not claimed.
 
 ## Alternatives and Decision
 

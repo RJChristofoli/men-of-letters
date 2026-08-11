@@ -30,25 +30,34 @@ List packs:
 npm run cli -- list
 ```
 
-Preview the proposed discovery pack in repository scope:
+Preview the experimental discovery pack in repository scope:
 
 ```bash
 npm run cli -- install engineering-discovery \
   --scope repo \
-  --allow-proposed \
+  --target /absolute/path/to/target-repository \
   --dry-run
 ```
 
 Install, diagnose, and remove it:
 
 ```bash
-npm run cli -- install engineering-discovery --scope repo --allow-proposed
-npm run cli -- doctor --scope repo
-npm run cli -- uninstall engineering-discovery --scope repo
+npm run cli -- install engineering-discovery \
+  --scope repo \
+  --target /absolute/path/to/target-repository
+
+npm run cli -- doctor \
+  --scope repo \
+  --target /absolute/path/to/target-repository
+
+npm run cli -- uninstall engineering-discovery \
+  --scope repo \
+  --target /absolute/path/to/target-repository
 ```
 
-`--allow-proposed` is intentionally explicit. It is for local evaluation and
-does not convert a proposed capability into a supported release.
+`--allow-proposed` is not required for the two Phase 1 experimental packs. It
+remains an explicit development escape hatch for proposed packs and never
+converts them into supported releases.
 
 Use `--scope user` only when the capability should be shared across repositories.
 `--target <directory>` overrides the repository root or home directory and is
@@ -62,31 +71,33 @@ Policy packs require an explicit host instruction target and confirmation:
 ```bash
 npm run cli -- install core-policies \
   --scope repo \
-  --instructions /absolute/path/to/AGENTS.md \
-  --allow-proposed \
+  --target /absolute/path/to/target-repository \
+  --instructions /absolute/path/to/target-repository/AGENTS.md \
   --dry-run
 
 npm run cli -- install core-policies \
   --scope repo \
-  --instructions /absolute/path/to/AGENTS.md \
-  --allow-proposed \
+  --target /absolute/path/to/target-repository \
+  --instructions /absolute/path/to/target-repository/AGENTS.md \
   --yes
 ```
 
 The current `core-policies` pack has all seven canonical sources. Complete-pack
 install, version update, `doctor`, uninstall, and rollback behavior run in clean
 controlled scope, and a canonical temporary install/doctor/uninstall smoke test
-passes. Four policies remain `proposed`, so `--allow-proposed` is still required
-and installation is for evaluation only. Activation uses checksummed managed
-blocks, preserves unmanaged bytes, backs up existing instruction files, and
-requires `--yes` only when applying changes after dry-run review.
+passes. All seven policies and the pack are experimental and install without
+`--allow-proposed` for controlled field evaluation. Activation uses checksummed
+managed blocks, preserves unmanaged bytes, backs up existing instruction files,
+and requires `--yes` only when applying changes after dry-run review.
 
 ## State and Safety
 
-Repository scope stores state under `.men-of-letters/state.json`; user scope uses
-`.local/state/men-of-letters/state.json` below the selected home. State records
-pack versions, dependencies, owned artifacts, checksums, links, managed policy
-blocks, backups, and the last operation.
+Repository scope stores state under `.men-of-letters/state.json`. User scope
+uses `$XDG_STATE_HOME/men-of-letters/state.json` when `XDG_STATE_HOME` is an
+absolute path, otherwise `.local/state/men-of-letters/state.json` below the
+selected home. An explicit `--target` keeps state below that target. State
+records pack versions, dependencies, owned artifacts, checksums, links, managed
+policy blocks, backups, and the last operation.
 
 The CLI resolves dependencies and all targets before mutation. It refuses
 unmanaged collisions, modified managed content, incompatible dependencies,
@@ -96,7 +107,7 @@ failure. Uninstall removes only verified installer-owned content.
 
 ## Package a Plugin
 
-Build the proposed engineering-discovery archive:
+Build the experimental engineering-discovery archive:
 
 ```bash
 npm run package-plugin -- engineering-discovery
@@ -105,13 +116,14 @@ tar -tzf dist/engineering-discovery-0.1.0-dev.0.tar.gz
 
 The generated `dist/` archive is not committed. It includes the plugin, license,
 provenance summary, and a release manifest with file checksums. Packaging a
-development archive does not authorize publishing it.
+development archive does not authorize public distribution.
 
-## Validated Scope
+## Experimental Readiness Scope
 
-The Node test suite covers repository and user scopes, policy budget, dry-run, proposed-pack
-gating, copied and linked installs, idempotency, update, discovery path, doctor,
-collision handling, modified-content refusal, policy confirmation and byte
-preservation, policy version-marker update, uninstall, state schema, state-path
-traversal rejection, and forced rollback. Marketplace install, signed releases,
-Windows behavior, and stable host compatibility remain unvalidated.
+The Node test suite covers repository and user scopes, policy budget, dry-run,
+proposed-pack gating, copied and linked installs, idempotency, update, discovery
+path, doctor, collision handling, modified-content refusal, policy confirmation
+and byte preservation, policy version-marker update, uninstall, state schema,
+XDG state resolution, state-path traversal rejection, and forced rollback.
+Marketplace install, signed releases, Windows behavior, and stable host
+compatibility remain unvalidated.

@@ -221,14 +221,21 @@ function resolvePacks(packId, repository, allowProposed) {
 }
 
 function pathsFor(options, environment) {
+  const hasExplicitTarget = options.target !== null;
   const targetRoot = path.resolve(options.target ?? (options.scope === "user" ? environment.home : environment.cwd));
   if (!fs.existsSync(targetRoot) || !fs.statSync(targetRoot).isDirectory()) {
     throw new Error(`target root does not exist: ${targetRoot}`);
   }
+  const xdgStateHome =
+    typeof environment.xdgStateHome === "string" && path.isAbsolute(environment.xdgStateHome)
+      ? path.resolve(environment.xdgStateHome)
+      : null;
   const stateRoot =
     options.scope === "repo"
       ? path.join(targetRoot, ".men-of-letters")
-      : path.join(targetRoot, ".local", "state", "men-of-letters");
+      : !hasExplicitTarget && xdgStateHome
+        ? path.join(xdgStateHome, "men-of-letters")
+        : path.join(targetRoot, ".local", "state", "men-of-letters");
   return { targetRoot, stateRoot, stateFile: path.join(stateRoot, "state.json") };
 }
 
@@ -480,7 +487,11 @@ function performInstall(options, installPlan, paths, state) {
         if (fs.existsSync(instruction.target)) {
           const backup = path.join(backupDirectory, path.basename(instruction.target));
           fs.copyFileSync(instruction.target, backup);
-          state.backups.push({ operation_id: operationId, target: relativeTarget(paths.targetRoot, instruction.target), backup: path.relative(paths.targetRoot, backup).split(path.sep).join("/") });
+          state.backups.push({
+            operation_id: operationId,
+            target: relativeTarget(paths.targetRoot, instruction.target),
+            backup: path.relative(paths.stateRoot, backup).split(path.sep).join("/"),
+          });
         }
         atomicWrite(instruction.target, instruction.content);
       }
@@ -637,6 +648,7 @@ export function execute(argv, context = {}) {
   const environment = {
     cwd: path.resolve(context.cwd ?? process.cwd()),
     home: path.resolve(context.home ?? os.homedir()),
+    xdgStateHome: context.xdgStateHome ?? process.env.XDG_STATE_HOME,
   };
   const options = parseOptions(argv);
   const repository = loadRepository(sourceRoot);

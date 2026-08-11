@@ -47,5 +47,9 @@ Choose a reversible next step before implementation. Stay read-only.
   Treat a proof of concept as separately authorized work with cleanup.
 - Use the user's format. Otherwise return: decision boundary; evidence and
   unknowns; options; recommendation; validation test; risks, rollback, and ADR.
+- When a reusable artifact is requested, use
+  [discovery-brief.md](assets/discovery-brief.md). When an ADR is justified, add
+  [adr-handoff.md](assets/adr-handoff.md) without treating the proposal as an
+  accepted decision.
 - Keep routine proposals brief. Expand only when decision cost or requested depth
   justifies it. Cite inspected repository or authoritative sources.

@@ -91,8 +91,9 @@ blinded quality remain unresolved.
   audit findings remain present.
 - Metrics: task success, input/output/total tokens, turns, tool calls, latency,
   correction turns, and negative-case overhead.
-- Experimental evidence: all six capability cases pass in one turn with no
-  corrections or additional tools. Applicable aggregate total tokens fell 35.7%,
+- Experimental evidence: all six capability cases pass in one turn with zero
+  recorded tool calls; correction turns were not measured. Applicable aggregate
+  total tokens fell 35.7%,
   but only one of three pairs improved because one high-input baseline dominates
   the aggregate. Negative aggregate overhead is 0.64%.
 - Experimental gate: deterministic install/update/doctor/uninstall checks and
@@ -116,7 +117,7 @@ blinded quality remain unresolved.
 
 - Tested host: Codex CLI 0.146.0 on Linux x64.
 - Bootstrap compatibility: `0.1.0-dev.0` in controlled repository-scope tests.
-- Pack status: `core-policies` remains proposed and incomplete.
+- Pack status: `core-policies` is experimental and ready for controlled field testing.
 - Migration: checksummed managed blocks support reviewed updates and clean
   removal without editing unmanaged instructions.
 

@@ -1,6 +1,6 @@
 # Capability Specification: `engineering-principles`
 
-Status: proposed implementation; source, installation, and the individual
+Status: experimental implementation; source, installation, and the individual
 representative matrix exist, but blinded review and incremental value remain
 unresolved.
 
@@ -10,7 +10,7 @@ unresolved.
 - Type: policy
 - Owner: `RJChristofoli`
 - Installation pack: `core-policies`
-- Lifecycle status: `proposed`
+- Lifecycle status: `experimental`
 - Target introduction: `core-policies@0.1.0-dev.0`
 
 ## Problem and Goal
@@ -66,8 +66,9 @@ unresolved.
 ## Evidence and Evaluation
 
 - Evidence today: source budget and complete-pack lifecycle checks pass; six
-  matched individual pairs pass with 100% capability objective success, 0.91%
-  unrelated overhead, and no tool calls or corrections.
+  matched individual pairs pass with 100% capability objective success and 0.91%
+  unrelated overhead. Zero tool calls were recorded; correction turns were not
+  measured.
 - No-capability baseline: matched runs without this policy.
 - Planned positive coverage: primary rule, boundary, and adverse or ambiguous
   engineering decisions.
@@ -83,10 +84,10 @@ unresolved.
 - Always-loaded context: at most 140 estimated tokens; no conditional context or
   policy-owned tool calls.
 - Bootstrap compatibility: `0.1.0-dev.0` in controlled complete-pack tests.
-- Host behavior compatibility: unknown until comparative runs.
+- Host behavior tested only on Codex CLI 0.146.0; broader compatibility unknown.
 - Alternatives: repeat principles in every workflow, rejected as duplication; do
   nothing remains the evaluation baseline.
-- Decision: retain as proposed. Applicable total tokens increased 0.8%, no
+- Decision: retain as experimental for controlled field testing. Applicable total tokens increased 0.8%, no
   objective gain appeared over the strong baseline, and blinded review is
   unresolved.
 

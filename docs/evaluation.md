@@ -3,25 +3,46 @@
 Status: experimental Phase 0 infrastructure.
 
 The harness compares a capability variant with the same no-capability task. It
-records task checks, token usage, turns, tool calls, latency, correction turns,
-environment, and the structured response. Baseline and capability runs must use
-the same case, output schema, Codex CLI configuration, and execution environment.
+records task checks, token usage, turns, tool calls, latency, environment, and
+the structured response. `correction_turns` remains a zero-valued compatibility
+placeholder and is not measured yet. Baseline and capability runs must otherwise
+use the same case, schema, Codex CLI configuration, and execution environment.
+
+For reproducible runs, pass `--model` and `--reasoning-effort` explicitly. The
+harness forwards and records those values together with the sandbox, schema,
+ephemeral mode, and ignored-user-config setting. When they are omitted, the
+Codex event stream does not report the resolved defaults, so the run records
+`null` with `model_metadata_source: not-reported` instead of guessing.
+
+New runs without both explicit flags may be retained for diagnosis, but they are
+not comparable for blinded review or the promotion gate. Legacy pairs remain
+readable as historical evidence under their original contract.
 
 ## Run a Case
 
 ```bash
 npm run evaluate -- run discovery-architecture-001 --variant baseline
 npm run evaluate -- run discovery-architecture-001 --variant capability
+
+# Recommended controlled pair
+npm run evaluate -- run discovery-architecture-001 --variant baseline \
+  --model <model> --reasoning-effort <effort>
+npm run evaluate -- run discovery-architecture-001 --variant capability \
+  --model <model> --reasoning-effort <effort>
 ```
 
 Add `--accept-baseline` only to a reviewed baseline run. Accepted baseline files
 are committed under `evaluations/baselines/`; raw runs under `evaluations/runs/`
 are local and ignored by Git.
 
-An accepted baseline is a valid reference observation, not necessarily a
-successful answer. The `accept` command re-scores and may retain a failing
-baseline so objective improvement remains measurable. The `record` command
-refuses a failing capability result.
+An accepted baseline or recorded capability run is a valid observation, not
+necessarily a successful answer. Both commands can select failures as canonical
+evidence, so an objective regression does not need to be discarded or retried
+until it passes.
+
+Each case/configuration has one selected committed baseline or capability result.
+Before replacing it, preserve prior evidence under a new case ID or in versioned
+field records; timestamped raw runs are local and ignored by Git.
 
 If review corrects only an objective rubric without changing the task or output,
 re-score and accept the existing measured run without another model call:
@@ -31,7 +52,7 @@ npm run evaluate -- accept evaluations/runs/<run-file>.json
 ```
 
 After reviewing a capability response, re-score it against the current case and
-retain it as comparative evidence:
+retain it as comparative evidence, whether it passes or fails:
 
 ```bash
 npm run evaluate -- record evaluations/runs/<run-file>.json
@@ -85,23 +106,25 @@ negative non-interference comparisons.
 - A single passing case is experimental evidence, not validation across the
   capability's declared scope.
 
-## Pre-registered Phase 1 Gate
+## Pre-registered Validation Promotion Gate
 
-The Phase 1 materiality thresholds, representative matrix, regression limits,
-and exit rules are fixed in the
-[Phase 1 evaluation gate](phase-1-evaluation-gate.md), with a validated
+The materiality thresholds, representative matrix, regression limits, and
+promotion rules are fixed in the
+[Phase 1 validation promotion gate](phase-1-evaluation-gate.md), with a validated
 machine-readable source at
 [`evaluations/phase-1-gate.yaml`](../evaluations/phase-1-gate.yaml). The gate
 requires material reviewed-quality improvement and at least 5% aggregate total-
-token reduction from the retained combined configuration. It is an acceptance
-contract, not evidence that Phase 1 already passes.
+token reduction from the retained combined configuration. It promotes the
+experimental field candidate to `validated`; it does not block Phase 1 closure
+or prove that the candidate already provides field value.
 
 The harness executes individual, complete-policy, and combined configurations;
 records blinded reviews with checksummed run identity; and calculates the
 aggregate gate. All Phase 1 capability sources now exist, so complete-policy and
-combined model runs can execute. The current gate report remains correctly
+combined model runs can execute. The current promotion report remains correctly
 `incomplete`: five policy rows are complete, while `evidence`, `safe-change`,
-discovery, precedence, combined, and blinded-review evidence remains unfinished.
+discovery, precedence, combined, field-correction, and blinded-review evidence
+remain unfinished.
 
 ### Blinded Preference
 
@@ -146,7 +169,7 @@ tool calls, latency, environment comparability, and blinded review integrity.
 
 Case `discovery-architecture-001` was run through Codex CLI 0.146.0 on Linux
 x64 with Node.js 18.19.1. Both variants passed the same structured checks in one
-turn without tool calls or corrections.
+turn with zero recorded tool calls; correction turns were not measured.
 
 | Variant | Input tokens | Cached input | Output tokens | Total tokens | Latency |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -172,10 +195,11 @@ higher. The 38,723-token reduction from the superseded capability result is
 historical only because that run predates the controlled user-configuration
 baseline and must not be treated as skill efficiency evidence.
 
-Decision: keep `engineering-discovery` proposed. One positive case and an
-unblinded technical review do not establish representative quality or
-efficiency. Add fresh positive cases, broaden negative-trigger coverage, and run
-matched comparisons before lifecycle promotion.
+Decision: retain `engineering-discovery` as an experimental field candidate.
+One positive case and an unblinded technical review support controlled use but
+do not establish representative quality or efficiency. Add fresh positive
+cases, broaden negative-trigger coverage, and run matched comparisons before
+promotion to `validated`.
 
 Case `discovery-accepted-design-002` then installed the skill without explicit
 invocation for an implementation task whose architecture was already accepted:
@@ -200,7 +224,7 @@ rate or host-wide trigger precision.
 The initial `evidence` and `safe-change` cases ran through Codex CLI 0.146.0 on
 Linux x64. Every baseline and capability variant passed after reviewed rubric
 corrections were applied to the same measured runs. All completed in one turn
-without tool calls or corrections.
+with zero recorded tool calls; correction turns were not measured.
 
 | Case | Baseline tokens | Policy tokens | Delta | Reviewed result |
 | --- | ---: | ---: | ---: | --- |
@@ -227,9 +251,9 @@ baseline. The sample is too small for `validated`, and the complete
 The repository-native `token-efficiency` policy is exactly 100 estimated tokens
 and has no external runtime or communication-mode dependency. Its initial
 positive and explicit-detail negative cases ran through the same Codex CLI
-0.146.0 environment. Both variants passed in one turn without tools or
-corrections, and reviewed content preserved the required implementation and
-release-safety details.
+0.146.0 environment. Both variants passed in one turn with zero recorded tool
+calls; correction turns were not measured. Reviewed content preserved the
+required implementation and release-safety details.
 
 | Case | Baseline total | Policy total | Total delta | Output delta |
 | --- | ---: | ---: | ---: | ---: |
@@ -264,9 +288,10 @@ Across all three applicable cases, aggregate total tokens fell 35.7%, but only
 one of three pairs improved; the reduction is dominated by the unusually large
 tools baseline and fails the frozen 70% paired-improvement requirement. All six
 capability results pass objectively in one turn. Negative aggregate overhead is
-0.64%, with no extra tools or corrections. The handoff preference review remains
-unresolved, so the quality floor and individual value decision remain
-incomplete. Do not claim material token efficiency from this matrix.
+0.64%, with no extra tool calls; correction turns were not measured. The handoff
+preference review remains unresolved, so the quality floor and individual value
+decision remain incomplete.
+Do not claim material token efficiency from this matrix.
 
 ## Complete Core Policy Sources
 
@@ -280,17 +305,18 @@ run `doctor`, preview and apply removal, and preserve unmanaged content. A secon
 smoke test against the canonical repository installed the full pack in temporary
 repository scope, reported `healthy: true`, and removed every managed block.
 
-This evidence makes the pack source-complete and installable for evaluation. It
-does not by itself validate policy behavior, and the pack remains `proposed`
-until the representative and combined gates pass.
+This evidence makes the pack source-complete and installable as an experimental
+field candidate. It does not validate policy behavior; representative, combined,
+and field evidence remain required for promotion to `validated`.
 
 ## New Core Policy Individual Matrix
 
 On 2026-08-10, `engineering-principles`, `backend-defaults`, `documentation`,
 and `versioning-and-lifecycle` each completed three applicable and three
 negative matched pairs on Codex CLI 0.146.0. Every capability result passed in
-one turn with no tool calls or corrections, and every negative case stayed
-within the frozen 1% aggregate and 2% single-case overhead limits.
+one turn with zero recorded tool calls; correction turns were not measured.
+Every negative case stayed within the frozen 1% aggregate and 2% single-case
+overhead limits.
 
 | Policy | Objective baseline → capability | Applicable token change | Paired token wins | Unrelated overhead |
 | --- | ---: | ---: | ---: | ---: |
@@ -306,5 +332,5 @@ last two policies are each dominated by one high-input baseline and fail the
 required 70% paired-improvement rate, so they are not material token wins.
 
 One adverse or ambiguous case per policy requires two independent blinded
-reviewers. Those verdicts are unresolved; all four policies therefore remain
-`proposed`, and no incremental-value or promotion claim is made.
+reviewers. Those verdicts are unresolved; all four policies are experimental
+field candidates, and no incremental-value or validation claim is made.

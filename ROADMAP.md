@@ -177,7 +177,7 @@ capability or authorize a public release.
 - [x] Create and initially evaluate a repository-native compact
   `token-efficiency` policy.
 - [x] Create `engineering-discovery` for feature design, technology research, architecture proposals, and trade-off analysis.
-- [ ] Create a discovery-brief template and optional ADR handoff.
+- [x] Create a discovery-brief template and optional ADR handoff.
 - [x] Forward-test discovery against the no-skill baseline.
 - [x] Reduce `engineering-discovery` default-path context cost and repeat its
   initial positive and negative comparisons.
@@ -185,30 +185,50 @@ capability or authorize a public release.
   evaluation matrix before the next promotion decision.
 - [x] Extend the harness for complete-policy and combined configurations,
   checksummed blinded verdicts, and deterministic aggregate gate calculation.
-- [ ] Validate every retained Phase 1 capability across representative positive,
-  negative, precedence, and combined-installation cases; revise or remove any
-  capability that does not demonstrate incremental value.
-- [ ] Demonstrate a material improvement in both reviewed task quality and total
-  tokens per completed task for the retained Phase 1 configuration, without
-  unacceptable safety, routing, latency, or correction-turn regressions.
+- [x] Qualify all eight retained capabilities through implementation, initial
+  positive and negative comparisons, safety boundaries, and known limitations.
+- [x] Package the seven-policy core and `engineering-discovery` as reversible,
+  documented experimental installations for repository and user scopes.
 
-Phase 1 exit gate: all retained Phase 1 capabilities must reach at least
-`validated`, the complete retained policy pack must install and remove cleanly,
-and matched evaluation must demonstrate material quality and total-token gains.
-Every retained capability must also satisfy a quality non-regression floor,
-including when its individual value is primarily lower token consumption; a
-token-only win cannot compensate for objectively worse or reviewer-disfavored
-answers. Quality means required correctness, substance, safety, evidence, and
-actionability—not verbosity.
-Source-size reduction, schema compliance, or isolated passing cases are not
-sufficient. If the gate cannot be met, revise, narrow, or retire the ineffective
-capability instead of closing the phase or weakening the evidence threshold.
+Phase 1 exit gate: all eight retained capabilities and both owning packs are
+`experimental`; canonical sources and user guidance exist; initial positive and
+negative checks pass without a known critical safety failure; policy and skill
+budgets pass; and install, update, `doctor`, uninstall, and rollback are tested.
+This gate authorizes controlled field use only. It does not claim incremental
+quality, token efficiency, stable compatibility, or public-release readiness.
+
+Phase 1 completion evidence (2026-08-10): all seven compact policies and
+`engineering-discovery` are experimental and source-complete. The policy pack
+fits its 800-token ceiling; discovery includes distributed brief and ADR-handoff
+assets. Repository validation covers 16 catalog capabilities, six packs, 37
+matched cases, 37 baselines, 37 capability results, and zero blinded reviews.
+The deterministic suite and integrated clean-scope installation verify both
+experimental packs, managed policy ownership, diagnostics, update, removal, and
+rollback. The harness can select failed capability observations as canonical
+evidence and can record an explicit model and reasoning configuration. This is
+internal readiness evidence, not proof that the candidate improves real
+development work.
+
+### Phase 1 Field Validation — Experimental to Validated
+
+- [ ] Dogfood the candidate on real, reversible development tasks and retain
+  useful, neutral, and harmful observations by capability and version.
+- [ ] Replace the correction-turn placeholder with observed interventions,
+  follow-up prompts, elapsed time, accepted outcomes, and objective checks.
+- [ ] Complete fresh representative, precedence, combined, and blinded-review
+  evidence, retaining failed attempts under distinct case IDs or versioned field
+  records.
+- [ ] Run the frozen materiality gate and promote, revise, narrow, or retire each
+  capability from the field evidence.
+- [ ] Demonstrate material reviewed-quality and total-token improvement for the
+  retained combined configuration before any `validated` claim.
 
 Initial Phase 1 evidence (2026-08-04): `evidence` and `safe-change` have canonical
 sources, specifications, positive/negative cases, and five accepted comparative
-pairs on Codex CLI 0.146.0. All pairs passed in one turn without tools or
-corrections. Reviewed outputs were equivalent to their baselines, with 99–123
-additional total tokens per task (0.7–0.8%). Sixteen deterministic tests pass,
+pairs on Codex CLI 0.146.0. All pairs passed in one turn with zero recorded
+tool calls; correction turns were not measured. Reviewed outputs were equivalent
+to their baselines, with 99–123 additional total tokens per task (0.7–0.8%).
+Sixteen deterministic tests pass,
 including policy budgets, dry-run, activation confirmation, checksummed blocks,
 version update, doctor, and clean removal. Both policies advance to
 `experimental`; the evidence is too narrow and shows no material benefit, so
@@ -220,7 +240,8 @@ third-party records.
 Token-efficiency evidence (2026-08-10): the original repository-native policy
 source is exactly 100 estimated tokens and passes controlled partial-pack
 install, update, `doctor`, and removal. One positive and one explicit-detail
-negative comparison both passed in one turn without tools or corrections on
+negative comparison both passed in one turn with zero recorded tool calls;
+correction turns were not measured. Runs used
 Codex CLI 0.146.0. The policy reduced aggregate output from 822 to 714 tokens
 (-13.1%) but increased aggregate total usage from 29,779 to 29,897 (+118,
 +0.4%) because of its fixed input cost. Required implementation and audit detail
@@ -240,8 +261,9 @@ and lifecycle infrastructure, not effectiveness validation.
 
 New-policy representative evidence (2026-08-10): the four newly implemented
 policies each have three applicable and three negative matched pairs on Codex
-CLI 0.146.0. All 24 capability runs passed in one turn without tools or
-corrections, and unrelated aggregate overhead stayed between 0.20% and 0.98%.
+CLI 0.146.0. All 24 capability runs passed in one turn with zero
+recorded tool calls; correction turns were not measured. Unrelated aggregate
+overhead stayed between 0.20% and 0.98%.
 `backend-defaults` and `versioning-and-lifecycle` improved applicable objective
 pass rate from 2/3 to 3/3; `engineering-principles` and `documentation` matched
 3/3 baselines. No policy cleared the frozen token gate: the first two increased
@@ -254,8 +276,9 @@ that checkpoint.
 
 Expanded token-efficiency evidence (2026-08-10): two additional applicable and
 two negative pairs complete its frozen three-positive/three-negative individual
-matrix. All six capability results pass objectively in one turn, with no extra
-tools or corrections. Applicable aggregate tokens fell 35.7%, but only one of
+matrix. All six capability results pass objectively in one turn, with zero
+recorded tool calls; correction turns were not measured. Applicable aggregate
+tokens fell 35.7%, but only one of
 three pairs improved because a single high-input tools baseline dominates the
 aggregate; this fails the required 70% paired-win threshold. Negative aggregate
 overhead is 0.64%. The handoff blind review remains unresolved, so
@@ -630,6 +653,24 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 ## Decision Log
 
+### 2026-08-10 — Phase 1 closes as an experimental field candidate
+
+- Separate internal experimental readiness from demonstrated field value for the
+  solo-development workflow. Phase 1 now closes when all eight retained
+  capabilities are installable, reversible, documented, and pass initial
+  positive, negative, safety, and lifecycle checks.
+- Promote the seven policies, `engineering-discovery`, `core-policies`, and the
+  discovery pack to `experimental`. This authorizes controlled dogfooding, not a
+  quality, efficiency, compatibility, stable-release, or public-release claim.
+- Preserve the frozen material-quality, token, routing, latency, and review
+  thresholds unchanged as the later `experimental` to `validated` promotion
+  gate.
+- Preserve failed capability executions as evidence and record explicit model,
+  reasoning, sandbox, and schema configuration for new controlled pairs.
+- Distribute discovery-brief and ADR-handoff assets with the plugin and publish a
+  practical capability guide that distinguishes the eight usable capabilities
+  from the eight planned catalog entries.
+
 ### 2026-08-10 — Token-efficiency representative matrix completed
 
 - Add workspace-fixture support so context and local-tool selection can be
@@ -927,32 +968,28 @@ For optimization work, require reproducible before-and-after measurements. If me
 
 - No stable or public artifact has been published. Marketplace/registry flows,
   signatures, attestations, Windows behavior, and a broader clean-host matrix
-  remain unvalidated.
-- `engineering-discovery` remains proposed: its controlled positive result used
-  3.6% more total tokens despite 3.8% fewer output tokens, coverage is narrow,
-  and blinded preference evidence is absent. The revised default path avoided,
-  but did not independently fix, the prior host sandbox failure.
-- One negative case records zero observed response-level false triggers, but it
-  does not establish a false-positive rate or broad implicit-trigger precision.
-- All seven core policy sources exist and the complete pack installs, diagnoses,
-  updates, rolls back, and removes in controlled scope. The four new policies
-  complete their individual objective matrices but remain `proposed` pending
-  blinded review and incremental-value decisions.
-- `token-efficiency` reduced output 13.1% in its initial pair but increased total
-  tokens 0.4%. Its representative matrix now passes objectively but still has no
-  material paired token value; blinded review and owner disposition remain
-  pending.
+  remain unvalidated. Recorded host compatibility remains Codex CLI 0.146.0.
+- All eight Phase 1 capabilities and both packs are experimental. Their current
+  evidence authorizes controlled field use but does not demonstrate incremental
+  developer value; zero blinded reviews and zero field observations are recorded.
+- `engineering-discovery` used 3.6% more total tokens in its one positive pair,
+  and one negative case cannot establish broad implicit-trigger precision.
+- `token-efficiency` passes its individual matrix but has no material paired
+  token value; field evidence must determine whether to retain, narrow, or remove
+  it.
+- `correction_turns` remains an unmeasured zero-valued harness placeholder.
+  Field testing must record interventions and follow-up prompts before making a
+  correction or rework claim.
 - The provenance inventory is empty; every future third-party addition still
   requires license, immutable source, attribution, and reviewer evidence.
 
 ## Next Action
 
-Continue Phase 1 by obtaining two independent blinded reviews for the four new
-adverse/ambiguous pairs and `token-efficiency-handoff-001`. Use the token review
-to record a revise, narrow, or remove decision; current token evidence alone does
-not justify retention. Complete the representative rows for `evidence`,
-`safe-change`, and discovery before executing complete-policy precedence and
-combined configurations. In parallel, add the discovery-brief/ADR handoff. Do
-not close the phase until every retained capability and the combined
-configuration pass the frozen quality, token, safety, routing, latency, and
-correction thresholds.
+Begin controlled repository-scoped field testing with the Phase 1 candidate by
+following `docs/capabilities.md`. Record the exact commit, pack versions, model
+configuration, objective checks, accepted outcome, interventions, elapsed time,
+and useful or harmful behavior for every observed task. Keep the first runs
+reversible and explicit: let policies apply automatically and invoke
+`$engineering-discovery` only for unresolved pre-implementation decisions. Use
+the accumulated evidence to revise, narrow, remove, or later promote capabilities
+without rewriting historical results.

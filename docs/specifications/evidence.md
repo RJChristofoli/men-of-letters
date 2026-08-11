@@ -92,7 +92,7 @@ positive and negative runs pass, but representative validation is incomplete.
 
 - Tested host: Codex CLI 0.146.0 on Linux x64.
 - Bootstrap compatibility: `0.1.0-dev.0` in controlled repository-scope tests.
-- Pack status: `core-policies` remains proposed and incomplete.
+- Pack status: `core-policies` is experimental and ready for controlled field testing.
 - Migration: managed checksummed blocks support reviewed update and clean removal.
 
 ## Alternatives and Decision

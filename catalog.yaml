@@ -2,7 +2,7 @@ schema_version: 1
 capabilities:
   - id: engineering-principles
     type: policy
-    status: proposed
+    status: experimental
     owner: RJChristofoli
     source: policies/engineering-principles.md
     dependencies: []
@@ -30,7 +30,7 @@ capabilities:
     context_budget_tokens: 120
   - id: backend-defaults
     type: policy
-    status: proposed
+    status: experimental
     owner: RJChristofoli
     source: policies/backend-defaults.md
     dependencies: [engineering-principles, evidence, safe-change]
@@ -44,7 +44,7 @@ capabilities:
     context_budget_tokens: 150
   - id: documentation
     type: policy
-    status: proposed
+    status: experimental
     owner: RJChristofoli
     source: policies/documentation.md
     dependencies: [evidence]
@@ -72,7 +72,7 @@ capabilities:
     context_budget_tokens: 100
   - id: versioning-and-lifecycle
     type: policy
-    status: proposed
+    status: experimental
     owner: RJChristofoli
     source: policies/versioning-and-lifecycle.md
     dependencies: [evidence]
@@ -112,7 +112,7 @@ capabilities:
     context_budget_tokens: 1200
   - id: engineering-discovery
     type: router
-    status: proposed
+    status: experimental
     owner: RJChristofoli
     source: plugins/engineering-discovery/skills/engineering-discovery/SKILL.md
     dependencies: []

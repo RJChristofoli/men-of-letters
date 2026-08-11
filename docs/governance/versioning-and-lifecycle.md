@@ -62,9 +62,10 @@ proposed → experimental → validated → stable → deprecated → retired
 - **Experimental:** implementation is installable in a controlled scope; core
   structure, safety checks, and initial positive/negative cases pass. Contract
   changes remain likely.
-- **Validated:** representative forward tests outperform or materially match the
-  no-capability baseline on declared success criteria without unacceptable
-  safety, trigger, token, latency, or correction regressions.
+- **Validated:** representative controlled and field evidence outperforms or
+  materially matches the no-capability baseline on declared success criteria
+  without unacceptable safety, trigger, token, latency, or correction
+  regressions. Forward tests alone do not prove end-user value.
 - **Stable:** validated across the published compatibility matrix and maintained
   through at least one regression cycle; ownership, support, migration, and
   release documentation are complete.

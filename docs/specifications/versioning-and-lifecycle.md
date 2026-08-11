@@ -1,6 +1,6 @@
 # Capability Specification: `versioning-and-lifecycle`
 
-Status: proposed implementation; source, installation, and the individual
+Status: experimental implementation; source, installation, and the individual
 representative matrix exist, but blinded review and final value remain
 unresolved.
 
@@ -10,7 +10,7 @@ unresolved.
 - Type: policy
 - Owner: `RJChristofoli`
 - Installation pack: `core-policies`
-- Lifecycle status: `proposed`
+- Lifecycle status: `experimental`
 - Target introduction: `core-policies@0.1.0-dev.0`
 
 ## Problem and Goal
@@ -65,8 +65,9 @@ unresolved.
 
 ## Evidence and Evaluation
 
-- Evidence today: six matched pairs pass with 100% capability objective success,
-  no tools or corrections, and 0.20% unrelated overhead. The policy refused an
+- Evidence today: six matched pairs pass with 100% capability objective success
+  and 0.20% unrelated overhead. Zero tool calls were recorded; correction turns
+  were not measured. The policy refused an
   unsupported compatibility classification that the baseline made, producing
   an initial 33.3-point objective gain.
 - No-capability baseline: matched versioning/lifecycle tasks without this policy.
@@ -83,10 +84,10 @@ unresolved.
 - Always-loaded context: at most 90 estimated tokens; no conditional context or
   policy-owned tool calls.
 - Bootstrap compatibility: `0.1.0-dev.0` in controlled complete-pack tests.
-- Host behavior compatibility: unknown until comparative runs.
+- Host behavior tested only on Codex CLI 0.146.0; broader compatibility unknown.
 - Alternatives: duplicate release rules in every workflow, rejected as
   divergence; do nothing remains the evaluation baseline.
-- Decision: keep proposed. The objective gain is promising; the apparent 40.4%
+- Decision: retain as experimental for controlled field testing. The objective gain is promising; the apparent 40.4%
   aggregate token reduction wins only one of three applicable pairs and blinded
   review remains unresolved.
 

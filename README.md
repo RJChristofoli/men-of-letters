@@ -19,18 +19,17 @@ The planned capabilities support engineering discovery, backend and security rev
 
 ## Status
 
-Phase 0 foundation is implemented and validated at an experimental level. Phase
-1 has a source-complete seven-policy core pack: `evidence`, `safe-change`, and
-native `token-efficiency` are experimental. `token-efficiency` and the four new
-compact policies have complete three-positive/three-negative individual
-comparisons, but await blinded review and final value decisions. Complete-pack
-installation is tested; the catalog, schemas, evaluation harness, bootstrap CLI,
-and first proposed plugin slice also exist. No stable capability or public
-release is available yet.
+Phase 0 foundation and the Phase 1 experimental field candidate are complete.
+All seven core policies and `engineering-discovery` are installable at
+`experimental` status. Deterministic validation, 37 matched comparisons,
+complete-pack lifecycle tests, the evaluation harness, and safe bootstrap CLI
+support controlled dogfooding. Field evidence and blinded review are still
+required before any capability reaches `validated`; no stable or public release
+is available.
 
 ## Installation
 
-There is no supported stable installation yet. For local development:
+There is no stable installation. For development and controlled field testing:
 
 ```bash
 git clone https://github.com/RJChristofoli/men-of-letters.git
@@ -41,28 +40,32 @@ npm test
 npm run cli -- list
 ```
 
-Preview the proposed discovery pack without changing the repository:
+Preview the experimental discovery pack without changing the target repository:
 
 ```bash
-npm run cli -- install engineering-discovery --scope repo --allow-proposed --dry-run
+npm run cli -- install engineering-discovery \
+  --scope repo \
+  --target /absolute/path/to/target-repository \
+  --dry-run
 ```
 
-See the bootstrap guide before installing or activating policies. Proposed-pack
-installation is for evaluation only.
+See the capability and bootstrap guides before installation. Experimental packs
+are for controlled, reversible field evaluation.
 
 ## Continue development
 
-Start a new thread in this repository with:
+Start experimental field testing with:
 
 ```text
-Read ROADMAP.md and the repository, determine the current state, and continue Phase 1 from the current Next Action. Keep the roadmap and affected documentation synchronized with validated decisions.
+Read ROADMAP.md and docs/capabilities.md. Install the Phase 1 experimental candidate in a reversible repository scope, record every useful or harmful outcome, and preserve evidence by capability and version.
 ```
 
-The next thread must treat [ROADMAP.md](ROADMAP.md) as the source of truth and read the linked documentation before changing direction.
+Treat [ROADMAP.md](ROADMAP.md) as the source of truth before changing capabilities.
 
 ## Documentation
 
 - [Roadmap and current next action](ROADMAP.md)
+- [Capabilities, installation, and invocation](docs/capabilities.md)
 - [Governance contracts and capability specification](docs/governance/README.md)
 - [Distribution architecture](docs/architecture/distribution-boundaries.md)
 - [Bootstrap CLI](docs/bootstrap-cli.md)

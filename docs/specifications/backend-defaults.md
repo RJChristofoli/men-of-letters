@@ -1,6 +1,6 @@
 # Capability Specification: `backend-defaults`
 
-Status: proposed implementation; source, installation, and the individual
+Status: experimental implementation; source, installation, and the individual
 representative matrix exist, but blinded review and final value remain
 unresolved.
 
@@ -10,7 +10,7 @@ unresolved.
 - Type: policy
 - Owner: `RJChristofoli`
 - Installation pack: `core-policies`
-- Lifecycle status: `proposed`
+- Lifecycle status: `experimental`
 - Target introduction: `core-policies@0.1.0-dev.0`
 
 ## Problem and Goal
@@ -67,7 +67,8 @@ unresolved.
 ## Evidence and Evaluation
 
 - Evidence today: six matched pairs pass with 100% capability objective success,
-  no tools or corrections, and 0.98% unrelated overhead. One adverse baseline
+  zero recorded tool calls, and 0.98% unrelated overhead. Correction turns were
+  not measured. One adverse baseline
   missed the existing-boundary decision, producing an initial 33.3-point
   objective gain.
 - No-capability baseline: matched backend tasks without this policy.
@@ -85,10 +86,10 @@ unresolved.
 - Always-loaded context: at most 150 estimated tokens; no conditional context or
   policy-owned tool calls.
 - Bootstrap compatibility: `0.1.0-dev.0` in controlled complete-pack tests.
-- Host behavior compatibility: unknown until comparative runs.
+- Host behavior tested only on Codex CLI 0.146.0; broader compatibility unknown.
 - Alternatives: a large production-readiness skill, rejected as always-loaded
   scope; do nothing remains the evaluation baseline.
-- Decision: keep narrow defaults proposed. The initial objective gain is
+- Decision: keep narrow defaults experimental for controlled field testing. The initial objective gain is
   promising, but applicable tokens increased 1.1% and blinded review is
   unresolved.
 

@@ -1,16 +1,17 @@
-# Phase 1 Evaluation Gate
+# Phase 1 Validation Promotion Gate
 
-Status: pre-registered acceptance contract; the expanded runs and Phase 1 result
-do not exist yet.
+Status: pre-registered promotion contract; expanded field runs and a validation
+result do not exist yet.
 
 Machine-readable source: [`evaluations/phase-1-gate.yaml`](../evaluations/phase-1-gate.yaml).
 
 ## Decision Boundary
 
-This gate decides whether the retained Phase 1 policies and
-`engineering-discovery` have enough incremental value to reach `validated` and
-whether Phase 1 may close. It does not validate later workflows, the complete
-engineering suite, stable compatibility, or a public release.
+This gate decides whether the experimental Phase 1 policies and
+`engineering-discovery` have enough incremental value to reach `validated`.
+Phase 1 may close earlier as an experimental field candidate under the roadmap's
+separate readiness criteria. This gate does not validate later workflows, the
+complete engineering suite, stable compatibility, or a public release.
 
 Thresholds are fixed before the expanded case set is run. A later change needs a
 dated roadmap decision, a technical reason independent of observed outcomes,
@@ -60,7 +61,7 @@ single pair may exceed 2%. These limits force progressive disclosure and prevent
 an aggregate gain from hiding persistent context cost on tasks that do not need
 the capabilities.
 
-The 5% threshold is a Phase 1 materiality rule, not a claim of statistical
+The 5% threshold is a validation-promotion rule, not a claim of statistical
 significance or a universal product target. It is intentionally larger than the
 current 0.7–0.8% policy overhead and the 3.6% discovery regression. Absolute and
 relative values must both be reported.
@@ -72,6 +73,10 @@ relative values must both be reported.
 - No increase in aggregate correction turns.
 - No additional unnecessary tool calls.
 - No more than 10% increase in median latency.
+
+The current harness records `correction_turns: 0` as an unmeasured placeholder.
+Field promotion evidence must replace that placeholder with observed correction
+or intervention data before claiming that this guardrail passed.
 
 Any safety failure or false trigger fails the gate regardless of quality or
 token gains. Latency is a guardrail, not an optimization claim; record material
@@ -102,7 +107,7 @@ the quality non-regression floor, and every regression guardrail. The complete
 retained Phase 1 configuration must demonstrate both material quality and
 material token improvement while also satisfying that floor.
 
-Phase 1 closes only when:
+Promotion from `experimental` to `validated` occurs only when:
 
 1. every retained capability is at least `validated`;
 2. the complete retained core-policy pack passes install, update, `doctor`,
@@ -112,8 +117,8 @@ Phase 1 closes only when:
    blinded verdicts, known limitations, and owner decision.
 
 A failed capability is revised and re-evaluated, narrowed with a new contract,
-or retired. Do not weaken a threshold, hide a failed case, or close the phase on
-source-size reduction, isolated passes, or equivalence with a strong baseline.
+or retired. Do not weaken a threshold, hide a failed case, or promote on source-
+size reduction, isolated passes, or equivalence with a strong baseline.
 
 ## Harness Support
 
@@ -123,8 +128,8 @@ stores the identity key separately under ignored run artifacts, records resolved
 checksummed verdicts, and calculates this gate deterministically.
 
 Configuration resolution fails before model execution when a declared source is
-missing. The current aggregate report remains `incomplete`: the four new
-policies and `token-efficiency` now have complete individual positive/negative
-rows, but `evidence`, `safe-change`, discovery, complete-pack precedence,
-combined configurations, and blinded verdicts remain incomplete. Harness
-readiness and partial matrix coverage are not capability validation.
+missing. The current promotion report remains `incomplete`: five policies have
+complete individual positive/negative rows, but `evidence`, `safe-change`,
+discovery, complete-pack precedence, combined configurations, field correction
+data, and blinded verdicts remain incomplete. Experimental readiness and partial
+matrix coverage are not capability validation.
