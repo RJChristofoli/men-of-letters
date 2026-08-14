@@ -7,54 +7,62 @@ description: Review an existing pull request, branch, commit, local diff, or use
 
 Find defects that the author would want to fix before shipping.
 
-## Inspect
+## Delta Gate
 
-1. Read applicable repository instructions and determine the comparison. For a
-   pull request or branch, resolve the appropriate base; for a commit, local
-   changes, or a user-specified comparison, use that review surface.
-2. Inspect the complete relevant diff before producing findings.
-3. Explore unchanged callers, consumers, contracts, data paths, and tests only
-   when something in the diff justifies that targeted context.
-4. Evaluate changed behavior rather than formatting in isolation, and run focused
-   read-only checks when they can confirm or reject a suspected issue.
+Before analysis, state the reviewed delta: base, target, and whether staged,
+unstaged, or untracked changes are included. Resolve the comparison from the user
+request or repository context; state any necessary assumption. Inspect the full
+delta before producing findings.
 
-A finding is admissible only when it is causally attributable to the reviewed
-change: code directly introduced it, changed behavior caused a regression, a
-pre-existing condition became newly reachable or materially worse, or a modified
-contract, schema, interface, dependency, migration, event, or data flow required
-a counterpart update that is missing. Do not report a defect that would exist in
-exactly the same way without the reviewed change, and do not broaden the task into
-a repository audit.
+Inspect unchanged callers, consumers, contracts, data paths, and tests only as
+targeted evidence for changed behavior. Run focused read-only checks when they
+can confirm or reject a suspected defect.
 
-## Prioritize
+## Classify Candidates
 
-Look first for:
+Classify each candidate before reporting it:
 
-- incorrect behavior and regressions;
-- security or authorization failures;
-- data loss, corruption, or unsafe migrations;
-- broken API, event, or compatibility contracts;
-- concurrency, retry, ordering, and partial-failure bugs;
-- resource leaks or unbounded work;
-- tests that miss a credible failure introduced by the change.
+- **Introduced defect:** the delta creates a reachable failure or omits a required
+  counterpart change. It may be a finding.
+- **Pre-existing problem:** it fails the same way without the delta. Do not report
+  it unless the delta makes it newly reachable or materially worsens its impact;
+  then report only the introduced regression.
+- **Optional improvement:** it improves maintainability, style, or resilience
+  without fixing a defect caused by the delta. Do not report it as a finding.
 
-Do not report preference-only style issues, speculative risks without a reachable
-scenario, or pre-existing problems unrelated to the diff.
+Admit only introduced defects, including missing counterpart updates required by
+a changed contract, schema, interface, dependency, migration, event, or data
+flow. Do not broaden the task into a repository audit.
+
+Prioritize correctness, security, data integrity, compatibility contracts,
+concurrency, partial failure, resource bounds, and missing coverage for a
+credible regression.
 
 ## Write Findings
 
-For each finding:
+For every finding, include all of:
 
-1. Assign severity based on realistic impact.
-2. Cite the changed line that caused the problem when possible.
-3. Explain the triggering scenario and resulting failure.
-4. Suggest the smallest viable correction when it is clear.
+- the smallest relevant location, preferably a changed line;
+- a concrete triggering scenario;
+- the resulting impact;
+- the causal relationship to the delta;
+- the smallest viable correction.
 
-If the failure manifests in unchanged code or a missing counterpart update, make
-its causal relationship to the reviewed diff explicit.
+Assign severity from realistic impact and order findings by severity. If a
+failure manifests in unchanged code or a missing counterpart update, cite the
+changed behavior that activates it.
 
-Order findings by severity. Keep summaries brief and do not bury findings behind
-process narration. If no material defect is found, say so and mention only
-meaningful validation gaps or residual risks.
+## Final Finding Gate
+
+Before delivery, remove:
+
+- preferences and optional improvements;
+- risks without a reachable triggering scenario;
+- findings outside the delta's causal scope;
+- duplicate findings with the same root cause and correction;
+- severity labels unsupported by the demonstrated impact.
+
+Keep findings concise. If none survive the gate, say that no material defect was
+found and mention only meaningful validation gaps or residual risks.
 
 Remain read-only unless the user explicitly asks to apply fixes.
