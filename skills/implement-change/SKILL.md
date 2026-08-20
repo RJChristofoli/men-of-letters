@@ -1,72 +1,90 @@
 ---
 name: implement-change
-description: Implement a sufficiently defined behavior, change, or fix in an existing repository when the intended result or correction is already known and the primary work is modifying files and validating the result. Use to add, modify, fix, refactor, migrate, or complete code. If the main problem is discovering why something fails, use debug-problem. Skip review-only, diagnosis-only, research, and pre-implementation architecture decisions.
+description: Implement a sufficiently defined behavior, change, or fix in an existing repository when the intended result or correction is already known and the primary work is modifying files and validating the result. Use to add, modify, fix, refactor, migrate, or complete code. If the cause of a failure is still unknown, use debug-problem. Skip review-only, diagnosis-only, research, and pre-implementation architecture decisions.
 ---
 
 # Implement Change
 
 Deliver the requested behavior with the smallest compatible change.
 
-## Scope Gate — Before Editing
+## Establish the Change
 
-1. Read applicable repository instructions and inspect the working tree.
-2. Define observable acceptance criteria and trace the affected entry points,
-   contracts, data, tests, and documentation.
-3. Before the first edit, declare the expected files or components and classify
-   each planned change:
-   - **Necessary:** required to satisfy an acceptance criterion.
-   - **Related test or documentation:** directly verifies or describes changed
-     behavior.
-   - **Opportunistic cleanup:** useful independently of the requested behavior.
-   - **Material expansion:** broadens behavior, ownership, compatibility, or
-     blast radius beyond the accepted change.
-4. Exclude opportunistic cleanup. Obtain authorization before including material
-   expansion. Ask when a missing decision changes the accepted behavior or scope.
+1. Read applicable repository instructions and inspect the working tree. Identify
+   pre-existing user changes before editing overlapping files.
+2. Translate the request into observable acceptance criteria and trace affected
+   entry points, contracts, data, tests, generated artifacts, and documentation.
+3. Before editing, state the known components and classify planned work on two
+   independent axes:
+   - **Purpose:** necessary behavior, related test or documentation, or
+     opportunistic cleanup.
+   - **Reach:** local, shared, or material expansion.
+4. Exclude opportunistic cleanup. Ask only when a missing decision changes accepted
+   behavior or when a material expansion is not already authorized by the request.
 
-A necessary dependency is the smallest direct support for an acceptance
-criterion. Cleanup is independently useful and optional. Treat a change as
-material, even when necessary, if it alters a shared API, global imports,
-cross-cutting configuration, bootstrap, shared infrastructure, or pre-existing
-behavior outside the requested path.
+A shared file or API is not automatically a material expansion. Expansion is
+material when it broadens behavior, ownership, compatibility, operational impact,
+or blast radius beyond the requested outcome. A necessary shared change that is
+clearly implied by the accepted behavior may proceed.
 
-## Expansion Gate — Before an Undeclared File
+Known components are an initial scope, not a prediction of every file. Add a newly
+discovered file automatically when it is the smallest direct dependency of an
+acceptance criterion and does not materially expand the request. State the scope
+update before editing it.
 
-Before editing a file or component outside the declared scope:
+## Keep the Change Safe
 
-1. Check whether the original request or delta already included it.
-2. Determine whether the edit changes any shared or cross-cutting surface listed
-   above.
-3. If it is a material expansion, do not edit it; explain the dependency and ask
-   for authorization.
-4. Add it automatically only when it is a direct, low-risk dependency. Record
-   the reason and add it to the declared scope before editing.
+- Preserve unrelated user work and intentional compatibility. Never discard or
+  overwrite pre-existing changes to simplify the implementation.
+- Resolve exact mutation targets and inspect overlapping edits before writing.
+- Prefer reversible operations. Confirm destructive, privileged, publishing, or
+  otherwise irreversible actions not already authorized by the request.
+- Stop before mutation when a failed precondition makes the requested operation
+  unsafe.
+- If a required material expansion appears, explain why it is required and obtain
+  authorization before editing that surface. Do not leave a partial expansion in
+  the worktree while waiting.
 
 ## Implement
 
 - Follow existing architecture, names, and patterns unless they cause the problem.
-- Handle trust boundaries and external or asynchronous failure properties only
+- Validate input and authorization at changed trust boundaries.
+- Handle retries, idempotency, concurrency, partial failure, and observability only
   where the changed path makes them relevant.
-- Update documentation only when verified behavior or usage changes.
+- Update generated artifacts, dependency locks, migrations, and documentation only
+  when they are required counterparts of verified behavior.
+- Avoid speculative abstractions and unrelated refactors.
 
 ## Verify
 
 1. Run the narrowest relevant checks first, then broader checks when risk warrants.
-2. Add or update tests for changed behavior and credible regression paths.
-3. Inspect the final diff for debug artifacts and unintended contract changes.
-4. Distinguish passed, failed, and skipped validation. Never claim a result that
-   was not observed.
+2. Add or update tests for changed behavior and credible regression paths when the
+   repository supports meaningful automated coverage. Do not create artificial
+   tests for documentation-only or purely mechanical changes; state why no test
+   was added.
+3. When a check fails, classify it as introduced by the change, pre-existing,
+   unrelated, or inconclusive. Establish a baseline when attribution matters and
+   can be checked safely.
+4. Inspect the final attributable diff for debug artifacts, accidental scope,
+   unintended contract changes, and missing counterpart updates.
+5. Distinguish passed, failed, and skipped validation. Never claim an unobserved
+   result.
 
 ## Final Scope Gate
 
 Before completion:
 
-1. Compare every modified file or component with the declared scope.
-2. Remove only your opportunistic cleanup; preserve pre-existing user changes.
-3. List each authorized expansion and its reason.
-4. Do not complete while any material expansion remains unauthorized. Remove your
-   expansion or request authorization first.
+1. Compare every change attributable to this task with the acceptance criteria and
+   latest declared scope.
+2. Remove only opportunistic work introduced by this task; preserve all
+   pre-existing user changes.
+3. Ensure every material expansion was authorized and every direct scope update
+   was disclosed.
+4. Do not claim completion while required behavior is missing or an unauthorized
+   expansion remains.
 
 ## Hand Off
 
-Lead with the implemented outcome. Summarize changed files, validation evidence,
-authorized expansions, and any material limitation.
+Lead with the implemented outcome. Report changed components, satisfied behavior,
+validation commands and outcomes, authorized expansions, and material limitations.
+Mention pre-existing failures or skipped checks only when they affect confidence or
+the user's next action.

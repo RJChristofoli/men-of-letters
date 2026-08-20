@@ -1,6 +1,6 @@
 ---
 name: research-solution
-description: Research and compare technical approaches, libraries, platforms, architecture options, and feasibility when a decision materially depends on current or external technical evidence such as documented behavior, compatibility, vendor capabilities, standards, licensing, or external alternatives. Use authoritative sources and reversible experiments before implementation. Skip questions answerable primarily from the existing repository, accepted designs, routine debugging, code implementation, and diff review.
+description: Research and compare technical approaches, libraries, platforms, architecture options, and feasibility when a decision materially depends on current external evidence such as documented behavior, compatibility, vendor capabilities, standards, licensing, support, or cost. Use authoritative sources and isolated reversible experiments when documentation cannot resolve a decisive uncertainty. Skip repository-centered design analysis, accepted designs, routine debugging, code implementation, and diff review.
 ---
 
 # Research Solution
@@ -13,33 +13,58 @@ external systems.
 1. Define the desired outcome, actual decision, decisive constraints, current
    state, and acceptance signals.
 2. Inspect supplied repository evidence before expanding the research surface.
-3. Ask only when one missing choice can change the option ranking.
+3. Separate questions answerable from the repository from those requiring current
+   external evidence. Use `analyze-technical-solution` when the repository is the
+   primary decision source.
+4. Ask only when one missing choice can materially change option ranking.
 
-## Research
+## Build the Evidence
 
-- Research only facts that may change the recommendation or validation test.
-- Prefer primary and authoritative sources for compatibility, security,
-  licensing, support, and product behavior.
-- Verify temporally unstable claims instead of answering from memory.
-- Separate measured, observed, documented, inferred, and assumed support.
-- Stop when another source cannot change the ranking or next experiment.
+- Research only claims capable of changing the recommendation or required
+  validation.
+- Prefer primary and authoritative sources for compatibility, security, licensing,
+  support, pricing, standards, and product behavior.
+- Record applicable version, publication or retrieval date, environment, and
+  scope for temporally unstable or version-sensitive claims.
+- Keep documented facts, observed measurements, inferences, and assumptions
+  distinct. Do not convert vendor claims into observed results.
+- Resolve material source conflicts or state which uncertainty remains. Read
+  [evidence-and-alternatives.md](references/evidence-and-alternatives.md) when
+  evidence conflicts or costly reversal keeps the decision ambiguous.
+
+Stop researching when decisive claims have suitable support, relevant conflicts
+are resolved or recorded, and more evidence would not change the option ranking or
+next validation.
 
 ## Compare and Decide
 
-1. Include no change when viable and compare one to three distinct alternatives.
+1. Compare the smallest set of materially distinct viable options. Include no
+   change when credible; do not invent or exclude an option to meet a fixed count.
 2. Apply the same decisive criteria, failure modes, operating cost, migration
-   burden, and exit cost to every option.
-3. Recommend one option with confidence, trade-offs, and contraindications, or
-   state exactly which evidence is still required.
-4. Define the smallest reversible test that can falsify the recommendation,
-   including success, failure, retained evidence, cleanup, and rollback.
+   burden, maintenance burden, reversibility, and exit cost to every option where
+   those dimensions matter.
+3. Recommend one option with confidence, trade-offs, contraindications, and
+   conditions that would change the ranking. If evidence is insufficient, state
+   exactly which fact or observation remains decisive.
 
-Read [evidence-and-alternatives.md](references/evidence-and-alternatives.md) only
-when evidence conflicts or a costly-to-reverse decision remains ambiguous.
+## Validate Uncertainty
+
+Do not invent an experiment when authoritative documentation already resolves the
+decision. When ranking depends on uncertain empirical behavior, define or run the
+smallest falsifiable and reversible test.
+
+Run experiments only in an isolated temporary workspace with synthetic or
+sanitized data. Do not mutate the repository, production, accounts, or external
+services. If decisive validation requires broader effects, describe it for later
+authorized execution instead of running it as research. State hypothesis,
+representative scope, success and failure signals, stop condition, retained
+evidence, cleanup, rollback, and the decision following each result.
 
 ## Report
 
 Use the user's requested format. Otherwise lead with the recommendation, then
-present decision boundary, decisive evidence, alternatives, validation test,
-risks, and rollback. Cite inspected repository artifacts and external sources
-near the claims they support.
+present the decision boundary, decisive evidence with nearby citations,
+alternatives, confidence, material risks, and rollback or exit path. Include an
+experiment only when unresolved empirical uncertainty requires one. Distinguish
+facts established for the applicable version from assumptions requiring later
+validation.
